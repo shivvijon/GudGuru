@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "527477229647",
+    "project_id": "gudguru-8106b",
+    "storage_bucket": "gudguru-8106b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:527477229647:android:9dbc1f29b474d14535023a",
+        "android_client_info": {
+          "package_name": "com.gudguru.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "527477229647-vb34vhnqa2iacdlqmc3ov3fcg32qdchc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gudguru.app",
+            "certificate_hash": "02613513499b214f716acee6591a559e89263fcd"
+          }
+        },
+        {
+          "client_id": "527477229647-m39ac7o5delmrto5utjr60qrp5f056ej.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuEPb1g2bwZYAM5bjna0I_lpy3AmplqLg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "527477229647-m39ac7o5delmrto5utjr60qrp5f056ej.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

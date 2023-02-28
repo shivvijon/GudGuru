@@ -1,0 +1,64 @@
+ion-content::part(background) {
+  background: #FFFFFF;
+}
+
+.main-container {
+  .title, .sub-title {
+    line-height: 174.6%;
+  }
+
+  .title, a {
+    color: #FD191A;
+  }
+
+  p {
+    line-height: 130.6%;
+    letter-spacing: 0.02em;
+  }
+
+  ul {
+    padding-left: 24px;
+  }
+
+  p, ul {
+    font-size: 11pt;
+    color: #747474;
+  }
+
+  a {
+    letter-spacing: 0.02em;
+  }
+
+  ion-item {
+    --padding-start: 0px;
+    margin-top: 24px;
+    margin-bottom: 24px;
+
+    ion-checkbox {
+      margin-top: 0;
+    }
+
+    ion-label {
+      margin: 0;
+    }
+  }
+
+  ion-button {
+    margin-top: 24px;
+    margin-bottom: 24px;
+    font-size: 14pt;
+    text-transform: capitalize;
+    min-height: 48px;
+  }
+}
+
+ion-footer {
+  ion-toolbar {
+    ion-fab {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      margin: 16px 0;
+    }
+  }
+}

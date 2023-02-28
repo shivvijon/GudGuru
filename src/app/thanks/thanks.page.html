@@ -1,0 +1,33 @@
+<!-- <ion-header *ngIf="prevUrl && prevUrl !== '/plan'">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="false">
+        <ion-icon src="assets/icon/menu-icon.svg"></ion-icon>
+      </ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-content no padding *ngIf="paymentStatus?.success === true">
+  <div style="height: 100%; display: flex; align-items: center; justify-content: center;">
+    <ion-card class="ion-text-center thanksCard">
+      <ion-icon  src="../../assets/icon/success.svg"></ion-icon>
+      <h1>Thank You!</h1>
+      <p><b>Your Payment Has Been Done Successfully</b></p>
+      <ion-button (click)="navToHome()" shape="round">Home</ion-button>
+
+    </ion-card>
+  </div>
+</ion-content>
+
+<ion-content no padding *ngIf="paymentStatus?.success === false">
+  <div style="height: 100%; display: flex; align-items: center; justify-content: center;">
+    <ion-card class="ion-text-center thanksCard">
+      <ion-icon  src="../../assets/icon/fail.svg"></ion-icon>
+      <h1>Sorry!</h1>
+      <p><b>Your Payment Has Been Declined</b></p>
+      <ion-button [routerLink]="prevUrl" class="ion-danger" shape="round">Retry</ion-button>
+
+    </ion-card>
+  </div>
+</ion-content>

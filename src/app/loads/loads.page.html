@@ -1,0 +1,192 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button mode="ios">Back</ion-back-button>
+    </ion-buttons>
+
+    <ion-title>
+      <ion-icon src="assets/icon/location-icon.svg"></ion-icon>
+      <ng-container *ngIf="emergency.currentLocation; else noLoc">
+        {{emergency.currentLocation}}
+        <!-- <ion-icon src="assets/icon/chevron-down-light.svg"></ion-icon> -->
+      </ng-container>
+      <ng-template #noLoc>
+        No Location...
+      </ng-template>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button routerLink="../notification">
+        <ion-icon slot="icon-only" src="assets/icon/bell-icon.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form [formGroup]="loadForm" (ngSubmit)="addLoad()" (keyup.enter)="addLoad(true)">
+    <div class="header-cont">
+      <div class="header-cont-area ion-padding">
+        <h2 class="ion-padding-vertical">Load</h2>
+
+        <div class="emergency-btn">
+          <ng-container *ngIf="isEmLoading; else emLoad">
+            <ion-skeleton-text class="emload-toggle-skel" [animated]="true"></ion-skeleton-text>
+          </ng-container>
+          <ng-template #emLoad>
+            <div class="energency-toggle">
+              <ion-label mode="md">Emergency</ion-label>
+              <ion-toggle slot="end" mode="md" formControlName="emergency"></ion-toggle>
+            </div>
+            <em *ngIf="alertMessage" >{{alertMessage}}</em>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-container">
+      <div class="form-fields">
+        <ion-item class="ion-no-padding">
+          <ion-label position="floating" class="min-scale">Weight</ion-label>
+          <ion-input type="text" inputmode="numeric" maxlength="10" formControlName="weight"></ion-input>
+        </ion-item>
+        <div class="validation-error" *ngIf="(loadForm.get('weight').touched || loadForm.get('weight').dirty) &&
+          loadForm.get('weight').hasError('required')">
+          Weight is required
+        </div>
+
+        <ion-item class="ion-no-padding">
+          <ion-label position="floating" class="min-scale">Weight Type</ion-label>
+          <ion-select formControlName="weightType">
+            <ion-select-option value="Pound">Pound</ion-select-option>
+            <ion-select-option value="Kg">Kg</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <div class="validation-error" *ngIf="(loadForm.get('weightType').touched || loadForm.get('weightType').dirty) &&
+          loadForm.get('weightType').hasError('required')">
+          Weight Type is required
+        </div>
+
+        <ion-item class="ion-no-padding">
+          <ion-label position="floating" class="min-scale">Choose Type</ion-label>
+          <ion-select formControlName="type">
+            <ion-select-option value="refeer">Reefer</ion-select-option>
+            <ion-select-option value="dry van">Dry Van</ion-select-option>
+            <ion-select-option value="other">Other</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <div class="validation-error" *ngIf="(loadForm.get('type').touched || loadForm.get('type').dirty) &&
+          loadForm.get('type').hasError('required')">
+          Load Type is required
+        </div>
+
+        <h2>From</h2>
+
+        <ion-item class="ion-no-padding" (click)="openStateModal('from')">
+          <ion-label position="floating" class="min-scale">State</ion-label>
+          <ion-input type="text" formControlName="fromState" readonly="true"></ion-input>
+        </ion-item>
+        <div class="validation-error" *ngIf="(loadForm.get('fromState').touched || loadForm.get('fromState').dirty) &&
+          loadForm.get('fromState').hasError('required')">
+          From State is required
+        </div>
+
+        <ion-item class="ion-no-padding" (click)="loadForm.get('fromState').value?.length ? openCityModal('from') : ''">
+          <ion-label position="floating" class="min-scale">City</ion-label>
+          <ion-input type="text" formControlName="fromCity" readonly="true"></ion-input>
+        </ion-item>
+        <div class="validation-error" *ngIf="(loadForm.get('fromCity').touched || loadForm.get('fromCity').dirty) &&
+          loadForm.get('fromCity').hasError('required')">
+          From City is required
+        </div>
+
+        <ion-item class="ion-no-padding" (click)="openDatetime=true;">
+          <ion-label position="floating" class="min-scale">Pick up Date & Time</ion-label>
+          <ion-input id="pickupDate" type="text" readonly="true" formControlName="pickDate">
+            <ion-icon slot="end" src="assets/icon/calendar.svg"></ion-icon>
+          </ion-input>
+        </ion-item>
+        <div class="validation-error" *ngIf="(loadForm.get('pickDate').touched || loadForm.get('pickDate').dirty) &&
+          loadForm.get('pickDate').hasError('required')">
+          Pickup date time is required
+        </div>
+        <ion-modal class="datetimePicker" [isOpen]="openDatetime" [backdropDismiss]="false" (didPresent)="disableMonthPicker()">
+          <ng-template>
+            <div class="cal-wrapper">
+              <ion-datetime #ionDatetime presentation="date" size="cover" [min]="minDate" [max]="maxDate"
+                [value]="selectedDatetime" (ionChange)="setDatetime($event)"></ion-datetime>
+              <div class="ion-text-right ion-padding-top">
+                <ion-button fill="clear" class="hardware-tap" (click)="openDatetime=false;">Cancel</ion-button>
+                <ion-button fill="clear" (click)="patchDatetime()" [disabled]="!selectedDatetime">Ok</ion-button>
+              </div>
+            </div>
+          </ng-template>
+        </ion-modal>
+
+        <!-- <ion-item class="ion-no-padding">
+          <ion-label position="floating" class="min-scale">Detail Address</ion-label>
+          <ion-input type="text" formControlName="fromAddress" maxlength="20"></ion-input>
+        </ion-item>
+        <div class="validation-error" *ngIf="(loadForm.get('fromAddress').touched || loadForm.get('fromAddress').dirty) &&
+          loadForm.get('fromAddress').hasError('required')">
+          From detail address is required
+        </div> -->
+
+        <h2>To</h2>
+
+        <ion-item class="ion-no-padding" (click)="openStateModal('to')">
+          <ion-label position="floating" class="min-scale">State</ion-label>
+          <ion-input type="text" formControlName="toState" readonly="true"></ion-input>
+        </ion-item>
+        <div class="validation-error" *ngIf="(loadForm.get('toState').touched || loadForm.get('toState').dirty) &&
+          loadForm.get('toState').hasError('required')">
+          To State is required
+        </div>
+
+        <ion-item class="ion-no-padding" (click)="loadForm.get('toState').value?.length ? openCityModal('to') : ''">
+          <ion-label position="floating" class="min-scale">City</ion-label>
+          <ion-input type="text" formControlName="toCity" readonly="true"></ion-input>
+        </ion-item>
+        <div class="validation-error" *ngIf="(loadForm.get('toCity').touched || loadForm.get('toCity').dirty) &&
+          loadForm.get('toCity').hasError('required')">
+          To City is required
+        </div>
+
+        <!-- <ion-item class="ion-no-padding">
+          <ion-label position="floating" class="min-scale">Detail Address</ion-label>
+          <ion-input type="text" formControlName="toAddress" maxlength="20"></ion-input>
+        </ion-item>
+        <div class="validation-error" *ngIf="(loadForm.get('toAddress').touched || loadForm.get('toAddress').dirty) &&
+          loadForm.get('toAddress').hasError('required')">
+          To detail address is required
+        </div> -->
+
+        <ion-item class="ion-no-padding">
+          <ion-label position="floating" class="min-scale">Contact No</ion-label>
+          <ion-input type="text" inputmode="numeric" formControlName="contact"></ion-input>
+        </ion-item>
+        <div class="validation-error" *ngIf="(loadForm.get('contact').touched || loadForm.get('contact').dirty) &&
+          loadForm.get('contact').hasError('required')">
+          Contact is required
+        </div>
+
+        <ion-item class="ion-no-padding">
+          <ion-label position="floating" class="min-scale">Ad Title</ion-label>
+          <ion-input type="text" formControlName="title" maxlength="70"></ion-input>
+        </ion-item>
+        <div class="validation-error" *ngIf="(loadForm.get('title').touched || loadForm.get('title').dirty) &&
+          loadForm.get('title').hasError('required')">
+          Title is required
+        </div>
+
+        <div class="ion-text-center form-btn">
+          <ion-button type="submit" class="ion-text-capitalize" expand="block" [disabled]="loadForm.invalid || loading">
+            <ion-spinner *ngIf="loading" color="secondary"></ion-spinner>
+            <span *ngIf="!loading">Continue</span>
+          </ion-button>
+        </div>
+
+      </div>
+    </div>
+  </form>
+</ion-content>

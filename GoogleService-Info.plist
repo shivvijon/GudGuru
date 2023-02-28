@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>527477229647-uth721dhv8n1rcba9aer7snubjc2vjug.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.527477229647-uth721dhv8n1rcba9aer7snubjc2vjug</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>527477229647-vb34vhnqa2iacdlqmc3ov3fcg32qdchc.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCKyclaDPKdb8W7Wk0SA4c6n7-DgXBHxsU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>527477229647</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.gudguru.app</string>
+	<key>PROJECT_ID</key>
+	<string>gudguru-8106b</string>
+	<key>STORAGE_BUCKET</key>
+	<string>gudguru-8106b.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:527477229647:ios:1bd08ae60f8652e635023a</string>
+</dict>
+</plist>

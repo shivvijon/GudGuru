@@ -1,0 +1,24 @@
+<ion-tabs>
+  <ion-tab-bar slot="bottom" mode="md">
+    <ion-tab-button tab="home">
+      <!-- <ion-icon src="assets/icon/home-icon.svg" class="tab-active"></ion-icon> -->
+      <ion-icon src="assets/icon/home-icon.svg"></ion-icon>
+      <ion-label>Home</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button [disabled]="!api.user" (click)="getTrialStatus()">
+      <ion-icon src="assets/icon/bolt-icon.svg"></ion-icon>
+      <ion-label>Emergency</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="profile">
+      <ion-icon src="assets/icon/profile-icon.svg"></ion-icon>
+      <ion-label>Profile</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="listing">
+      <ion-icon src="assets/icon/list-icon.svg"></ion-icon>
+      <ion-label>Listing</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>

@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar color="secondary" mode="md">
+    <ion-title class="modal-title">Select State</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button class="hardware-tap" (click)="closeModal(true)">
+        <ion-icon class="close-btn" slot="end" src="assets/icon/close-icon.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-toolbar color="secondary">
+    <ion-searchbar placeholder="Search State" mode="ios" class="loc-search"
+      (ionChange)="getfilteredStates($event)" (ionCancel)="resetStates()"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-radio-group [value]="selectedState" (ionChange)="setStateCity($event);">
+    <ion-item *ngFor="let state of filteredStates" lines="none">
+      <ion-label>{{state}}</ion-label>
+      <ion-radio slot="end" [value]="state" mode="md"></ion-radio>
+    </ion-item>
+  </ion-radio-group>
+</ion-content>
+
+<ion-footer>
+  <ion-button class="ion-margin" expand="block" [disabled]="!selectedState" (click)="closeModal(false)">
+    Continue
+  </ion-button>
+</ion-footer>

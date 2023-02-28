@@ -1,0 +1,108 @@
+<ion-header *ngIf="userService.user?.isSubscribed">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="false">
+        <ion-icon src="assets/icon/menu-icon.svg"></ion-icon>
+      </ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>
+      <ion-icon src="assets/icon/location-icon.svg"></ion-icon>
+      <ng-container *ngIf="emergency.currentLocation; else noLoc">
+        {{emergency.currentLocation}}
+        <!-- <ion-icon src="assets/icon/chevron-down-light.svg"></ion-icon> -->
+      </ng-container>
+      <ng-template #noLoc>
+        No Location...
+      </ng-template>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button routerLink="../notification">
+        <ion-icon slot="icon-only" src="assets/icon/bell-icon.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="header-cont">
+    <div class="header-cont-area ion-padding">
+      <h2 class="ion-padding-vertical">
+        Upgrade Plan
+      </h2>
+    </div>
+  </div>
+  <div class="header-logo">
+    <ion-icon slot="icon-only" src="assets/icon/plan-icon.svg"></ion-icon>
+  </div>
+
+  <div class="loads-list ion-padding">
+    <!-- <ion-card>
+      <div class="card-content">
+        <h2>{{silver?.plan_name}}</h2>
+        <h3>${{silver?.amount}} /mon</h3>
+      </div>
+      <div class="card-content">
+        <p>
+          Can Add 3 listing
+          <br>
+          Can Access Phone no
+        </p>
+        <ion-button shape="round" *ngIf="level <= '0'" (click)="makePayment(silver?.amount,'1')">Upgrade</ion-button>
+        <ion-button shape="round" *ngIf="level >= '1'" >Active</ion-button>
+      </div>
+    </ion-card> -->
+
+    <ion-card>
+      <ng-container *ngIf="!isPlanLoading; else planLoad">
+        <div class="card-content">
+          <h2>{{platinum?.plan_name}}</h2>
+          <h3>${{platinum?.amount}} /mon</h3>
+        </div>
+        <div class="card-content">
+          <p>
+            Can Add Unlimited listing
+            <br>
+            Can Access Phone no
+            <br>
+            Can Use City Wise Filter
+            <br>
+            Can See Emergency Loads
+          </p>
+        </div>
+        <div class="ion-margin">
+          <ion-button shape="round" *ngIf="level !== '2'" (click)="makePayment(platinum?.amount,'2')" >Upgrade</ion-button>
+          <ion-button shape="round" *ngIf="level === '2' && subStatus !== 'past_due'">Active</ion-button>
+          <ion-button shape="round" *ngIf="level === '2' && subStatus === 'past_due'"
+            (click)="makePayment(platinum?.amount,'2', 'card_update')">
+            Update Card
+          </ion-button>
+          <ion-button shape="round" color="danger" class="plan-cancel" *ngIf="level === '2' && subStatus !== 'inactive'"
+            [disabled]="isLoading" (click)="presentAlert()">
+            <span *ngIf="!isLoading">Cancel</span>
+            <ion-spinner name="crescent" *ngIf="isLoading"></ion-spinner>
+          </ion-button>
+        </div>
+      </ng-container>
+      <ng-template #planLoad>
+        <div class="card-content">
+          <ion-skeleton-text [style]="{'width': '150px'}" [animated]="true"></ion-skeleton-text>
+          <ion-skeleton-text [style]="{'width': '100px'}" [animated]="true"></ion-skeleton-text>
+        </div>
+        <div class="card-content">
+          <p class="skeleton">
+            <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+            <br>
+            <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+            <br>
+            <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+            <br>
+            <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+          </p>
+          <ion-skeleton-text [style]="{'width': '100px'}" [animated]="true"></ion-skeleton-text>
+        </div>
+      </ng-template>
+    </ion-card>
+  </div>
+</ion-content>

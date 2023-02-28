@@ -1,0 +1,142 @@
+<!--Modal for Pickup State-->
+<ion-modal class="loc-select" [isOpen]="openLocation" [initialBreakpoint]="modalInitialBr" [breakpoints]="[0.50, 1]"
+ [backdropDismiss]="false" [handle]="false">
+  <ng-template>
+    <div class="modal-main-cont" [ngClass]="fromSelected ? 'from-loc-selected' : ''">
+      <!--From State/City-->
+      <ion-item class="modal-header-cont ion-no-padding" lines="none">
+        <ion-label class="modal-title">From</ion-label>
+        <ion-icon class="close-btn hardware-tap" slot="end" src="assets/icon/close-icon.svg" (click)="closeModal(false)">
+        </ion-icon>
+      </ion-item>
+
+      <ion-item class="ion-no-padding" lines="none" mode="ios"
+        (click)="selectedState=(selectedPickState ? selectedPickState : null); openState=true; locMode='pickState'">
+        <ion-label position="stacked">Select State</ion-label>
+        <ion-input placeholder="Select State" readonly="true" [value]="selectedPickState">
+          <ion-icon slot="end" src="assets/icon/chevron-down.svg"></ion-icon>
+        </ion-input>
+      </ion-item>
+      <ion-item class="ion-no-padding" lines="none" mode="ios" (click)="filterCity('pickCity')">
+        <ion-label position="stacked">Select City</ion-label>
+        <ion-input placeholder="Select City" readonly="true" [value]="selectedPickCities">
+          <ion-icon slot="end" src="assets/icon/chevron-down.svg"></ion-icon>
+        </ion-input>
+      </ion-item>
+
+      <!--To State/City-->
+      <ng-container *ngIf="fromSelected">
+        <ion-item class="modal-header-cont ion-no-padding" lines="none">
+          <ion-label class="modal-title">To</ion-label>
+        </ion-item>
+
+        <ion-item class="ion-no-padding" lines="none" mode="ios"
+          (click)="filteredStates.unshift('All'); selectedState=(selectedDropState ? selectedDropState : null);
+          openState=true; locMode='dropState'">
+          <ion-label position="stacked">Select State</ion-label>
+          <ion-input placeholder="Select State" readonly="true" [value]="selectedDropState">
+            <ion-icon slot="end" src="assets/icon/chevron-down.svg"></ion-icon>
+          </ion-input>
+        </ion-item>
+        <ion-item class="ion-no-padding" lines="none" mode="ios" (click)="filterCity('dropCity')">
+          <ion-label position="stacked">Select City</ion-label>
+          <ion-input placeholder="Select City" readonly="true" [value]="selectedDropCities">
+            <ion-icon slot="end" src="assets/icon/chevron-down.svg"></ion-icon>
+          </ion-input>
+        </ion-item>
+
+        <ion-button class="ion-margin-vertical" expand="block"
+          [disabled]="!selectedPickState || !selectedPickCities.length || !selectedDropState || !selectedDropCities.length"
+          (click)="closeModal(true);">
+          Submit
+        </ion-button>
+      </ng-container>
+    </div>
+  </ng-template>
+</ion-modal>
+
+<!--Modal for State-->
+<ion-modal class="state-list" [isOpen]="openState" [backdropDismiss]="false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar color="secondary" mode="md">
+        <ion-title class="modal-title">Select State</ion-title>
+
+        <ion-buttons slot="end">
+          <ion-button class="hardware-tap" (click)="openState=false;
+            (filteredStates[0] === 'All' ? filteredStates.shift() : null);">
+            <ion-icon class="close-btn" slot="end" src="assets/icon/close-icon.svg"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+
+      <ion-toolbar color="secondary">
+        <ion-searchbar placeholder="Search State" mode="ios" class="loc-search"
+          (ionChange)="getfilteredStates($event)" (ionCancel)="resetStates()"></ion-searchbar>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <ion-radio-group [value]="selectedState" (ionChange)="setStateCity($event, 'state');">
+        <ion-item *ngFor="let state of filteredStates" lines="none">
+          <ion-label>{{state}}</ion-label>
+          <ion-radio slot="end" [value]="state" mode="md"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </ion-content>
+
+    <ion-footer>
+      <ion-button class="ion-margin" expand="block" [disabled]="!selectedState" (click)="setLocation(); openState=false;">
+        Continue
+      </ion-button>
+    </ion-footer>
+  </ng-template>
+</ion-modal>
+
+<!--Modal for City-->
+<ion-modal class="city-list" [isOpen]="openCity" [backdropDismiss]="false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar color="secondary" mode="md">
+        <ion-title class="modal-title">Select City</ion-title>
+
+        <ion-buttons slot="end">
+          <ion-button class="hardware-tap" (click)="openCity=false;">
+            <ion-icon class="close-btn" slot="end" src="assets/icon/close-icon.svg"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+
+      <ion-toolbar color="secondary">
+        <ion-searchbar placeholder="Search City" mode="ios" class="loc-search"
+          (ionChange)="getfilteredCities($event)" (ionCancel)="resetCities()"></ion-searchbar>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <cdk-virtual-scroll-viewport itemSize="40" [minBufferPx]="1000" [maxBufferPx]="1350">
+        <ion-item *cdkVirtualFor="let city of filteredCities" lines="none">
+          <ion-label>{{city.city}}</ion-label>
+          <ion-checkbox slot="end" [value]="city.city"
+            [checked]="selectedCities.includes(city.city) ? true : false"
+            mode="md"(ionChange)="setStateCity($event, 'city')">
+          </ion-checkbox>
+          <!-- <ng-template #showCities>
+            <ion-checkbox slot="end" [value]="city.city"
+              [disabled]="selectedCities.includes('All') ? true : false"
+              [checked]="selectedCities.includes(city.city) ? true : false"
+              mode="md"(ionChange)="setStateCity($event, 'city')">
+            </ion-checkbox>
+          </ng-template> -->
+        </ion-item>
+      </cdk-virtual-scroll-viewport>
+    </ion-content>
+
+    <ion-footer>
+      <ion-button class="ion-margin" expand="block" [disabled]="!selectedCities.length"
+        (click)="setLocation(); openCity=false;">
+        Continue
+      </ion-button>
+    </ion-footer>
+  </ng-template>
+</ion-modal>

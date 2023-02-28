@@ -1,0 +1,52 @@
+<ion-content color="primary">
+  <div class="reg-container ion-margin">
+    <h2 class="title ion-padding-vertical">Add Your Profile</h2>
+
+    <form [formGroup]="regForm" (ngSubmit)="register()" (keyup.enter)="register(true)">
+      <ion-item lines="none">
+        <ion-label class="ion-padding-bottom" position="stacked" color="light">Name</ion-label>
+        <ion-input type="text" placeholder="name" formControlName="name">
+          <ion-icon slot="start" src="assets/icon/user-profile.svg"></ion-icon>
+        </ion-input>
+      </ion-item>
+      <div class="validation-error" *ngIf="(regForm.get('name').touched || regForm.get('name').dirty) &&
+        regForm.get('name').hasError('required')">
+          Please enter name
+      </div>
+
+      <ion-item lines="none">
+        <ion-label class="ion-padding-bottom" position="stacked" color="light">Email</ion-label>
+        <ion-input type="email" placeholder="johndoe@domain" formControlName="email">
+          <ion-icon slot="start" src="assets/icon/email.svg"></ion-icon>
+        </ion-input>
+      </ion-item>
+      <div class="validation-error" *ngIf="(regForm.get('email').touched || regForm.get('email').dirty) &&
+        regForm.get('email').hasError('required')">
+          Please enter email
+      </div>
+      <div class="validation-error" *ngIf="(regForm.get('email').touched || regForm.get('email').dirty) &&
+        regForm.get('email').hasError('email')">
+          Please enter valid email
+      </div>
+
+      <ion-item lines="none">
+        <ion-label class="ion-padding-bottom" position="stacked" color="light">Phone No.</ion-label>
+        <ion-input type="text" [disabled]="true"  inputmode="numeric" placeholder="phone" formControlName="phone">
+          <ion-icon slot="start" src="assets/icon/phone-code.svg"></ion-icon>
+        </ion-input>
+      </ion-item>
+      <div class="validation-error" *ngIf="(regForm.get('phone').touched || regForm.get('phone').dirty) &&
+        regForm.get('phone').hasError('required')">
+          Please enter phone
+      </div>
+
+
+      <ion-button type="submit" class="reg-btn ion-padding-vertical" expand="block" [disabled]="regForm.invalid || loading">
+        <span *ngIf="!loading">Sign Up</span>
+        <ion-spinner *ngIf="loading" color="primary"></ion-spinner>
+      </ion-button>
+    </form>
+
+    <!-- <p class="ion-padding-bottom ion-text-center login-note">You already have account? <span routerLink="/login">Sign In</span> </p> -->
+  </div>
+</ion-content>

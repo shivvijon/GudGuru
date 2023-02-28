@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="false">
+        <ion-icon src="assets/icon/menu-icon.svg"></ion-icon>
+      </ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>
+      <ion-icon src="assets/icon/location-icon.svg"></ion-icon>
+      <ng-container *ngIf="emergency.currentLocation; else noLoc">
+        {{emergency.currentLocation}}
+        <!-- <ion-icon src="assets/icon/chevron-down-light.svg"></ion-icon> -->
+      </ng-container>
+      <ng-template #noLoc>
+        No Location...
+      </ng-template>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button routerLink="notification">
+        <ion-icon slot="icon-only" src="assets/icon/bell-icon.svg"></ion-icon>
+        <div *ngIf="push.isNotifNew" class="notif-marker"></div>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="header-cont">
+    <div class="header-cont-area ion-padding">
+      <h2 class="ion-padding-vertical">
+        <ion-icon class="ion-padding-end" slot="icon-only" src="assets/icon/chevron-left.svg" (click)="location.back()"></ion-icon>
+        Profile
+      </h2>
+    </div>
+  </div>
+  <div class="header-logo">
+    <ion-icon slot="icon-only" src="assets/icon/avatar.svg"></ion-icon>
+  </div>
+
+  <ng-container *ngIf="api.user; else profileLoading">
+    <ion-text class="ion-text-center ion-text-capitalize" color="tertiary"><h2>{{api.user.name}}</h2></ion-text>
+    <div class="profile-data">
+      <p><ion-icon slot="icon-only" src="assets/icon/tele-icon.svg"></ion-icon> {{api.user.phone}}</p>
+      <p><ion-icon slot="icon-only" src="assets/icon/email-icon.svg"></ion-icon> {{api.user.email}}</p>
+    </div>
+  </ng-container>
+  <ng-template #profileLoading>
+    <div class="ion-text-center ion-padding-vertical">
+      <ion-skeleton-text [animated]="true" style="width: 200px; margin: auto;"></ion-skeleton-text>
+    </div>
+    <div class="profile-data">
+      <p><ion-skeleton-text [animated]="true" style="width: 200px;"></ion-skeleton-text></p>
+      <p><ion-skeleton-text [animated]="true" style="width: 200px;"></ion-skeleton-text></p>
+    </div>
+  </ng-template>
+
+</ion-content>

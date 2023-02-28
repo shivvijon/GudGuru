@@ -1,0 +1,27 @@
+ion-item {
+  --background: transparent;
+
+  h1, h2 {
+    font-weight: bold;
+  }
+
+  h2 {
+    color: #000000;
+  }
+
+  p {
+    color: #818181;
+    font-weight: 400;
+  }
+}
+
+ion-item:first-child {
+  h1 {
+    color: var(--ion-color-primary);
+  }
+}
+
+ion-item::part(detail-icon) {
+  color: var(--ion-color-primary);
+  opacity: 1;
+}

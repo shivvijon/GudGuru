@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="false">
+        <ion-icon src="assets/icon/menu-icon.svg"></ion-icon>
+      </ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>
+      <ion-icon src="assets/icon/location-icon.svg"></ion-icon>
+      <ng-container *ngIf="emergency.currentLocation; else noLoc">
+        {{emergency.currentLocation}}
+        <!-- <ion-icon src="assets/icon/chevron-down-light.svg"></ion-icon> -->
+      </ng-container>
+      <ng-template #noLoc>
+        No Location...
+      </ng-template>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button routerLink="../notification">
+        <ion-icon slot="icon-only" src="assets/icon/bell-icon.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="header-cont">
+    <div class="header-cont-area ion-padding">
+      <h2 class="ion-padding-vertical">
+        <ion-icon class="ion-padding-end" slot="icon-only" src="assets/icon/chevron-left.svg" routerLink="../"></ion-icon>
+        Back
+      </h2>
+      <ng-container *ngIf="isLoading; else emLoad">
+        <ion-skeleton-text class="emload-skel" [animated]="true"></ion-skeleton-text>
+      </ng-container>
+      <ng-template #emLoad>
+        <ion-button class="emergency-btn" shape="round" [disabled]="!api.user || isLoading"
+          (click)="(!api.isTrial && api.user?.role === '0' &&
+          (api.subscriptionStatus === 'inactive' || api.subscriptionStatus === 'past_due')) ?
+          api.showPlanUpgrade() : emergency.checkPermission()">
+          Emergency Load
+          <ion-icon slot="end" src="assets/icon/emergency-icon.svg"></ion-icon>
+        </ion-button>
+      </ng-template>
+    </div>
+  </div>
+  <div class="header-logo">
+    <ion-icon slot="icon-only" src="assets/icon/truck-icon.svg"></ion-icon>
+  </div>
+
+  <div class="loads-list ion-padding">
+    <ion-item lines="none" routerLink="loads">
+      <ion-label color="primary">Load Listing</ion-label>
+      <ion-icon slot="end" src="assets/icon/chevron-right-red.svg"></ion-icon>
+    </ion-item>
+  </div>
+</ion-content>

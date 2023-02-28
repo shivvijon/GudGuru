@@ -1,0 +1,29 @@
+.service-container {
+  position: relative;
+  margin-top: -220px;
+
+  ion-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 8px;
+    min-height: 164px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.12);
+  }
+
+  ion-card h2 {
+    font-weight: 600;
+    color: #181818;
+    padding-top: 8px;
+  }
+
+}
+
+.alert-count{
+position: absolute;
+top: -10px;
+left: 10px;
+border-radius: 10px;
+font-size: 7px;
+color: white;
+}

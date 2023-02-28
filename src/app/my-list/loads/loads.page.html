@@ -1,0 +1,120 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="false">
+        <ion-icon src="assets/icon/menu-icon.svg"></ion-icon>
+      </ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>
+      <ion-icon src="assets/icon/location-icon.svg"></ion-icon>
+      <ng-container *ngIf="emergency.currentLocation; else noLoc">
+        {{emergency.currentLocation}}
+        <!-- <ion-icon src="assets/icon/chevron-down-light.svg"></ion-icon> -->
+      </ng-container>
+      <ng-template #noLoc>
+        No Location...
+      </ng-template>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button routerLink="../../notification">
+        <ion-icon slot="icon-only" src="assets/icon/bell-icon.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="header-cont">
+    <div class="header-cont-area ion-padding">
+      <h2 class="ion-padding-vertical">
+        <ion-icon class="ion-padding-end" slot="icon-only" src="assets/icon/chevron-left.svg" routerLink="../"></ion-icon>
+        Back
+      </h2>
+      <ng-container *ngIf="isLoading; else emLoad">
+        <ion-skeleton-text class="emload-skel" [animated]="true"></ion-skeleton-text>
+      </ng-container>
+      <ng-template #emLoad>
+        <ion-button class="emergency-btn" shape="round" [disabled]="!userService.user || isLoading"
+          (click)="(!userService.isTrial && userService.user?.role === '0' &&
+          (userService.subscriptionStatus === 'inactive' || userService.subscriptionStatus === 'past_due')) ?
+          userService.showPlanUpgrade() : emergency.checkPermission()">
+          Emergency Load
+          <ion-icon slot="end" src="assets/icon/emergency-icon.svg"></ion-icon>
+        </ion-button>
+      </ng-template>
+    </div>
+  </div>
+  <div class="header-logo">
+    <ion-icon slot="icon-only" src="assets/icon/truck-icon.svg"></ion-icon>
+  </div>
+
+  <div class="loads-list ion-padding">
+    <ion-card mode="md" *ngIf="isLoading; else loadsList">
+      <ion-item class="ion-no-padding">
+        <ion-skeleton-text [animated]="true" style="width: 100px;"></ion-skeleton-text>
+      </ion-item>
+
+      <div class="card-content">
+        <div class="loc-content">
+          <p>
+            <ion-skeleton-text [animated]="true" style="width: 200px;"></ion-skeleton-text>
+          </p>
+        </div>
+        <div class="loc-content">
+          <p>
+            <ion-skeleton-text [animated]="true" style="width: 200px;"></ion-skeleton-text>
+            <br>
+            <ion-skeleton-text [animated]="true" style="width: 150px;"></ion-skeleton-text>
+          </p>
+        </div>
+
+        <ion-skeleton-text [animated]="true" style="width: 125px;"></ion-skeleton-text>
+        <div class="load-type">
+          <ion-skeleton-text [animated]="true" style="width: 120px;"></ion-skeleton-text>
+          <ion-skeleton-text [animated]="true" style="width: 130px; height: 30px; border-radius: 30px"></ion-skeleton-text>
+        </div>
+      </div>
+    </ion-card>
+
+    <ng-template #loadsList>
+      <ng-container *ngIf="loads.length; else noLoads">
+        <ion-card *ngFor="let load of loads" mode="md">
+          <ion-item class="ion-no-padding">
+            <ion-label>{{load.title}}</ion-label>
+            <ion-icon *ngIf="load.emergency" slot="end" src="assets/icon/emergency-icon.svg"></ion-icon>
+          </ion-item>
+
+          <div class="card-content">
+            <div class="loc-content">
+              <ion-icon slot="icon-only" src="assets/icon/truck-green.svg"></ion-icon>
+              <p>
+                <span>{{load.from.city}}, {{load.from.state}}</span>
+              </p>
+            </div>
+            <div class="loc-content">
+              <ion-icon slot="icon-only" src="assets/icon/location-red.svg"></ion-icon>
+              <p>
+                <span>{{load.to.city}}, {{load.to.state}}</span>
+                <br>
+                {{load.from.pickupdate}}
+              </p>
+            </div>
+
+            <p class="ion-no-margin load-weight"><span>Weight : </span>{{load.weight}} {{load.weight_type}}</p>
+            <div class="load-type">
+              <p class="load-weight"><span>Type : </span>{{load.type}}</p>
+              <ion-icon class="delete-icon" slot="icon-only" src="assets/icon/delete-icon.svg" (click)="presentAlert(load._id)">
+              </ion-icon>
+            </div>
+          </div>
+        </ion-card>
+      </ng-container>
+
+      <ng-template #noLoads>
+        <h2 class="ion-text-center">No loads available</h2>
+      </ng-template>
+    </ng-template>
+  </div>
+</ion-content>

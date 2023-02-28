@@ -1,0 +1,28 @@
+.email-modal {
+  --height: auto;
+  --max-height: 85%;
+
+  .ion-page {
+    background: var(--var-color-secondary);
+  }
+}
+
+ion-modal.email-modal::part(content) {
+  overflow-y: hidden;
+}
+
+.email-cont {
+  padding: 60px 14px;
+  color: #FFFFFF;
+
+  ion-button {
+    height: 48px;
+    --background: #FFFFFF;
+    color: #FD191A;
+    text-transform: capitalize;
+    font-weight: 600;
+    font-size: 14pt;
+    margin-top: 20px;
+  }
+}
+

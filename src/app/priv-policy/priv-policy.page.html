@@ -1,0 +1,105 @@
+<ion-header class="ion-no-border" mode="md">
+  <ion-toolbar>
+    <ion-buttons slot="start" routerLink="/login">
+      <ion-button class="back-btn">
+        <ion-icon src="assets/icon/chevron-left-black.svg" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [scrollEvents]="true" (ionScroll)="onWindowScroll($any($event))">
+  <div id="container" class="main-container ion-padding">
+
+    <h3 class="title">Thank you for using GudGuru!</h3>
+
+    <div class="policy">
+      <h3 class="sub-title">PRIVACY POLICY</h3>
+
+      <p>
+        This Privacy Policy applies when you use GudGuru’s services and tells you, amongst other things, about:
+      </p>
+
+      <ul>
+        <li> The ways we collect and store your Personal Data and why we do so, </li>
+        <li> How we use and disclose your Personal Data, and </li>
+        <li> The choices you have about your Personal Data. </li>
+      </ul>
+
+      <p>
+        This Privacy Policy is issued by GudGuru on behalf of itself, its subsidiaries and its affiliates
+        (together, “GudGuru”, www.gudguru.com, “we”, “us” and “our”) and is addressed to individuals with whom we interact,
+        including our customers, visitors to our Sites, and other users of our services (together, “your”, or “you”).
+        To ensure transparency this Privacy Policy describes our information handling practices when you access our website
+        located at www.GudGuru.com and/or when you use the GudGuru mobile app or third-party applications relying on such an
+        API, and related services (referred to collectively hereinafter as "Services").
+        <br><br>
+        If you do not want GudGuru to collect, store, use, or share your data in the ways described in this Privacy Policy,
+        you may not use GudGuru’ s Services. If you have any questions about this Privacy Notice, please contact us at
+        info@gudguru.com.
+        <br><br>
+        By accessing and using our Services, you signify acceptance to the terms of this Privacy Policy and consent to
+        the collection, use, and disclosure of your personal information as described below. If you do not agree with or
+        you are not comfortable with any aspect of this Privacy Policy, you should immediately discontinue access or use of
+        our Services.
+        <br><br>
+        <a [href]="env.policyUrl" target="_blank">Read Full Privacy Policy</a>
+        <br>
+      </p>
+    </div>
+
+    <div class="terms">
+      <h3 class="sub-title">TERMS & CONDITION</h3>
+
+      <p>
+        Arbitration Notice And Class Action Waiver
+        <br><br>
+        Important Notice: Unless you opt out of arbitration within 30 days of the date you first agree to these terms by
+        following the opt-out procedure specified in the “arbitration” section below, and except for certain types of disputes
+        described in the “arbitration“ section below, you agree that disputes between you and gudguru will be resolved by binding,
+        individual arbitration and you are waiving your right to a trial by jury or to participate as a plaintiff or class member
+        in any purported class action or representative proceedings.
+        <br><br>
+        GUDGURU LLC (hereinafter “GUDGURU”) is a technology platform for connecting drivers and shippers/brokers for various
+        purposes including but not limited to booking loads. Please read our Terms of Service so that you can understand your
+        use of GUDGURU. You agree to our Terms of Service (“Terms”) by installing, accessing, or using our apps, services,
+        features, software, or website (together, “Services”). In case you don’t agree to all the terms and conditions set
+        out below, you must not use the Services. Please read these Terms of Service and our Privacy Policy very carefully
+        before using GUDGURU’s Services for any purpose.
+        <br><br>
+        You acknowledge and agree that the GUDGURU’s Privacy Policy will apply to you when you use the Services. Our Privacy
+        Policy explains how we use, store, collect, disclose your personal information along with your rights and choices
+        concerning your information. You must not use the Services in case you do not agree with the ways we use your personal
+        information in our Privacy Policy.
+        <br><br>
+        Please note that “GUDGURU,” or “we,” “our,” or “us” in these Terms of Service means GUDGURU and all other Affiliate
+        entities. GUDGURU is located at 6642 W Alluvial Ave Fresno CA (3722. In all cases, “GUDGURU,” “we,” “our,” or “us”
+        includes agents, consultants, employees, officers, and directors.
+        <br><br>
+        <a [href]="env.termsUrl" target="_blank">Read Full Terms & Conditions</a>
+        <br>
+      </p>
+    </div>
+
+    <ion-item class="ion-margin-vertical" lines="none" mode="md">
+      <ion-checkbox slot="start" (ionChange)="checkTerms($event)"></ion-checkbox>
+      <ion-label class="ion-text-wrap">I agree to the above privacy policy and terms & conditions</ion-label>
+    </ion-item>
+
+    <ion-button class="ion-margin-vertical" color="primary" expand="block"
+      [disabled]="!isTermsChecked" (click)="navToRegister()">
+      Continue
+    </ion-button>
+
+  </div>
+</ion-content>
+
+<ion-footer id="scrollDownBtn" class="ion-no-border" mode="md">
+  <ion-toolbar>
+    <ion-fab>
+      <ion-fab-button (click)="scrollDown()">
+        <ion-icon src="assets/icon/chevron-down-light.svg"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </ion-toolbar>
+</ion-footer>

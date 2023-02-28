@@ -1,0 +1,92 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button mode="ios">Back</ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-item class="heading" lines="none">
+    <h3>Payment</h3>
+  </ion-item>
+  <ion-grid>
+      <ion-row>
+        <ion-col>
+          <!--Payment Card Form-->
+          <form [formGroup]="makePayment" (submit)="stripePayment()">
+            <ion-list>
+                <ng-container>
+                  <div class="item-container">
+                    <ion-item>
+                      <ion-label position="stacked">Name on Card</ion-label>
+                      <ion-input type="text" formControlName="nameOnCard"></ion-input>
+                    </ion-item>
+                  </div>
+                  <span class="error ion-padding" *ngIf="errorControl.nameOnCard.errors?.required && (errorControl.nameOnCard.dirty || errorControl.nameOnCard.touched)">
+                    Full name required
+                  </span>
+
+                  <div class="item-container">
+                    <ion-item>
+                      <ion-label position="stacked">Card Number</ion-label>
+                      <ion-input type="text" inputmode="numeric" maxlength="16" formControlName="accountNumber"></ion-input>
+                    </ion-item>
+                  </div>
+                  <span class="error ion-padding" *ngIf="errorControl.accountNumber.errors?.required && (errorControl.accountNumber.dirty || errorControl.accountNumber.touched)">
+                    Card Number required
+                  </span>
+
+                  <div class="item-container">
+                    <ion-item>
+                      <ion-label position="stacked">Expiration</ion-label>
+                      <ion-row>
+                        <ion-col size="5" class="ion-no-padding">
+                          <ion-input #cardExpMonth type="text" inputmode="numeric" maxlength="2" placeholder="MM" formControlName="expireMonth"></ion-input>
+                        </ion-col>
+                        <ion-col size="2">/</ion-col>
+                        <ion-col size="5" class="ion-no-padding">
+                          <ion-input #cardExpYear type="text" inputmode="numeric" maxlength="4" placeholder="YYYY" formControlName="expireYear"></ion-input>
+                        </ion-col>
+                      </ion-row>
+                      </ion-item>
+                  </div>
+                  <span class="error ion-padding" *ngIf="errorControl.expireMonth.errors?.required && (errorControl.expireMonth.dirty || errorControl.expireMonth.touched)
+                             && errorControl.expireYear.errors?.required && (errorControl.expireYear.dirty || errorControl.expireYear.touched)">
+                    Expiration Date required
+                  </span>
+                  <div class="item-container">
+                    <ion-item lines="none">
+                      <ion-label position="stacked">Security Code</ion-label>
+                      <ion-input type="text" inputmode="numeric" maxlength="4" placeholder="CVC" formControlName="cardVerificationValue"></ion-input>
+                    </ion-item>
+                  </div>
+                </ng-container>
+              </ion-list>
+              <ion-button class="ion-padding-horizontal form-submit"
+                type="submit" [class.button-disabled]="loading" expand="block">
+                <ion-spinner color="light" *ngIf="loading" name="dots"></ion-spinner>
+                <span *ngIf="!loading">Pay $ {{this.getData?.amount}}</span>
+              </ion-button>
+
+          </form>
+
+          <!-- Payment Card Form End -->
+        </ion-col>
+      </ion-row>
+
+      <!-- <ion-footer>
+        <ion-toolbar>
+          <ion-row class="footer">
+            <ion-col class="ion-no-padding">
+              <ion-button class="ion-padding-start ion-padding-end" expand="block" type="submit">
+                Update
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-toolbar>
+      </ion-footer> -->
+
+  </ion-grid>
+
+</ion-content>

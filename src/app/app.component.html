@@ -1,0 +1,62 @@
+<ion-app>
+  <ion-menu contentId="main-content">
+    <ion-header>
+      <ion-toolbar color="tertiary">
+        <ion-title>GudGuru</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding-vertical">
+      <ion-item lines="none">
+        <ion-label>
+          <ng-container *ngIf="auth.user; else noUser">
+            <h1>{{auth.user.name}}</h1>
+            <p>{{auth.user.email}}</p>
+          </ng-container>
+          <ng-template #noUser>
+            <h1><ion-skeleton-text [animated]="true" style="width: 150px;"></ion-skeleton-text></h1>
+            <p><ion-skeleton-text [animated]="true" style="width: 150px;"></ion-skeleton-text></p>
+          </ng-template>
+        </ion-label>
+      </ion-item>
+
+      <ion-menu-toggle>
+        <ion-item lines="none" detail="true" routerLink="/tabs/listing/my-list">
+          <ion-label>
+            <h2>My Listing</h2>
+            <p>Listing and Find Load</p>
+          </ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+
+      <ion-menu-toggle>
+        <ion-item lines="none" detail="true" (click)="redirectContactUs()">
+          <ion-label>
+            <h2>Help & Support</h2>
+            <p>Help Center and Legal Terms</p>
+          </ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+
+      <ion-menu-toggle>
+        <ion-item lines="none" detail="true" routerLink="/tabs/profile/plans">
+          <ion-label>
+            <h2>Upgrade Plan</h2>
+            <p>Upgrade to Gudguru Plus</p>
+          </ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+
+      <ion-menu-toggle>
+        <ion-item lines="none" detail="true" (click)="api.logout()">
+          <ion-label>
+            <h2>Logout Account</h2>
+          </ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+    </ion-content>
+  </ion-menu>
+
+  <ion-router-outlet id="main-content"></ion-router-outlet>
+  <app-emergency-load></app-emergency-load>
+  <app-email-verify></app-email-verify>
+</ion-app>

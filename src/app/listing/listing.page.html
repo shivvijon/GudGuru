@@ -1,0 +1,115 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="false">
+        <ion-icon src="assets/icon/menu-icon.svg"></ion-icon>
+      </ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>
+      <ion-icon src="assets/icon/location-icon.svg"></ion-icon>
+      <ng-container *ngIf="emergency.currentLocation; else noLoc">
+        {{emergency.currentLocation}}
+        <!-- <ion-icon src="assets/icon/chevron-down-light.svg"></ion-icon> -->
+      </ng-container>
+      <ng-template #noLoc>
+        No Location...
+      </ng-template>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button routerLink="notification">
+        <ion-icon slot="icon-only" src="assets/icon/bell-icon.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <div class="header-cont">
+    <div class="header-cont-area ion-padding">
+      <div class="ion-margin-vertical ion-text-right">
+        <ng-container *ngIf="isLoading; else emLoad">
+          <ion-skeleton-text class="emload-skel" [animated]="true"></ion-skeleton-text>
+        </ng-container>
+        <ng-template #emLoad>
+          <ion-button class="emergency-btn" shape="round" [disabled]="!api.user || isLoading"
+          (click)="(!api.isTrial && api.user?.role === '0' &&
+            (api.subscriptionStatus === 'inactive' || api.subscriptionStatus === 'past_due')) ?
+            api.showPlanUpgrade() : emergency.checkPermission()">
+            Emergency Load
+            <ion-icon slot="end" src="assets/icon/emergency-icon.svg"></ion-icon>
+          </ion-button>
+        </ng-template>
+      </div>
+
+      <h2 class="ion-padding-vertical">What are you Offering</h2>
+      <div *ngIf="!api.user?.isSubscribed && api.user?.role === '0'" class="trial">
+        <ng-container *ngIf="isLoading; else trialLoad">
+          <ion-skeleton-text class="ion-margin-end" [animated]="true"></ion-skeleton-text>
+          <div class="trial-date ion-text-nowrap">
+            <ion-skeleton-text style="width: 100px;" [animated]="true"></ion-skeleton-text>
+            <ion-skeleton-text style="width: 100px;" [animated]="true"></ion-skeleton-text>
+          </div>
+        </ng-container>
+
+        <ng-template #trialLoad>
+          <p *ngIf="api.daysLeft !== 0; else trialOver">Free trial for 10 days, Upgrade your plan for unlimited access</p>
+          <ng-template #trialOver>
+            <p>Your trial is over. To continue please upgrade your plan</p>
+          </ng-template>
+          <div class="trial-date ion-text-nowrap">
+            <ion-chip *ngIf="api.daysLeft !== 0 && api.daysLeft > 3; else chipDanger">{{api.daysLeft}} days left</ion-chip>
+            <ng-template #chipDanger>
+              <ion-chip *ngIf="api.daysLeft !== 0;" color="danger">{{api.daysLeft}} days left</ion-chip>
+            </ng-template>
+            <a routerLink="/tabs/profile/plans">Upgrade Plan</a>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="service-container">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6" (click)="isLoading ? null : checkPlanActive()">
+          <ion-card mode="md">
+            <ion-card-content class="ion-text-center">
+              <ng-container *ngIf="isLoading; else showLoad">
+                <ion-skeleton-text [animated]="true" style="width: 80px; height: 80px; border-radius: 100%; margin: auto;">
+                </ion-skeleton-text>
+                <ion-skeleton-text [animated]="true" style="width: 100px; margin: 12px auto;"></ion-skeleton-text>
+              </ng-container>
+              <ng-template #showLoad>
+                <img src="assets/images/cargo.svg" alt="">
+                <h2>Loads</h2>
+              </ng-template>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="6" (click)="comingSoon()">
+          <ion-card mode="md">
+            <ion-card-content class="ion-text-center">
+              <img src="assets/images/truck.svg" alt="">
+              <h2>Truck Sale</h2>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="6" offset="3" (click)="comingSoon()">
+          <ion-card mode="md">
+            <ion-card-content class="ion-text-center">
+              <img src="assets/images/parts.svg" alt="">
+              <h2>Truck's Parts Sale</h2>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

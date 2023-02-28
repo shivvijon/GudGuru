@@ -1,0 +1,53 @@
+<ion-content color="primary">
+  <div class="section1" *ngIf="section1">
+  <div class="login-container ion-margin">
+    <h2 class="title ion-padding-vertical">Verify Email</h2>
+    <form [formGroup]="sendOtp" (ngSubmit)="submitEmail()">
+      <ion-item lines="none">
+        <ion-label class="ion-padding-bottom" position="stacked" color="light">Email</ion-label>
+        <ion-input type="email" placeholder="abc@gmail.com" formControlName="email">
+          <ion-icon class="flagIcon" slot="start" src="assets/icon/email.svg"></ion-icon>
+        </ion-input>
+      </ion-item>
+      <ion-button type="submit" class="ion-padding-vertical" expand="block" [disabled]="sendOtp.invalid || loading">
+       <span *ngIf="!loading"> Get OTP </span>
+       <ion-spinner *ngIf="loading" color="primary"></ion-spinner>
+      </ion-button>
+    </form>
+  </div>
+  </div>
+
+
+  <div class="section2" *ngIf="!section1">
+    <div class="login-container ion-margin">
+      <h2 class="title ion-padding-vertical">
+        <ion-buttons left>
+        <button ion-button icon-only class="backButn" (click)="backSignup()">
+                <ion-icon name="arrow-back"></ion-icon>
+            </button>
+        </ion-buttons>
+      </h2>
+      <div class="textInfoSection ion-padding">
+        <p>
+          <ion-text color="light">
+            Enter the 4-digit code sent to you at
+          </ion-text>
+        </p>
+        <p>
+          <ion-text color="light">
+          <b *ngIf="mobile">{{mobile}}</b>
+          </ion-text>
+        </p>
+      </div>
+      <form [formGroup]="otpForm" (ngSubmit)="submitOtp()">
+        <div class="ion-padding">
+          <ng-otp-input (onInputChange)="onOtpChange($event)" class="otpStyle"  [config]="{length:4,allowNumbersOnly:true}"></ng-otp-input>
+        </div>
+        <ion-button type="submit" class="ion-padding-vertical" expand="block" [disabled]="otpForm.invalid || loading2">
+         <span *ngIf="!loading2"> Verify OTP </span>
+         <ion-spinner *ngIf="loading2" color="primary"></ion-spinner>
+        </ion-button>
+      </form>
+    </div>
+  </div>
+</ion-content>

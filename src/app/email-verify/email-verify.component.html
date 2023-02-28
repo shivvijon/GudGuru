@@ -1,0 +1,10 @@
+<ion-modal class="email-modal" [isOpen]="userService.isEmailModalOpen" (didDismiss)="userService.isEmailModalOpen=false"
+  [initialBreakpoint]="modalInitialBr" [breakpoints]="[0.50, 1]" [handle]="false">
+  <ng-template>
+    <div class="email-cont ion-text-center">
+      <h1>Verify your Email</h1>
+      <p class="ion-padding-vertical">We need your email for sending invoice</p>
+      <ion-button expand="block" (click)="emailOtpRedirect()">Verify Now</ion-button>
+    </div>
+  </ng-template>
+</ion-modal>

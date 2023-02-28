@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar color="secondary" mode="md">
+    <ion-title class="modal-title">Select City</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button class="hardware-tap" (click)="closeModal(true)">
+        <ion-icon class="close-btn" slot="end" src="assets/icon/close-icon.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-toolbar color="secondary">
+    <ion-searchbar placeholder="Search City" mode="ios" class="loc-search"
+      (ionChange)="getfilteredCities($event)" (ionCancel)="resetCities()"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <cdk-virtual-scroll-viewport itemSize="40" [minBufferPx]="1000" [maxBufferPx]="1350">
+    <ion-radio-group [value]="selectedCity" (ionChange)="setStateCity($event);">
+      <ion-item *cdkVirtualFor="let city of filteredCities" lines="none">
+        <ion-label>{{city.city}}</ion-label>
+        <ion-radio slot="end" [value]="city.city" mode="md"></ion-radio>
+      </ion-item>
+    </ion-radio-group>
+  </cdk-virtual-scroll-viewport>
+</ion-content>
+
+<ion-footer>
+  <ion-button class="ion-margin" expand="block" [disabled]="!selectedCity" (click)="closeModal(false);">Continue</ion-button>
+</ion-footer>
