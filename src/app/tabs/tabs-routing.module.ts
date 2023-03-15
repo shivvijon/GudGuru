@@ -41,10 +41,10 @@ const routes: Routes = [
             path: '',
             loadChildren: () => import('../profile/profile.module').then(m => m.ProfilePageModule)
           },
-          {
+          /* {
             path: 'plans',
             loadChildren: () => import('../plans/plans.module').then(m => m.PlansPageModule)
-          },
+          }, */
           {
             path: 'notification',
             loadChildren: () => import('../notification/notification.module').then( m => m.NotificationPageModule)

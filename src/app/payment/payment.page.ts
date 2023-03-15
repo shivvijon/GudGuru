@@ -115,17 +115,11 @@ export class PaymentPage implements OnInit {
       }
 
       const navExtras: NavigationExtras = {
-        state: {data: res, prevUrl: res.success ? '/tabs/profile/plans' : '/plan'},
+        state: {data: res},
         replaceUrl: true
       };
 
-      if(this.userService.user.isSubscribed) {
-        this.router.navigate(['/tabs/profile/thanks'], navExtras);
-      }
-      else {
-        this.router.navigate(['/thanks'], navExtras);
-      }
-
+      this.router.navigate(['/tabs/profile/thanks'], navExtras);
     //  this.router.navigate(['/tabs/profile/thanks']);
     });
   }

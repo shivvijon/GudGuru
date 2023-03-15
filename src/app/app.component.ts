@@ -60,14 +60,8 @@ export class AppComponent {
 
         if(userToken?.token)
         {
-          if(userToken.isSubscribed)
-          {
-            this.push.initAndroidPush();
-            this.router.navigate(['/tabs']);
-          }
-          else {
-            this.router.navigate(['/plan']);
-          }
+          this.push.initAndroidPush();
+          this.router.navigate(['/tabs']);
         }
         else {
           this.router.navigate(['/login']);

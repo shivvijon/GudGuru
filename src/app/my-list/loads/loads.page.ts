@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/api/auth.service';
 import { EmergencyLoadService } from 'src/app/services/api/emergency-load.service';
@@ -20,7 +21,8 @@ export class LoadsPage implements OnInit {
     private alertController: AlertController,
     private toast: ToastService,
     public emergency: EmergencyLoadService,
-    public userService: AuthService
+    public userService: AuthService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -99,6 +101,17 @@ export class LoadsPage implements OnInit {
         this.toast.presentToast('Load not found', 'danger');
       }
     });
+  }
+
+  navToNotifications()
+  {
+    if(!this.userService.isTrial && this.userService.user?.role === '0' &&
+    (this.userService.subscriptionStatus === 'inactive' || this.userService.subscriptionStatus === 'past_due')) {
+      this.userService.showPlanUpgrade();
+    }
+    else {
+      this.router.navigate(['tabs/listing/notification']);
+    }
   }
 
 }

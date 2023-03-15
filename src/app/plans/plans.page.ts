@@ -7,6 +7,8 @@ import { LoadService } from '../services/api/load.service';
 import { Subscription } from 'rxjs';
 import { AlertController } from '@ionic/angular';
 import { StorageService } from '../services/storage.service';
+import { IAPProduct, InAppPurchase2 } from '@ionic-native/in-app-purchase-2/ngx';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-plans',
@@ -23,6 +25,7 @@ export class PlansPage implements OnInit {
   isPlanLoading: boolean;
   isLoading: boolean;
   subStatus: string;
+  plan: IAPProduct;
 
   constructor(
     public emergency: EmergencyLoadService,
@@ -31,10 +34,21 @@ export class PlansPage implements OnInit {
     public userService: AuthService,
     private loadService: LoadService,
     private alertController: AlertController,
-    private storage: StorageService
+    private storage: StorageService,
+    private store: InAppPurchase2
   ) { }
 
-  ngOnInit() {}
+  ngOnInit()
+  {
+    this.store.verbosity = this.store.DEBUG;
+    this.registerPlans();
+    this.listenStorePurchase();
+
+    this.store.ready(() => {
+      this.plan = this.store.products[0];
+      //this.ref.detectChanges();
+    });
+  }
 
   ionViewWillEnter() {
     this.listenPlanStatusChange();
@@ -46,6 +60,26 @@ export class PlansPage implements OnInit {
       this.isPlanLoading = true;
       this.getProfile();
     });
+  }
+
+  registerPlans()
+  {
+    this.store.register({
+      id: environment.platinumId,
+      type: this.store.PAID_SUBSCRIPTION
+    });
+
+    this.store.refresh();
+  }
+
+  listenStorePurchase()
+  {
+    this.store.when(environment.platinumId).approved((p: IAPProduct) => {
+      if(p.id === environment.platinumId) {
+        return p.verify();
+      }
+    })
+    .verified((p: IAPProduct) => p.finish());
   }
 
   getProfile()
@@ -88,13 +122,7 @@ export class PlansPage implements OnInit {
       state: {data: value}
     };
 
-    if(this.userService.user.isSubscribed) {
-      this.router.navigate(['/tabs/profile/payment'], navExtras);
-    }
-    else {
-      this.router.navigate(['/payment'], navExtras);
-    }
-
+    this.router.navigate(['/tabs/profile/payment'], navExtras);
     // this.router.navigate(['/tabs/profile/thanks']);
   }
   else{
@@ -102,6 +130,17 @@ export class PlansPage implements OnInit {
     console.log('make payment');
   }
 }
+
+  subscribeInAppPurchase()
+  {
+    this.store.order(this.plan).then(p => {
+      // Purchase in progress!
+    }, e => {
+      alert('Failed..' + e);
+    });
+  }
+
+
 
   ionViewWillLeave() {
     this.planStatusSub.unsubscribe();

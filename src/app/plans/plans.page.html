@@ -1,4 +1,4 @@
-<ion-header *ngIf="userService.user?.isSubscribed">
+<ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-menu-button auto-hide="false">
@@ -16,12 +16,6 @@
         No Location...
       </ng-template>
     </ion-title>
-
-    <ion-buttons slot="end">
-      <ion-button routerLink="../notification">
-        <ion-icon slot="icon-only" src="assets/icon/bell-icon.svg"></ion-icon>
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -72,12 +66,13 @@
           </p>
         </div>
         <div class="ion-margin">
-          <ion-button shape="round" *ngIf="level !== '2'" (click)="makePayment(platinum?.amount,'2')" >Upgrade</ion-button>
+          <ion-button shape="round" (click)="subscribeInAppPurchase()" >Upgrade</ion-button>
+          <!-- <ion-button shape="round" *ngIf="level !== '2'" (click)="makePayment(platinum?.amount,'2')" >Upgrade</ion-button>
           <ion-button shape="round" *ngIf="level === '2' && subStatus !== 'past_due'">Active</ion-button>
           <ion-button shape="round" *ngIf="level === '2' && subStatus === 'past_due'"
             (click)="makePayment(platinum?.amount,'2', 'card_update')">
             Update Card
-          </ion-button>
+          </ion-button> -->
           <ion-button shape="round" color="danger" class="plan-cancel" *ngIf="level === '2' && subStatus !== 'inactive'"
             [disabled]="isLoading" (click)="presentAlert()">
             <span *ngIf="!isLoading">Cancel</span>

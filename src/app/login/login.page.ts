@@ -159,10 +159,15 @@ export class LoginPage implements OnInit {
       this.loading2=true;
       this.apiService.verifyOtp(this.otpForm.value).subscribe((response) => {
         console.log(response.isActive);
-        if(response.success===true){
-          if(response.isActive===false){
-            localStorage.setItem('phoneNumber', this.mobile);
-            this.router.navigate(['/policy']);
+        if(response.success===true)
+        {
+          if(!response.isSubscribed)
+          {
+            this.section1 = true;
+            this.alert.presentAlert("Finish signing up on the website.",
+            "Unfortunately, this app doesn't support in-app sign up. Sign in on the GudGuru website to start your membership.");
+            /* localStorage.setItem('phoneNumber', this.mobile);
+            this.router.navigate(['/policy']); */
           }
           else
           {
@@ -172,22 +177,16 @@ export class LoginPage implements OnInit {
             };
 
             this.storage.set('userToken', userToken).then(() => {
-              if(response.isSubscribed)
-              {
-                this.push.initAndroidPush();
-                this.router.navigate(['/tabs'], {replaceUrl: true});
-              }
-              else {
-                this.router.navigate(['/plan'], {replaceUrl: true});
-              }
+              this.push.initAndroidPush();
             });
+
+            this.router.navigate(['/tabs'], {replaceUrl: true});
           }
         }
         else{
           this.alert.presentAlert('Login Error', response.message);
           this.loading2=false;
         }
-
       },
       (err) => {
         console.log(err.error);

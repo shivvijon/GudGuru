@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from '../services/api/auth.service';
 import { EmergencyLoadService } from '../services/api/emergency-load.service';
 
@@ -13,7 +14,8 @@ export class MyListPage implements OnInit {
 
   constructor(
     public emergency: EmergencyLoadService,
-    public api: AuthService
+    public api: AuthService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -34,6 +36,17 @@ export class MyListPage implements OnInit {
         this.api.daysLeft = resp.daysLeft;
       }
     });
+  }
+
+  navToNotifications()
+  {
+    if(!this.api.isTrial && this.api.user?.role === '0' &&
+    (this.api.subscriptionStatus === 'inactive' || this.api.subscriptionStatus === 'past_due')) {
+      this.api.showPlanUpgrade();
+    }
+    else {
+      this.router.navigate(['tabs/listing/notification']);
+    }
   }
 
 }

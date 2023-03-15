@@ -18,11 +18,18 @@
     </ion-title>
 
     <ion-buttons slot="end">
-      <ion-button routerLink="notification">
-        <ion-icon slot="icon-only" src="assets/icon/bell-icon.svg"></ion-icon>
-        <!-- <div *ngIf="push.isNotifNew" class="notif-marker"></div> -->
-        <ion-badge *ngIf="push.isNotifNew" color="warning" class="alert-count" slot="end">{{push.countNotifNew}}</ion-badge>
-      </ion-button>
+      <ng-container *ngIf="isLoading; else showNotif">
+        <ion-button>
+          <ion-skeleton-text class="notification-skel" animated="true"></ion-skeleton-text>
+        </ion-button>
+      </ng-container>
+      <ng-template #showNotif>
+        <ion-button (click)="navToNotifications()">
+          <ion-icon slot="icon-only" src="assets/icon/bell-icon.svg"></ion-icon>
+          <!-- <div *ngIf="push.isNotifNew" class="notif-marker"></div> -->
+          <ion-badge *ngIf="push.isNotifNew" color="warning" class="alert-count" slot="end">{{push.countNotifNew}}</ion-badge>
+        </ion-button>
+      </ng-template>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -47,7 +54,7 @@
       </div>
 
       <h2 class="ion-padding-vertical">Which type of Services you looking</h2>
-      <div *ngIf="!api.user?.isSubscribed && api.user?.role === '0'" class="trial">
+      <!-- <div *ngIf="!api.user?.isSubscribed && api.user?.role === '0'" class="trial">
         <ng-container *ngIf="isLoading; else trialLoad">
           <ion-skeleton-text class="ion-margin-end" [animated]="true"></ion-skeleton-text>
           <div class="trial-date ion-text-nowrap">
@@ -59,7 +66,7 @@
         <ng-template #trialLoad>
           <p *ngIf="api.daysLeft !== 0; else trialOver">Free trial for 10 days, Upgrade your plan for unlimited access</p>
           <ng-template #trialOver>
-            <p>Your trial is over. To continue please upgrade your plan</p>
+            <p>Upgrade your plan to enable unlimited services.</p>
           </ng-template>
           <div class="trial-date ion-text-nowrap">
             <ion-chip *ngIf="api.daysLeft !== 0 && api.daysLeft > 3; else chipDanger">{{api.daysLeft}} days left</ion-chip>
@@ -69,7 +76,7 @@
             <a routerLink="/tabs/profile/plans">Upgrade Plan</a>
           </div>
         </ng-template>
-      </div>
+      </div> -->
     </div>
   </div>
 
@@ -80,8 +87,15 @@
         <ion-col size="6" (click)="openLocationModal()">
           <ion-card mode="md">
             <ion-card-content class="ion-text-center">
-              <img src="assets/images/cargo.svg" alt="">
-              <h2>Loads</h2>
+              <ng-container *ngIf="isLoading; else showLoad">
+                <ion-skeleton-text [animated]="true" style="width: 80px; height: 80px; border-radius: 100%; margin: auto;">
+                </ion-skeleton-text>
+                <ion-skeleton-text [animated]="true" style="width: 100px; margin: 12px auto;"></ion-skeleton-text>
+              </ng-container>
+              <ng-template #showLoad>
+                <img src="assets/images/cargo.svg" alt="">
+                <h2>Loads</h2>
+              </ng-template>
             </ion-card-content>
           </ion-card>
         </ion-col>

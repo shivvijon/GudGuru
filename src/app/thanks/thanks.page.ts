@@ -17,9 +17,7 @@ export class ThanksPage implements OnInit {
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
         this.paymentStatus = this.router.getCurrentNavigation().extras.state.data;
-        this.prevUrl = this.router.getCurrentNavigation().extras.state.prevUrl;
         console.log(this.paymentStatus);
-
       }
     });
    }

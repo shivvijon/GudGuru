@@ -93,15 +93,10 @@ export class RegisterPage implements OnInit {
           };
 
           this.storage.set('userToken', userToken).then(() => {
-            if(response.isSubscribed)
-            {
-              this.push.initAndroidPush();
-              this.router.navigate(['/tabs'], {replaceUrl: true});
-            }
-            else {
-              this.router.navigate(['/plan'], {replaceUrl: true});
-            }
+            this.push.initAndroidPush();
           });
+
+          this.router.navigate(['/tabs'], {replaceUrl: true});
         }
       },
       (err) => {

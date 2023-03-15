@@ -171,6 +171,15 @@
         </div>
 
         <ion-item class="ion-no-padding">
+          <ion-label position="floating" class="min-scale">Email</ion-label>
+          <ion-input type="email" formControlName="email"></ion-input>
+        </ion-item>
+        <div class="validation-error" *ngIf="(loadForm.get('email').touched || loadForm.get('email').dirty) &&
+          loadForm.get('email').hasError('email')">
+          Enter valid email
+        </div>
+
+        <ion-item class="ion-no-padding">
           <ion-label position="floating" class="min-scale">Ad Title</ion-label>
           <ion-input type="text" formControlName="title" maxlength="70"></ion-input>
         </ion-item>

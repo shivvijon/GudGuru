@@ -18,7 +18,7 @@
     </ion-title>
 
     <ion-buttons slot="end">
-      <ion-button routerLink="notification">
+      <ion-button (click)="navToNotifications()">
         <ion-icon slot="icon-only" src="assets/icon/bell-icon.svg"></ion-icon>
         <div *ngIf="push.isNotifNew" class="notif-marker"></div>
       </ion-button>

@@ -58,6 +58,7 @@ export class LoadsPage implements OnInit {
       toCity: new FormControl({value: null, disabled: true}, [Validators.required]),
       toAddress: new FormControl(null),
       contact: new FormControl(null, [Validators.required]),
+      email: new FormControl(null, [Validators.email]),
       title: new FormControl(null, [Validators.required])
     });
   }
@@ -234,7 +235,7 @@ export class LoadsPage implements OnInit {
         this.userService.isTrial = resp.isTrial;
         this.userService.subscriptionStatus = resp.subscriptionStatus;
         this.userService.daysLeft = resp.daysLeft;
-        if(this.userService.isTrial && this.level === '0' && this.userService.subscriptionStatus === 'active') {
+        if(this.level === '2' && this.userService.subscriptionStatus === 'active') {
           this.loadForm.get('emergency').enable({onlySelf: true});
           this.alertMessage='';
         }

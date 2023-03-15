@@ -55,4 +55,15 @@ export class ListingPage implements OnInit {
       this.router.navigate(['/tabs/listing/loads']);
     }
   }
+
+  navToNotifications()
+  {
+    if(!this.api.isTrial && this.api.user?.role === '0' &&
+    (this.api.subscriptionStatus === 'inactive' || this.api.subscriptionStatus === 'past_due')) {
+      this.api.showPlanUpgrade();
+    }
+    else {
+      this.router.navigate(['notification']);
+    }
+  }
 }

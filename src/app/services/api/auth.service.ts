@@ -73,9 +73,9 @@ export class AuthService {
   async showPlanUpgrade()
   {
     const alert = await this.alertController.create({
-      header: 'Upgrade Plan',
+      header: 'Upgrade Plan in GudGuru website',
       message: 'In order to use Emergency Load Services, you must upgrade the plan to <span>PLATINUM</span>.<br> <br>' +
-               'Menu ---> Upgrade Plan ---> Upgrade.',
+               'My Plans ---> Upgrade.',
       cssClass: 'plan-upgrade',
       backdropDismiss: false,
       mode: 'ios',

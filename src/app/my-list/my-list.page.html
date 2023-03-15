@@ -18,9 +18,16 @@
     </ion-title>
 
     <ion-buttons slot="end">
-      <ion-button routerLink="../notification">
-        <ion-icon slot="icon-only" src="assets/icon/bell-icon.svg"></ion-icon>
-      </ion-button>
+      <ng-container *ngIf="isLoading; else showNotif">
+        <ion-button>
+          <ion-skeleton-text class="notification-skel" animated="true"></ion-skeleton-text>
+        </ion-button>
+      </ng-container>
+      <ng-template #showNotif>
+        <ion-button (click)="navToNotifications()">
+          <ion-icon slot="icon-only" src="assets/icon/bell-icon.svg"></ion-icon>
+        </ion-button>
+      </ng-template>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

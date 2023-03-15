@@ -18,9 +18,16 @@
     </ion-title>
 
     <ion-buttons slot="end">
-      <ion-button routerLink="notification">
-        <ion-icon slot="icon-only" src="assets/icon/bell-icon.svg"></ion-icon>
-      </ion-button>
+      <ng-container *ngIf="isLoading; else showNotif">
+        <ion-button>
+          <ion-skeleton-text class="notification-skel" animated="true"></ion-skeleton-text>
+        </ion-button>
+      </ng-container>
+      <ng-template #showNotif>
+        <ion-button (click)="navToNotifications()">
+          <ion-icon slot="icon-only" src="assets/icon/bell-icon.svg"></ion-icon>
+        </ion-button>
+      </ng-template>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -45,7 +52,7 @@
       </div>
 
       <h2 class="ion-padding-vertical">What are you Offering</h2>
-      <div *ngIf="!api.user?.isSubscribed && api.user?.role === '0'" class="trial">
+      <!-- <div *ngIf="!api.user?.isSubscribed && api.user?.role === '0'" class="trial">
         <ng-container *ngIf="isLoading; else trialLoad">
           <ion-skeleton-text class="ion-margin-end" [animated]="true"></ion-skeleton-text>
           <div class="trial-date ion-text-nowrap">
@@ -57,7 +64,7 @@
         <ng-template #trialLoad>
           <p *ngIf="api.daysLeft !== 0; else trialOver">Free trial for 10 days, Upgrade your plan for unlimited access</p>
           <ng-template #trialOver>
-            <p>Your trial is over. To continue please upgrade your plan</p>
+            <p>Upgrade your plan to enable unlimited services.</p>
           </ng-template>
           <div class="trial-date ion-text-nowrap">
             <ion-chip *ngIf="api.daysLeft !== 0 && api.daysLeft > 3; else chipDanger">{{api.daysLeft}} days left</ion-chip>
@@ -67,7 +74,7 @@
             <a routerLink="/tabs/profile/plans">Upgrade Plan</a>
           </div>
         </ng-template>
-      </div>
+      </div> -->
     </div>
   </div>
 

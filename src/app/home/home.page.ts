@@ -43,6 +43,7 @@ export class HomePage implements OnInit {
     this.api.getProfile().subscribe((resp) => {
       if(resp.success) {
         this.api.user = resp.data;
+        console.log(this.api.user.role, 'testing');
         this.getTrialStatus();
       }
     });
@@ -62,8 +63,15 @@ export class HomePage implements OnInit {
 
   async openLocationModal()
   {
-    this.openLocation = true;
-    this.clearLocation = true;
+    if(!this.api.isTrial && this.api.user?.role === '0' &&
+    (this.api.subscriptionStatus === 'inactive' || this.api.subscriptionStatus === 'past_due')) {
+      this.api.showPlanUpgrade();
+    }
+    else
+    {
+      this.openLocation = true;
+      this.clearLocation = true;
+    }
   }
 
   getLoadLocation(locationData)
@@ -87,6 +95,17 @@ export class HomePage implements OnInit {
 
   comingSoon(){
     this.alert.comingSoon('Coming Soon.');
+  }
+
+  navToNotifications()
+  {
+    if(!this.api.isTrial && this.api.user?.role === '0' &&
+    (this.api.subscriptionStatus === 'inactive' || this.api.subscriptionStatus === 'past_due')) {
+      this.api.showPlanUpgrade();
+    }
+    else {
+      this.router.navigate(['notification']);
+    }
   }
 
 }

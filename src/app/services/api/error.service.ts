@@ -14,6 +14,7 @@ export class ErrorService {
       header: title,
       message: msg,
       cssClass: 'error-alert',
+      mode: 'ios',
       backdropDismiss: false,
       buttons: [{
         text: 'Ok',
