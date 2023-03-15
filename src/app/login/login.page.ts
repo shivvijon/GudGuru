@@ -36,7 +36,7 @@ export class LoginPage implements OnInit {
     otp: new FormControl(''),
   });
 
-  countryCode = '+91';
+  countryCode = '+1';
 
   constructor(
     private apiService: AuthService,
