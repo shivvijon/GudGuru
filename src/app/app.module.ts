@@ -25,6 +25,8 @@ import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { NetworkStatusInterceptor } from './services/http-interceptors/network-status.interceptor';
 import { EmailVerifyComponent } from './email-verify/email-verify.component';
 import { Stripe } from '@awesome-cordova-plugins/stripe/ngx';
+import { InAppPurchase2 } from '@ionic-native/in-app-purchase-2/ngx';
+import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 
 @NgModule({
   declarations: [AppComponent, StateComponent, CityComponent, EmergencyLoadComponent, EmailVerifyComponent],
@@ -41,7 +43,7 @@ import { Stripe } from '@awesome-cordova-plugins/stripe/ngx';
     })
   ],
   providers: [
-    LocationAccuracy, NativeGeocoder, AndroidPermissions, Diagnostic, Stripe,
+    LocationAccuracy, NativeGeocoder, AndroidPermissions, Diagnostic, Stripe, InAppPurchase2, InAppBrowser,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: NetworkStatusInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
