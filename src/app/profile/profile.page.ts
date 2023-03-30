@@ -30,7 +30,7 @@ export class ProfilePage implements OnInit {
       this.api.showPlanUpgrade();
     }
     else {
-      this.router.navigate(['notification']);
+      this.router.navigate(['tabs/profile/notification']);
     }
   }
 

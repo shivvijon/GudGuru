@@ -161,13 +161,14 @@ export class LoginPage implements OnInit {
         console.log(response.isActive);
         if(response.success===true)
         {
-          if(!response.isSubscribed)
+          if(!response.isActive)
           {
             this.section1 = true;
-            this.alert.presentAlert("Finish signing up on the website.",
-            "Unfortunately, this app doesn't support in-app sign up. Sign in on the GudGuru website to start your membership.");
-            /* localStorage.setItem('phoneNumber', this.mobile);
-            this.router.navigate(['/policy']); */
+            localStorage.setItem('phoneNumber', this.mobile);
+            this.router.navigate(['/policy']);
+
+            /* this.alert.presentAlert("Finish signing up on the website.",
+            "Unfortunately, this app doesn't support in-app sign up. Sign in on the GudGuru website to start your membership."); */
           }
           else
           {

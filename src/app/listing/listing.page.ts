@@ -63,7 +63,7 @@ export class ListingPage implements OnInit {
       this.api.showPlanUpgrade();
     }
     else {
-      this.router.navigate(['notification']);
+      this.router.navigate(['tabs/listing/notification']);
     }
   }
 }

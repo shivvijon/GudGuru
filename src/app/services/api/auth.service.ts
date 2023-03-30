@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { AlertController } from '@ionic/angular';
+import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,8 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private iab: InAppBrowser
   ) { }
 
   login(postData): Observable<any> {
@@ -73,19 +75,23 @@ export class AuthService {
   async showPlanUpgrade()
   {
     const alert = await this.alertController.create({
-      header: 'Upgrade Plan in GudGuru website',
-      message: 'In order to use Emergency Load Services, you must upgrade the plan to <span>PLATINUM</span>.<br> <br>' +
-               'My Plans ---> Upgrade.',
+      header: 'Complete signup',
+      message: 'Please complete signup process in gudguru website',
       cssClass: 'plan-upgrade',
       backdropDismiss: false,
       mode: 'ios',
       buttons: [{
         text: 'Ok',
-        role: 'cancel'
+        role: 'cancel',
+        handler: () => { this.redirectToBrowser(); }
       }]
     });
 
     await alert.present();
+  }
+
+  async redirectToBrowser() {
+    const browser = this.iab.create('https://gudguru.com/login-page', '_blank', {hideurlbar: 'yes'});
   }
 
 }
