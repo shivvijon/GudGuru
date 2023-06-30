@@ -167,49 +167,55 @@ export class LoadsPage implements OnInit {
       Keyboard.hide();
     }
 
-    this.loading = true;
+    if(this.level === '2' && this.userService.subscriptionStatus === 'active')
+    {
+      this.loading = true;
 
-    const loadPost = this.loadForm.value;
+      const loadPost = this.loadForm.value;
 
-    loadPost.weight_type = loadPost.weightType;
-    loadPost.contactno = loadPost.contact;
-    loadPost.location = {
-      lat: '',
-      long: ''
-    };
+      loadPost.weight_type = loadPost.weightType;
+      loadPost.contactno = loadPost.contact;
+      loadPost.location = {
+        lat: '',
+        long: ''
+      };
 
-    loadPost.from = {
-      state: loadPost.fromState,
-      city: loadPost.fromCity,
-      address: loadPost.fromAddress,
-      pickupdate: loadPost.pickDate
-    };
+      loadPost.from = {
+        state: loadPost.fromState,
+        city: loadPost.fromCity,
+        address: loadPost.fromAddress,
+        pickupdate: loadPost.pickDate
+      };
 
-    loadPost.to = {
-      state: loadPost.toState,
-      city: loadPost.toCity,
-      address: loadPost.toAddress
-    };
+      loadPost.to = {
+        state: loadPost.toState,
+        city: loadPost.toCity,
+        address: loadPost.toAddress
+      };
 
-    ['fromState', 'fromCity','toState', 'toCity', 'fromAddress',
-    'toAddress', 'pickDate', 'contact', 'weightType'].forEach(key => delete loadPost[key]);
+      ['fromState', 'fromCity','toState', 'toCity', 'fromAddress',
+      'toAddress', 'pickDate', 'contact', 'weightType'].forEach(key => delete loadPost[key]);
 
-    this.api.addLoad(loadPost).subscribe(resp => {
-      console.log(resp);
-      this.loading = false;
-      if(resp.success)
-      {
-        this.toast.presentToast((loadPost.emergency ? 'Emergency ' : '') + 'Load Added', 'success');
-        this.router.navigate(['/tabs/listing']);
-      }
-    },
-    (err) => {
-      this.loading = false;
-      console.error(err);
-      if(err.status !== 502 && err.error) {
-        this.toast.presentToast('Unable to add load', 'danger');
-      }
-    });
+      this.api.addLoad(loadPost).subscribe(resp => {
+        console.log(resp);
+        this.loading = false;
+        if(resp.success)
+        {
+          this.toast.presentToast((loadPost.emergency ? 'Emergency ' : '') + 'Load Added', 'success');
+          this.router.navigate(['/tabs/listing']);
+        }
+      },
+      (err) => {
+        this.loading = false;
+        console.error(err);
+        if(err.status !== 502 && err.error) {
+          this.toast.presentToast('Unable to add load', 'danger');
+        }
+      });
+    }
+    else {
+      this.userService.showPlanUpgrade();
+    }
   }
 
   getLevel()

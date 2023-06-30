@@ -1,0 +1,149 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button mode="ios">Back</ion-back-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="navToNotifications()">
+        <ion-icon slot="icon-only" src="assets/icon/bell-icon.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ng-container *ngIf="isLoading; else truckDetails">
+    <div class="gallery-slides">
+      <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+    </div>
+
+    <div class="ion-padding truck-details">
+      <ion-skeleton-text [animated]="true" style="width: 150px; height: 20px;"></ion-skeleton-text>
+      <div class="contact">
+        <ion-skeleton-text [animated]="true" style="width: 150px; height: 20px;"></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true" style="width: 120px; height: 30px; border-radius: 30px"></ion-skeleton-text>
+      </div>
+
+      <ion-grid class="ion-no-padding ion-margin-bottom">
+        <ion-row class="row-outer">
+          <ion-col class="col-outer">
+            <ion-row class="ion-text-center">
+              <ion-col class="grid-title">
+                <ion-skeleton-text [animated]="true" style="width: 100px; margin: auto;"></ion-skeleton-text>
+              </ion-col>
+            </ion-row>
+            <ion-row class="ion-text-center">
+              <ion-col class="grid-data">
+                <ion-skeleton-text [animated]="true" style="width: 120px; margin: auto;"></ion-skeleton-text>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+          <ion-col class="col-outer">
+            <ion-row class="ion-text-center">
+              <ion-col class="grid-title">
+                <ion-skeleton-text [animated]="true" style="width: 100px; margin: auto;"></ion-skeleton-text>
+              </ion-col>
+            </ion-row>
+            <ion-row class="ion-text-center">
+              <ion-col class="grid-data">
+                <ion-skeleton-text [animated]="true" style="width: 120px; margin: auto;"></ion-skeleton-text>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid class="ion-no-padding ion-margin-bottom">
+        <ion-row class="ion-text-center">
+          <ion-col class="grid-title">
+            <ion-skeleton-text [animated]="true" style="width: 100px; margin: auto;"></ion-skeleton-text>
+          </ion-col>
+        </ion-row>
+        <ion-row class="ion-text-center">
+          <ion-col class="grid-data">
+            <ion-skeleton-text [animated]="true" style="width: 120px; margin: auto;"></ion-skeleton-text>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid class="ion-no-padding ion-margin-bottom">
+        <ion-row class="ion-text-center">
+          <ion-col class="grid-title">
+            <ion-skeleton-text [animated]="true" style="width: 100px; margin: auto;"></ion-skeleton-text>
+          </ion-col>
+        </ion-row>
+        <ion-row class="ion-text-center">
+          <ion-col class="grid-data">
+            <ion-skeleton-text [animated]="true" style="width: 120px; margin: auto;"></ion-skeleton-text>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </ng-container>
+  <ng-template #truckDetails>
+    <div class="gallery-slides">
+      <swiper #swiperCont [config]="swiperOptions">
+        <ng-template swiperSlide *ngFor="let image of truck?.images">
+          <img [src]="env.imageUrl + image" alt="" crossorigin="anonymous">
+        </ng-template>
+      </swiper>
+      <div class="price-tag">
+        <h3>${{truck?.price}}</h3>
+      </div>
+    </div>
+
+    <div class="ion-padding truck-details">
+      <h2>{{truck?.make}}</h2>
+      <div class="contact">
+        <p>{{truck?.model}}</p>
+        <ion-button *ngIf="showContact; else upgradeBtn" class="ion-text-capitalize contact" shape="round"
+          (click)="callLoad(truck?.contactno)">Contact Now</ion-button>
+        <ng-template #upgradeBtn>
+          <ion-button class="ion-text-capitalize" color="danger" fill="outline" shape="round"
+          (click)="callLoad(truck?.contactno)">Upgrade Plan</ion-button>
+        </ng-template>
+      </div>
+
+      <ion-grid class="ion-no-padding ion-margin-bottom">
+        <ion-row class="row-outer">
+          <ion-col class="col-outer">
+            <ion-row class="ion-text-center">
+              <ion-col class="grid-title">Model Year</ion-col>
+            </ion-row>
+            <ion-row class="ion-text-center">
+              <ion-col class="grid-data"><p>{{truck?.year}}</p></ion-col>
+            </ion-row>
+          </ion-col>
+          <ion-col class="col-outer">
+            <ion-row class="ion-text-center">
+              <ion-col class="grid-title">Miles</ion-col>
+            </ion-row>
+            <ion-row class="ion-text-center">
+              <ion-col class="grid-data"><p>{{truck?.miles}}</p></ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid class="ion-no-padding ion-margin-bottom">
+        <ion-row class="ion-text-center">
+          <ion-col class="grid-title">Location</ion-col>
+        </ion-row>
+        <ion-row class="ion-text-center">
+          <ion-col class="grid-data"><p>{{truck?.city}}, {{truck?.state}}</p></ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid *ngIf="showContact" class="ion-no-padding ion-margin-bottom">
+        <ion-row class="ion-text-center">
+          <ion-col class="grid-title">Contact Details</ion-col>
+        </ion-row>
+        <ion-row class="ion-text-center">
+          <ion-col class="grid-data"><p>{{truck?.contactno}}</p></ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </ng-template>
+
+</ion-content>

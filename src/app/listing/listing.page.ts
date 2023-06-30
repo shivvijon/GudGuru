@@ -46,14 +46,14 @@ export class ListingPage implements OnInit {
 
   checkPlanActive()
   {
-
-    if(!this.api.isTrial && this.api.user?.role === '0' &&
+    this.router.navigate(['/tabs/listing/loads']);
+    /* if(!this.api.isTrial && this.api.user?.role === '0' &&
       (this.api.subscriptionStatus === 'inactive' || this.api.subscriptionStatus === 'past_due')) {
       this.api.showPlanUpgrade();
     }
     else {
       this.router.navigate(['/tabs/listing/loads']);
-    }
+    } */
   }
 
   navToNotifications()

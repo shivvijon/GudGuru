@@ -119,7 +119,7 @@
                 <ion-button shape="round" fill="outline" color="success" (click)="callLoad(load.contactno)">Book Now</ion-button>
               </ng-template>
             </div>
-            <div class="ion-margin-vertical">
+            <div *ngIf="level === '2'" class="ion-margin-vertical">
               <a [href]="'mailto:' + load.email">{{load.email}}</a>
             </div>
           </div>

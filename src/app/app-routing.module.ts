@@ -37,6 +37,10 @@ const routes: Routes = [
   {
     path: 'thanks',
     loadChildren: () => import('./thanks/thanks.module').then(m => m.ThanksPageModule)
+  },
+  {
+    path: 'ifta',
+    loadChildren: () => import('./ifta/ifta.module').then( m => m.IftaPageModule)
   }
 ];
 

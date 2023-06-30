@@ -13,19 +13,10 @@ import { StorageService } from '../storage.service';
 export class AuthInterceptor implements HttpInterceptor {
 
   private routes = [
-    'v1/loads',
-    'v1/loads/user-loads',
-    'v1/auth/me',
-    'v1/auth/updateDeviceId',
-    'v1/auth/updateLocation',
-    'v1/payment/stripeCheckout',
-    'v1/payment/getPlans',
-    'v1/payment/stripeLevel',
-    'v1/auth/sendEmail',
-    'v1/auth/verifyEmail',
-    'v1/auth/me',
-    'v1/auth/getTrialStatus',
-    'v1/payment/cancelSubscription'
+    'v1/auth/login',
+    'v1/auth/register',
+    'v1/auth/sendOtp',
+    'v1/auth/verifyOtp'
   ];
 
   constructor(private storage: StorageService) {}
@@ -50,7 +41,7 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   private allowToken(request: HttpRequest<any>): boolean {
-    return new RegExp(this.routes.join('|')).test(request.url);
+    return !(new RegExp(this.routes.join('|')).test(request.url));
   }
 
 }

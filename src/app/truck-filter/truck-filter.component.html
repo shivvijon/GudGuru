@@ -1,0 +1,197 @@
+<!--Modal for Truck Filter-->
+<ion-modal class="loc-select truck-filter" [isOpen]="openLocation" [initialBreakpoint]="modalInitialBr" [breakpoints]="[0.50, 1]"
+ [backdropDismiss]="false" [handle]="false">
+  <ng-template>
+    <div class="modal-main-cont">
+      <!--From State/City-->
+      <ion-item class="modal-header-cont ion-no-padding" lines="none">
+        <ion-label class="modal-title">Find Truck</ion-label>
+        <ion-icon class="close-btn hardware-tap" slot="end" src="assets/icon/close-icon.svg" (click)="closeModal(false)">
+        </ion-icon>
+      </ion-item>
+
+      <form [formGroup]="truckForm">
+
+        <div class="model-year">
+          <ion-item class="ion-no-padding" lines="none" mode="ios" (click)="openMinDatetime=true;">
+            <ion-label position="stacked">Min Year</ion-label>
+              <ion-input id="pickupDate" type="text" readonly="true" formControlName="minYear">
+                <ion-icon slot="end" src="assets/icon/calendar.svg"></ion-icon>
+              </ion-input>
+          </ion-item>
+          <ion-icon class="year-divider" src="assets/icon/year-divider.svg"></ion-icon>
+          <ion-item class="ion-no-padding" lines="none" mode="ios" (click)="openMaxDatetime=true;">
+            <ion-label position="stacked">Max Year</ion-label>
+              <ion-input id="pickupDate" type="text" readonly="true" formControlName="maxYear">
+                <ion-icon slot="end" src="assets/icon/calendar.svg"></ion-icon>
+              </ion-input>
+          </ion-item>
+        </div>
+        <div class="validation-error" *ngIf="(truckForm.get('minYear').touched || truckForm.get('minYear').dirty) &&
+          truckForm.get('minYear').hasError('required')">
+          Model year is required
+        </div>
+        <ion-modal class="datetimePicker" [isOpen]="openMinDatetime" [backdropDismiss]="false">
+          <ng-template>
+            <div class="cal-wrapper">
+              <ion-datetime #ionDatetime presentation="year" size="cover" [value]="selectedMinDatetime"
+                (ionChange)="setDatetime($event, 'min')" mode="ios"></ion-datetime>
+              <div class="ion-text-right ion-padding-top">
+                <ion-button fill="clear" class="hardware-tap" (click)="openMinDatetime=false;">Cancel</ion-button>
+                <ion-button fill="clear" (click)="patchDatetime('min')" [disabled]="!selectedMinDatetime">Ok</ion-button>
+              </div>
+            </div>
+          </ng-template>
+        </ion-modal>
+        <ion-modal class="datetimePicker" [isOpen]="openMaxDatetime" [backdropDismiss]="false">
+          <ng-template>
+            <div class="cal-wrapper">
+              <ion-datetime #ionDatetime presentation="year" size="cover" [value]="selectedMaxDatetime"
+                (ionChange)="setDatetime($event, 'max')" mode="ios"></ion-datetime>
+              <div class="ion-text-right ion-padding-top">
+                <ion-button fill="clear" class="hardware-tap" (click)="openMaxDatetime=false;">Cancel</ion-button>
+                <ion-button fill="clear" (click)="patchDatetime('max')" [disabled]="!selectedMaxDatetime">Ok</ion-button>
+              </div>
+            </div>
+          </ng-template>
+        </ion-modal>
+
+        <div class="miles">
+          <ion-item class="ion-no-padding" lines="none" mode="ios">
+            <ion-label position="stacked">Min. Miles</ion-label>
+            <ion-select formControlName="minMiles">
+              <ion-select-option *ngFor="let miles of minMiles" [value]="miles.value">{{miles.name}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-icon class="year-divider" src="assets/icon/year-divider.svg"></ion-icon>
+          <ion-item class="ion-no-padding" lines="none" mode="ios">
+            <ion-label position="stacked">Max. Miles</ion-label>
+            <ion-select formControlName="maxMiles">
+              <ion-select-option *ngFor="let miles of maxMiles" [value]="miles.value">{{miles.name}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+        <div class="validation-error" *ngIf="(truckForm.get('minMiles').touched || truckForm.get('minMiles').dirty) &&
+          truckForm.get('minMiles').hasError('required')">
+          Miles Driven is required
+        </div>
+
+        <ion-item class="ion-no-padding" lines="none" mode="ios">
+          <ion-label position="stacked">Price</ion-label>
+          <ion-range [dualKnobs]="true" [pin]="true" [step]="1000" [max]="250000" [value]="{ lower: 0, upper: 50000 }"
+            [pinFormatter]="pinFormatter" (ionChange)="setPrice($event)"></ion-range>
+          <div class="price-data">
+            <p>Min: <span>${{price.min}}</span></p>
+            <p>Max: <span>${{price.max}}</span></p>
+          </div>
+        </ion-item>
+      </form>
+
+      <ng-container *ngIf="truckForm.valid">
+        <ion-item class="ion-no-padding" lines="none" mode="ios"
+          (click)="selectedState=(selectedState ? selectedState : null); openState=true;">
+          <ion-label position="stacked">Select State</ion-label>
+          <ion-input placeholder="Select State" readonly="true" [value]="finalState">
+            <ion-icon slot="end" src="assets/icon/chevron-down.svg"></ion-icon>
+          </ion-input>
+        </ion-item>
+        <ion-item class="ion-no-padding" lines="none" mode="ios" (click)="filterCity()">
+          <ion-label position="stacked">Select City</ion-label>
+          <ion-input placeholder="Select City" readonly="true" [value]="finalCities">
+            <ion-icon slot="end" src="assets/icon/chevron-down.svg"></ion-icon>
+          </ion-input>
+        </ion-item>
+
+        <ion-button class="ion-margin-vertical" expand="block" (click)="closeModal(true);">
+          Submit
+        </ion-button>
+      </ng-container>
+    </div>
+  </ng-template>
+</ion-modal>
+
+
+<!--Modal for State-->
+<ion-modal class="state-list" [isOpen]="openState" [backdropDismiss]="false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar color="secondary" mode="md">
+        <ion-title class="modal-title">Select State</ion-title>
+
+        <ion-buttons slot="end">
+          <ion-button class="hardware-tap" (click)="openState=false; selectedState=(selectedState ? selectedState : null);">
+            <ion-icon class="close-btn" slot="end" src="assets/icon/close-icon.svg"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+
+      <ion-toolbar color="secondary">
+        <ion-searchbar placeholder="Search State" mode="ios" class="loc-search"
+          (ionChange)="getfilteredStates($event)" (ionCancel)="resetStates()"></ion-searchbar>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <ion-radio-group [value]="finalState" (ionChange)="setStateCity($event, 'state');">
+        <ion-item *ngFor="let state of filteredStates" lines="none">
+          <ion-label>{{state}}</ion-label>
+          <ion-radio slot="end" [value]="state" mode="md"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </ion-content>
+
+    <ion-footer>
+      <ion-button class="ion-margin" expand="block" [disabled]="!selectedState" (click)="setTruck(); openState=false;">
+        Continue
+      </ion-button>
+    </ion-footer>
+  </ng-template>
+</ion-modal>
+
+
+<!--Modal for City-->
+<ion-modal class="city-list" [isOpen]="openCity" [backdropDismiss]="false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar color="secondary" mode="md">
+        <ion-title class="modal-title">Select City</ion-title>
+
+        <ion-buttons slot="end">
+          <ion-button class="hardware-tap" (click)="openCity=false; clearCity();">
+            <ion-icon class="close-btn" slot="end" src="assets/icon/close-icon.svg"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+
+      <ion-toolbar color="secondary">
+        <ion-searchbar placeholder="Search City" mode="ios" class="loc-search"
+          (ionChange)="getfilteredCities($event)" (ionCancel)="resetCities()"></ion-searchbar>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <cdk-virtual-scroll-viewport itemSize="40" [minBufferPx]="1000" [maxBufferPx]="1350">
+        <ion-item *cdkVirtualFor="let city of filteredCities" lines="none">
+          <ion-label>{{city.city}}</ion-label>
+          <ion-checkbox slot="end" [value]="city.city"
+            [checked]="selectedCities.includes(city.city) ? true : false"
+            mode="md"(ionChange)="setStateCity($event, 'city')">
+          </ion-checkbox>
+          <!-- <ng-template #showCities>
+            <ion-checkbox slot="end" [value]="city.city"
+              [disabled]="selectedCities.includes('All') ? true : false"
+              [checked]="selectedCities.includes(city.city) ? true : false"
+              mode="md"(ionChange)="setStateCity($event, 'city')">
+            </ion-checkbox>
+          </ng-template> -->
+        </ion-item>
+      </cdk-virtual-scroll-viewport>
+    </ion-content>
+
+    <ion-footer>
+      <ion-button class="ion-margin" expand="block" [disabled]="!selectedCities.length" (click)="openCity=false; setCity()">
+        Continue
+      </ion-button>
+    </ion-footer>
+  </ng-template>
+</ion-modal>

@@ -1,0 +1,166 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button mode="ios">Back</ion-back-button>
+    </ion-buttons>
+
+    <ion-title>
+      <ion-icon src="assets/icon/location-icon.svg"></ion-icon>
+      <ng-container *ngIf="emergency.currentLocation; else noLoc">
+        {{emergency.currentLocation}}
+        <!-- <ion-icon src="assets/icon/chevron-down-light.svg"></ion-icon> -->
+      </ng-container>
+      <ng-template #noLoc>
+        No Location...
+      </ng-template>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="navToNotifications()">
+        <ion-icon slot="icon-only" src="assets/icon/bell-icon.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="fuelForm" (ngSubmit)="addFuel()" (keyup.enter)="addFuel(true)">
+    <div class="header-cont">
+      <div class="header-cont-area ion-padding">
+        <h2 class="ion-padding-vertical">{{headTitle}}</h2>
+      </div>
+    </div>
+
+    <div class="form-container">
+      <div class="route">
+        <h4>Trip Route</h4>
+        <ion-item class="ion-no-padding" (click)="openStateModal('origin')" lines="none">
+          <ion-label position="stacked">Origin</ion-label>
+          <ion-input type="text" placeholder="Select" formControlName="origin" readonly="true"></ion-input>
+        </ion-item>
+        <div class="validation-error" *ngIf="(fuelForm.get('origin').touched || fuelForm.get('origin').dirty) &&
+          fuelForm.get('origin').hasError('required')">
+          Origin State is required
+        </div>
+
+        <ion-item class="ion-no-padding" (click)="openStateModal('destination')" lines="none">
+          <ion-label position="stacked">Destination</ion-label>
+          <ion-input type="text" placeholder="Select" formControlName="destination" readonly="true"></ion-input>
+        </ion-item>
+        <div class="validation-error" *ngIf="(fuelForm.get('destination').touched || fuelForm.get('destination').dirty) &&
+          fuelForm.get('destination').hasError('required')">
+          Destination State is required
+        </div>
+      </div>
+
+      <div class="form-fields">
+        <ng-container *ngIf="!mode">
+          <ion-item class="ion-no-padding" (click)="openStartDatetime=true;">
+            <ion-label position="floating" class="min-scale">Start Date</ion-label>
+            <ion-input id="pickupDate" type="text" readonly="true" formControlName="startDate">
+              <ion-icon slot="end" src="assets/icon/calendar.svg"></ion-icon>
+            </ion-input>
+          </ion-item>
+          <div class="validation-error" *ngIf="(fuelForm.get('startDate').touched || fuelForm.get('startDate').dirty) &&
+            fuelForm.get('startDate').hasError('required')">
+            Start date is required
+          </div>
+          <ion-modal class="datetimePicker" [isOpen]="openStartDatetime" [backdropDismiss]="false">
+            <ng-template>
+              <div class="cal-wrapper">
+                <ion-datetime #ionDatetime presentation="date" size="cover" [min]="minDate" [max]="maxDate" [value]="selectedStartDate"
+                  (ionChange)="setDatetime($event, 'tripDate')"></ion-datetime>
+                <div class="ion-text-right ion-padding-top">
+                  <ion-button fill="clear" class="hardware-tap" (click)="openStartDatetime=false;">Cancel</ion-button>
+                  <ion-button fill="clear" (click)="patchDatetime('tripDate')" [disabled]="!selectedStartDate">Ok</ion-button>
+                </div>
+              </div>
+            </ng-template>
+          </ion-modal>
+        </ng-container>
+
+        <ion-item class="ion-no-padding">
+          <ion-label position="floating" class="min-scale">Truck Number</ion-label>
+          <ion-input type="text" formControlName="truckNumber" maxlength="70"></ion-input>
+        </ion-item>
+        <div class="validation-error" *ngIf="(fuelForm.get('truckNumber').touched || fuelForm.get('truckNumber').dirty) &&
+          fuelForm.get('truckNumber').hasError('required')">
+          Truck number is required
+        </div>
+
+        <ion-item class="ion-no-padding" (click)="openDatetime=true;">
+          <ion-label position="floating" class="min-scale">Fuel Date</ion-label>
+          <ion-input id="pickupDate" type="text" readonly="true" formControlName="refillDate">
+            <ion-icon slot="end" src="assets/icon/calendar.svg"></ion-icon>
+          </ion-input>
+        </ion-item>
+        <div class="validation-error" *ngIf="(fuelForm.get('refillDate').touched || fuelForm.get('refillDate').dirty) &&
+          fuelForm.get('refillDate').hasError('required')">
+          Fuel date is required
+        </div>
+        <ion-modal class="datetimePicker" [isOpen]="openDatetime" [backdropDismiss]="false">
+          <ng-template>
+            <div class="cal-wrapper">
+              <ion-datetime #ionDatetime presentation="date" size="cover" [min]="minDate" [max]="maxDate" [value]="selectedDatetime"
+                (ionChange)="setDatetime($event, 'fuelDate')"></ion-datetime>
+              <div class="ion-text-right ion-padding-top">
+                <ion-button fill="clear" class="hardware-tap" (click)="openDatetime=false;">Cancel</ion-button>
+                <ion-button fill="clear" (click)="patchDatetime('fuelDate')" [disabled]="!selectedDatetime">Ok</ion-button>
+              </div>
+            </div>
+          </ng-template>
+        </ion-modal>
+
+        <ion-item class="ion-no-padding" (click)="openStateModal('stopState')">
+          <ion-label position="floating" class="min-scale">State</ion-label>
+          <ion-input type="text" formControlName="stopState" readonly="true"></ion-input>
+        </ion-item>
+        <div class="validation-error" *ngIf="(fuelForm.get('stopState').touched || fuelForm.get('stopState').dirty) &&
+          fuelForm.get('stopState').hasError('required')">
+          State is required
+        </div>
+
+        <ion-item class="ion-no-padding">
+          <ion-label position="floating" class="min-scale">Distance (Miles)</ion-label>
+          <ion-input type="text" inputmode="numeric" maxlength="10" formControlName="miles">
+            <p *ngIf="fuelForm.get('miles').value" class="distance-edit-btn">Edit</p>
+          </ion-input>
+        </ion-item>
+        <div class="validation-error" *ngIf="(fuelForm.get('miles').touched || fuelForm.get('miles').dirty) &&
+          fuelForm.get('miles').hasError('required')">
+          Distance is required
+        </div>
+
+        <ion-item class="ion-no-padding">
+          <ion-label position="floating" class="min-scale">Gallons</ion-label>
+          <ion-input type="text" inputmode="numeric" maxlength="10" formControlName="gallons"></ion-input>
+        </ion-item>
+        <div class="validation-error" *ngIf="(fuelForm.get('gallons').touched || fuelForm.get('gallons').dirty) &&
+          fuelForm.get('gallons').hasError('required')">
+          Gallons is required
+        </div>
+
+        <div class="ion-margin-vertical photos">
+          <div class="photo-cont" *ngFor="let img of selectedPhotos; index as i">
+            <ion-button shape="round" fill="clear" class="remove" (click)="removePhoto(i)">
+              <ion-icon src="assets/icon/close-icon-white.svg" slot="start"></ion-icon>
+            </ion-button>
+            <img [src]="img.fileType === 'img' ? img.src : 'assets/images/doc.png'" alt="">
+          </div>
+        </div>
+        <ion-button shape="round" fill="clear" class="ion-margin-vertical add-photos" (click)="presentSheet()">
+          <ion-icon src="assets/icon/upload.svg" slot="start"></ion-icon>
+          Upload Invoice
+        </ion-button>
+
+        <div class="ion-text-center form-btn">
+          <ion-button type="submit" class="ion-text-capitalize" expand="block"
+            [disabled]="fuelForm.invalid || loading">
+            <ion-spinner *ngIf="loading" color="secondary"></ion-spinner>
+            <span *ngIf="!loading">Continue</span>
+          </ion-button>
+        </div>
+     </div>
+    </div>
+  </form>
+</ion-content>

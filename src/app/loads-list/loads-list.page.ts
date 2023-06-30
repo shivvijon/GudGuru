@@ -96,7 +96,8 @@ export class LoadsListPage implements OnInit {
   }
 
   plan() {
-    this.router.navigate(['/tabs/profile/plans']);
+    /* this.router.navigate(['/tabs/profile/plans']); */
+    this.api.showPlanUpgrade();
   }
 
   getLevel()

@@ -1,0 +1,95 @@
+.header-cont {
+  .header-cont-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h2 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-right: 0;
+    }
+  }
+}
+
+.gallery-slides {
+  position: relative;
+
+  .price-tag {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    z-index: 1;
+    background: #FD191A;
+    padding: 0 8px;
+    color: #FFFFFF;
+
+    h3 {
+      font-weight: 700;
+    }
+
+  }
+}
+
+.gallery-slides, .gallery-slides img {
+  height: 216px;
+  width: 100%;
+}
+
+.gallery-slides img {
+  object-fit: cover;
+}
+
+.truck-details {
+  h2 {
+    font-weight: 600;
+    color: var(--ion-color-primary);
+    margin-bottom: 0;
+  }
+
+  .contact {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+
+    p {
+      font-size: 14pt;
+      font-weight: 600;
+    }
+
+    ion-button.contact::part(native) {
+      background: #0DAC86;
+    }
+  }
+
+  ion-grid {
+    .row-outer {
+      gap: 10px;
+    }
+
+    ion-col {
+      padding: 10px 0;
+    }
+
+    ion-col.col-outer {
+      padding: 0;
+    }
+
+    .grid-title {
+      background: #B6CEFF;
+      color: var(--ion-color-primary);
+      font-weight: 600;
+    }
+
+    .grid-data {
+      background: #FFFFFF;
+    }
+
+    p {
+      margin: 0;
+      font-weight: 400;
+    }
+  }
+}

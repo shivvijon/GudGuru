@@ -63,7 +63,10 @@ export class HomePage implements OnInit {
 
   async openLocationModal()
   {
-    if(!this.api.isTrial && this.api.user?.role === '0' &&
+    this.openLocation = true;
+    this.clearLocation = true;
+
+    /* if(!this.api.isTrial && this.api.user?.role === '0' &&
     (this.api.subscriptionStatus === 'inactive' || this.api.subscriptionStatus === 'past_due')) {
       this.api.showPlanUpgrade();
     }
@@ -71,7 +74,7 @@ export class HomePage implements OnInit {
     {
       this.openLocation = true;
       this.clearLocation = true;
-    }
+    } */
   }
 
   getLoadLocation(locationData)

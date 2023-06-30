@@ -87,7 +87,9 @@
         <ion-col size="6" (click)="openLocationModal()">
           <ion-card mode="md">
             <ion-card-content class="ion-text-center">
-              <ng-container *ngIf="isLoading; else showLoad">
+              <img src="assets/images/cargo.svg" alt="">
+              <h2>Loads</h2>
+              <!-- <ng-container *ngIf="isLoading; else showLoad">
                 <ion-skeleton-text [animated]="true" style="width: 80px; height: 80px; border-radius: 100%; margin: auto;">
                 </ion-skeleton-text>
                 <ion-skeleton-text [animated]="true" style="width: 100px; margin: 12px auto;"></ion-skeleton-text>
@@ -95,11 +97,11 @@
               <ng-template #showLoad>
                 <img src="assets/images/cargo.svg" alt="">
                 <h2>Loads</h2>
-              </ng-template>
+              </ng-template> -->
             </ion-card-content>
           </ion-card>
         </ion-col>
-        <ion-col size="6" (click)="comingSoon()">
+        <ion-col size="6" routerLink="truckList">
           <ion-card mode="md">
             <ion-card-content class="ion-text-center">
               <img src="assets/images/truck.svg" alt="">
@@ -110,11 +112,20 @@
       </ion-row>
 
       <ion-row>
-        <ion-col size="6" offset="3" (click)="comingSoon()">
+        <ion-col size="6" routerLink="truckPartList">
           <ion-card mode="md">
             <ion-card-content class="ion-text-center">
               <img src="assets/images/parts.svg" alt="">
               <h2>Truck's Parts Sale</h2>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <ion-col size="6" routerLink="ifta">
+          <ion-card mode="md">
+            <ion-card-content class="ion-text-center">
+              <img src="assets/images/ifta.svg" alt="">
+              <h2>PREP IFTA</h2>
             </ion-card-content>
           </ion-card>
         </ion-col>

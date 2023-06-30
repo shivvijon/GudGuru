@@ -1,0 +1,240 @@
+<!--Modal for Truck Filter-->
+<ion-modal class="loc-select fuel-filter" [isOpen]="openLocation" [initialBreakpoint]="modalInitialBr" [breakpoints]="[0.50, 1]"
+ [backdropDismiss]="false" [handle]="false">
+  <ng-template>
+    <div class="modal-main-cont">
+      <!--From State/City-->
+      <ion-item class="modal-header-cont ion-no-padding" lines="none">
+        <ion-label class="modal-title">Find Fuel Refills</ion-label>
+        <ion-icon class="close-btn hardware-tap" slot="end" src="assets/icon/close-icon.svg" (click)="closeModal(false)">
+        </ion-icon>
+      </ion-item>
+
+      <form [formGroup]="fuelForm">
+        <ion-item class="ion-no-padding" lines="none" mode="ios">
+          <ion-label position="stacked">Select Quarter</ion-label>
+          <ion-select formControlName="quarter">
+            <ion-select-option value="Q1">Q1 (Jan-Feb-Mar)</ion-select-option>
+            <ion-select-option value="Q2">Q2 (Apr-May-Jun)</ion-select-option>
+            <ion-select-option value="Q3">Q3 (Jul-Aug-Sep)</ion-select-option>
+            <ion-select-option value="Q4">Q4 (Oct-Nov-Dec)</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <div class="validation-error" *ngIf="(fuelForm.get('quarter').touched || fuelForm.get('quarter').dirty) &&
+          fuelForm.get('quarter').hasError('required')">
+          Quarter is required
+        </div>
+
+        <ion-item class="ion-no-padding" lines="none" mode="ios" (click)="openDatetime=true;">
+          <ion-label position="stacked">Year</ion-label>
+          <ion-input id="pickupDate" type="text" readonly="true" formControlName="year">
+            <ion-icon slot="end" src="assets/icon/calendar.svg"></ion-icon>
+          </ion-input>
+          <!-- <div class="model-year">
+            <div (click)="openDatetime=true;">
+
+            </div>
+            <ion-icon class="year-divider" src="assets/icon/year-divider.svg"></ion-icon>
+            <div (click)="openMaxDatetime=true;">
+              <ion-label position="stacked">Max Year</ion-label>
+              <ion-input id="pickupDate" type="text" readonly="true" formControlName="maxYear">
+                <ion-icon slot="end" src="assets/icon/calendar.svg"></ion-icon>
+              </ion-input>
+            </div>
+          </div> -->
+        </ion-item>
+        <div class="validation-error" *ngIf="(fuelForm.get('year').touched || fuelForm.get('year').dirty) &&
+          fuelForm.get('year').hasError('required')">
+          Year is required
+        </div>
+        <ion-modal class="datetimePicker" [isOpen]="openDatetime" [backdropDismiss]="false">
+          <ng-template>
+            <div class="cal-wrapper">
+              <ion-datetime #ionDatetime presentation="year" size="cover" [value]="selectedDatetime"
+                (ionChange)="setDatetime($event)" mode="ios"></ion-datetime>
+              <div class="ion-text-right ion-padding-top">
+                <ion-button fill="clear" class="hardware-tap" (click)="openDatetime=false;">Cancel</ion-button>
+                <ion-button fill="clear" (click)="patchDatetime()" [disabled]="!selectedDatetime">Ok</ion-button>
+              </div>
+            </div>
+          </ng-template>
+        </ion-modal>
+        <!-- <ion-modal class="datetimePicker" [isOpen]="openMaxDatetime" [backdropDismiss]="false">
+          <ng-template>
+            <div class="cal-wrapper">
+              <ion-datetime #ionDatetime presentation="year" size="cover" [value]="selectedMaxDatetime"
+                (ionChange)="setDatetime($event, 'max')" mode="ios"></ion-datetime>
+              <div class="ion-text-right ion-padding-top">
+                <ion-button fill="clear" class="hardware-tap" (click)="openMaxDatetime=false;">Cancel</ion-button>
+                <ion-button fill="clear" (click)="patchDatetime('max')" [disabled]="!selectedMaxDatetime">Ok</ion-button>
+              </div>
+            </div>
+          </ng-template>
+        </ion-modal> -->
+
+       <!--  <ion-item class="ion-no-padding" lines="none" mode="ios">
+          <ion-label position="stacked">Price</ion-label>
+          <ion-input type="text" inputmode="numeric" maxlength="10" formControlName="price"></ion-input>
+        </ion-item>
+        <div class="validation-error" *ngIf="(fuelForm.get('price').touched || fuelForm.get('price').dirty) &&
+          fuelForm.get('price').hasError('required')">
+          Price is required
+        </div> -->
+
+
+        <ng-container *ngIf="fuelForm.valid">
+          <ion-item class="ion-no-padding" lines="none" mode="ios"
+            (click)="openState=true; filterState();">
+            <ion-label position="stacked">Select State</ion-label>
+            <ion-input placeholder="Select State" readonly="true" [value]="selectedState">
+              <ion-icon slot="end" src="assets/icon/chevron-down.svg"></ion-icon>
+            </ion-input>
+          </ion-item>
+          <!-- <ion-item class="ion-no-padding" lines="none" mode="ios" (click)="filterCity()">
+            <ion-label position="stacked">Select City</ion-label>
+            <ion-input placeholder="Select City" readonly="true" [value]="selectedCities">
+              <ion-icon slot="end" src="assets/icon/chevron-down.svg"></ion-icon>
+            </ion-input>
+          </ion-item> -->
+        </ng-container>
+
+        <ion-item class="ion-no-padding" lines="none" mode="ios"
+          (click)="openTruck=true; filterTruck();">
+          <ion-label position="stacked">Select Truck Number</ion-label>
+          <ion-input placeholder="Select Truck Number" readonly="true" [value]="selectedTrucks">
+            <ion-icon slot="end" src="assets/icon/chevron-down.svg"></ion-icon>
+          </ion-input>
+        </ion-item>
+      </form>
+
+      <ion-button class="ion-margin-vertical" expand="block" (click)="closeModal(true);">
+        Submit
+      </ion-button>
+    </div>
+  </ng-template>
+</ion-modal>
+
+
+<!--Modal for State-->
+<ion-modal class="state-list" [isOpen]="openState" [backdropDismiss]="false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar color="secondary" mode="md">
+        <ion-title class="modal-title">Select State</ion-title>
+
+        <ion-buttons slot="end">
+          <ion-button class="hardware-tap" (click)="openState=false; clearStates();">
+            <ion-icon class="close-btn" slot="end" src="assets/icon/close-icon.svg"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+
+      <ion-toolbar color="secondary">
+        <ion-searchbar placeholder="Search State" mode="ios" class="loc-search"
+          (ionChange)="getfilteredStates($event)" (ionCancel)="resetStates()"></ion-searchbar>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <ion-item *ngFor="let state of filteredStates" lines="none">
+        <ion-label>{{state}}</ion-label>
+        <ion-checkbox slot="end" [value]="state"
+          [checked]="selectedState.includes(state) ? true : false"
+          mode="md" (ionChange)="setStateCity($event, 'state')">
+        </ion-checkbox>
+      </ion-item>
+    </ion-content>
+
+    <ion-footer>
+      <ion-button class="ion-margin" expand="block" [disabled]="!selectedState" (click)="setTruck(); openState=false;">
+        Continue
+      </ion-button>
+    </ion-footer>
+  </ng-template>
+</ion-modal>
+
+
+<!--Modal for City-->
+<ion-modal class="city-list" [isOpen]="openCity" [backdropDismiss]="false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar color="secondary" mode="md">
+        <ion-title class="modal-title">Select City</ion-title>
+
+        <ion-buttons slot="end">
+          <ion-button class="hardware-tap" (click)="openCity=false;">
+            <ion-icon class="close-btn" slot="end" src="assets/icon/close-icon.svg"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+
+      <ion-toolbar color="secondary">
+        <ion-searchbar placeholder="Search City" mode="ios" class="loc-search"
+          (ionChange)="getfilteredCities($event)" (ionCancel)="resetCities()"></ion-searchbar>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <cdk-virtual-scroll-viewport itemSize="40" [minBufferPx]="1000" [maxBufferPx]="1350">
+        <ion-item *cdkVirtualFor="let city of filteredCities" lines="none">
+          <ion-label>{{city.city}}</ion-label>
+          <ion-checkbox slot="end" [value]="city.city"
+            [checked]="selectedCities.includes(city.city) ? true : false"
+            mode="md" (ionChange)="setStateCity($event, 'city')">
+          </ion-checkbox>
+          <!-- <ng-template #showCities>
+            <ion-checkbox slot="end" [value]="city.city"
+              [disabled]="selectedCities.includes('All') ? true : false"
+              [checked]="selectedCities.includes(city.city) ? true : false"
+              mode="md"(ionChange)="setStateCity($event, 'city')">
+            </ion-checkbox>
+          </ng-template> -->
+        </ion-item>
+      </cdk-virtual-scroll-viewport>
+    </ion-content>
+
+    <ion-footer>
+      <ion-button class="ion-margin" expand="block" [disabled]="!selectedCities.length" (click)="openCity=false;">
+        Continue
+      </ion-button>
+    </ion-footer>
+  </ng-template>
+</ion-modal>
+
+<!--Modal for Truck Numbers-->
+<ion-modal class="state-list" [isOpen]="openTruck" [backdropDismiss]="false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar color="secondary" mode="md">
+        <ion-title class="modal-title">Select Truck Number</ion-title>
+
+        <ion-buttons slot="end">
+          <ion-button class="hardware-tap" (click)="openTruck=false; clearTrucks();">
+            <ion-icon class="close-btn" slot="end" src="assets/icon/close-icon.svg"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+
+      <ion-toolbar color="secondary">
+        <ion-searchbar placeholder="Search Truck" mode="ios" class="loc-search"
+          (ionChange)="getfilteredTrucks($event)" (ionCancel)="resetTrucks()"></ion-searchbar>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <ion-item *ngFor="let truck of filteredTrucks" lines="none">
+        <ion-label>{{truck}}</ion-label>
+        <ion-checkbox slot="end" [value]="truck"
+          [checked]="selectedTrucks.includes(truck) ? true : false"
+          mode="md" (ionChange)="setTrucks($event)">
+        </ion-checkbox>
+      </ion-item>
+    </ion-content>
+
+    <ion-footer>
+      <ion-button class="ion-margin" expand="block" [disabled]="!selectedTrucks" (click)="openTruck=false;">
+        Continue
+      </ion-button>
+    </ion-footer>
+  </ng-template>
+</ion-modal>

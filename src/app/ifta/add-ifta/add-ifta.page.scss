@@ -1,0 +1,128 @@
+.header-cont {
+  .header-cont-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.form-container {
+  position: relative;
+  margin: 16px;
+  margin-top: -220px;
+
+  .route {
+    h4 {
+      color: #0DAC86;
+      font-weight: 600;
+    }
+
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 16px;
+    background: #f3f5fd;
+
+    ion-item::part(native) {
+      background: transparent;
+    }
+
+    ion-item {
+      ion-label {
+        margin-bottom: 8px;
+        color: var(--ion-color-primary);
+        font-weight: 600;
+      }
+
+      ion-input {
+        background: #FFFFFF;
+        --padding-start: 8px;
+      }
+
+      input {
+        height: 48px;
+      }
+    }
+  }
+
+  .form-fields {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 16px;
+    background: #FFFFFF;
+
+    ion-item ion-input ion-icon {
+      order: 1;
+    }
+
+    ion-label {
+      color: #818181;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    ion-input, ion-select {
+      font-size: 12px;
+    }
+
+    .item-has-focus ion-label {
+      color: var(--ion-color-primary, #3880ff);
+    }
+
+    .form-btn {
+      margin: 60px 0 0;
+
+      ion-button {
+        height: 48px;
+        font-size: 14pt;
+      }
+    }
+
+    p.distance-edit-btn {
+      order: 1;
+      color: var(--ion-color-primary);
+      opacity: 0.7;
+    }
+  }
+
+
+  .photos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    .photo-cont {
+      position: relative;
+
+      .remove {
+        position: absolute;
+        left: 36px;
+        top: -20px;
+
+        i {
+          font-size: 16pt;
+        }
+      }
+    }
+
+    .photo-cont, .photo-cont img {
+      width: 70px;
+      height: 70px;
+      border-radius: 3px;
+    }
+
+    .photo-cont img {
+      object-fit: cover;
+    }
+  }
+
+  .add-photos {
+    ion-icon {
+      font-size: 30pt;
+    }
+
+    height: auto;
+    color: #0DAC86;
+    text-transform: capitalize;
+    font-weight: 600;
+  }
+}

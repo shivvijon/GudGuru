@@ -1,0 +1,94 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="false">
+        <ion-icon src="assets/icon/menu-icon.svg"></ion-icon>
+      </ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>
+      <ion-icon src="assets/icon/location-icon.svg"></ion-icon>
+      <ng-container *ngIf="emergency.currentLocation; else noLoc">
+        {{emergency.currentLocation}}
+        <!-- <ion-icon src="assets/icon/chevron-down-light.svg"></ion-icon> -->
+      </ng-container>
+      <ng-template #noLoc>
+        No Location...
+      </ng-template>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="navToNotifications()">
+        <ion-icon slot="icon-only" src="assets/icon/bell-icon.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="header-cont">
+    <div class="header-cont-area ion-padding">
+      <h2 class="ion-padding-vertical">
+        <ion-icon class="ion-padding-end" slot="icon-only" src="assets/icon/chevron-left.svg" routerLink="../"></ion-icon>
+        Truck Part Sale
+      </h2>
+    </div>
+  </div>
+  <div class="header-logo" (click)="openFilterModal()">
+    <ion-icon slot="icon-only" src="assets/icon/filter-icon.svg"></ion-icon>
+    <a>Filter by Name & Year</a>
+  </div>
+
+  <div class="loads-list ion-padding">
+    <ion-card mode="md" *ngIf="isLoading; else truckList">
+      <div class="thumbnail">
+        <ion-skeleton-text [animated]="true" style="width: 97px;"></ion-skeleton-text>
+      </div>
+
+      <div class="card-content">
+        <p>
+          <ion-skeleton-text [animated]="true" style="width: 200px;"></ion-skeleton-text>
+          <br><br>
+          <ion-skeleton-text [animated]="true" style="width: 200px;"></ion-skeleton-text>
+        </p>
+
+        <div class="price-tag">
+          <p><ion-skeleton-text [animated]="true" style="width: 100px;"></ion-skeleton-text></p>
+          <ion-skeleton-text [animated]="true" style="width: 70px;"></ion-skeleton-text>
+        </div>
+      </div>
+    </ion-card>
+
+    <ng-template #truckList>
+      <ng-container *ngIf="filteredParts.length; else noTrucks">
+        <ion-card mode="md" *ngFor="let truck of filteredParts" (click)="viewTruck(truck._id)">
+            <div class="thumbnail">
+              <img [src]="truck.images.length ? env.imageUrl + truck.images[0] : 'assets/images/truck-sale.svg'" alt=""
+                crossorigin="anonymous">
+            </div>
+
+            <div class="card-content">
+              <p>
+                <span class="truck-name">{{truck.part}} / </span>{{truck.make}}
+                <br><br>
+                <span class="model-year">Model : </span>{{truck.year}}
+              </p>
+
+              <div class="price-tag">
+                <p>Price : <span>${{truck.price}}</span></p>
+                <ion-icon slot="icon-only" src="assets/icon/chevron-right-green.svg"></ion-icon>
+              </div>
+            </div>
+        </ion-card>
+      </ng-container>
+
+      <ng-template #noTrucks>
+        <h2 class="ion-text-center">No truck part sales available</h2>
+      </ng-template>
+    </ng-template>
+  </div>
+</ion-content>
+
+<app-truck-part-filter [openLocation]="openFilter" [clearFilter]="clearFilter"
+  (filterChange)="getFilteredTruckParts($event)">
+</app-truck-part-filter>

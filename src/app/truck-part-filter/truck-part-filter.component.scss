@@ -1,0 +1,73 @@
+ion-item {
+  --background: (--var-color-secondary);
+}
+
+.truck-filter {
+  --height: auto;
+  --max-height: 85%;
+
+  .ion-page {
+    background: var(--var-color-secondary);
+  }
+}
+
+.modal-main-cont {
+  padding: 16px 16px 60px;
+
+  .modal-header-cont {
+    --inner-padding-end: 0;
+    padding: 0;
+
+    ion-label {
+      font-size: 14pt;
+    }
+  }
+
+  .modal-header-cont:last-child {
+    padding: 8px 0;
+  }
+
+  ion-item {
+    padding-bottom: 10px;
+    --inner-padding-end: 0;
+
+    ion-label {
+      font-weight: 550;
+    }
+
+    ion-input, ion-select {
+      background: #FFFFFF;
+      border-radius: 3px;
+      font-size: 12px;
+
+      ion-icon {
+        order: 2;
+        font-size: 10pt;
+        padding: 10px;
+      }
+    }
+
+    .model-year {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      ion-icon.year-divider {
+        font-size: 24pt;
+        margin: 24px 6px 0;
+      }
+    }
+  }
+
+  ion-item:nth-child(3) {
+    padding-bottom: 16px;
+  }
+}
+
+.modal-main-cont.from-loc-selected {
+  padding: 16px 16px 40px;
+}
+
+ion-footer {
+  background: var(--ion-color-secondary);
+}

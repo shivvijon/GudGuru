@@ -27,6 +27,7 @@ import { EmailVerifyComponent } from './email-verify/email-verify.component';
 import { Stripe } from '@awesome-cordova-plugins/stripe/ngx';
 import { InAppPurchase2 } from '@ionic-native/in-app-purchase-2/ngx';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
+import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
 
 @NgModule({
   declarations: [AppComponent, StateComponent, CityComponent, EmergencyLoadComponent, EmailVerifyComponent],
@@ -43,7 +44,7 @@ import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
     })
   ],
   providers: [
-    LocationAccuracy, NativeGeocoder, AndroidPermissions, Diagnostic, Stripe, InAppPurchase2, InAppBrowser,
+    LocationAccuracy, NativeGeocoder, AndroidPermissions, Diagnostic, Stripe, InAppPurchase2, InAppBrowser, FileOpener,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: NetworkStatusInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

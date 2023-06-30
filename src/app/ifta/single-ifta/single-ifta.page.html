@@ -1,0 +1,164 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="false">
+        <ion-icon src="assets/icon/menu-icon.svg"></ion-icon>
+      </ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>
+      <ion-icon src="assets/icon/location-icon.svg"></ion-icon>
+      <ng-container *ngIf="emergency.currentLocation; else noLoc">
+        {{emergency.currentLocation}}
+        <!-- <ion-icon src="assets/icon/chevron-down-light.svg"></ion-icon> -->
+      </ng-container>
+      <ng-template #noLoc>
+        No Location...
+      </ng-template>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="navToNotifications()">
+        <ion-icon slot="icon-only" src="assets/icon/bell-icon.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar class="filter" *ngIf="fuelPoints">
+    <ion-buttons slot="start">
+      <ion-back-button [text]="fuelPoints.fuelPoints[0].truckNumber">
+        <ion-icon src="assets/icon/menu-icon.svg"></ion-icon>
+      </ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button fill="clear">
+        <ion-icon slot="start" src="assets/icon/calendar-white.svg"></ion-icon>
+        {{fuelPoints.createdAt | date}}
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="fuel-list ion-padding" *ngIf="fuelPoints">
+    <ion-row class="total-fuel">
+      <ion-col class="ion-text-left">
+        <p>
+          TOTAL MILES
+          <br>
+          <span>{{fuelPoints.totalMiles}}</span>
+        </p>
+      </ion-col>
+      <ion-col class="ion-text-right">
+        <p>
+          TOTAL GALLONS
+          <br>
+          <span>{{fuelPoints.totalGallons}}</span>
+        </p>
+      </ion-col>
+    </ion-row>
+
+    <div class="route ion-margin-vertical">
+      <p class="origin">
+        <ion-icon slot="icon-only" src="assets/icon/location-green.svg"></ion-icon>
+        {{fuelPoints.origin}}
+      </p>
+      <div class="divider"></div>
+      <p>
+        <ion-icon slot="icon-only" src="assets/icon/destination.svg"></ion-icon>
+        {{fuelPoints.destination}}
+      </p>
+    </div>
+
+    <ion-grid class="headerCnt ion-margin-bottom">
+      <ion-row  class="tableHead ion-text-center">
+        <ion-col>Date</ion-col>
+        <ion-col>State</ion-col>
+        <ion-col>Miles</ion-col>
+        <ion-col>Gallons</ion-col>
+        <ion-col>Action</ion-col>
+      </ion-row>
+      <ion-row class="middleCnt ion-text-center" *ngFor="let point of fuelPoints.fuelPoints">
+        <ion-col>{{getFormattedTripDate(point.refillDate)}}</ion-col>
+        <ion-col>{{point.stopState}}</ion-col>
+        <ion-col>{{point.miles}}</ion-col>
+        <ion-col>{{point.gallons}}</ion-col>
+        <ion-col class="action">
+          <ion-button fill="clear" size="small" [disabled]="!point.documents.length" (click)="getFuelInvoices(point); showInvoices=true;">
+            <ion-icon slot="icon-only" src="assets/images/upload.svg"></ion-icon>
+          </ion-button>
+          <ion-button fill="clear" size="small" (click)="navToAddIfta('update', point)">
+            <ion-icon slot="icon-only" src="assets/images/edit.svg"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <div class="addFab">
+      <ion-fab (click)="navToAddIfta('add')">
+        <ion-fab-button color="light" id="btnProceed">
+          <ion-icon color="light" name="add"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+      <p class="addMore" (click)="navToAddIfta('add')">ADD MORE</p>
+    </div>
+  </div>
+</ion-content>
+
+<ion-modal mode="md" class="invoices" [isOpen]="showInvoices" [backdropDismiss]="false" (didDismiss)="ionViewWillEnter()">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar color="primary">
+        <ion-title>Fuel Invoices</ion-title>
+        <ion-buttons slot="end">
+          <ion-button class="hardware-tap" (click)="showInvoices=false; selectedPoint=null">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ng-container *ngIf="isLoading; else showDocs">
+          <div class="list-header ion-padding-horizontal">
+            <h3><ion-skeleton-text [animated]="true" style="width: 100px"></ion-skeleton-text></h3>
+            <p><ion-skeleton-text [animated]="true" style="width: 140px"></ion-skeleton-text></p>
+          </div>
+
+          <ion-item>
+            <ion-thumbnail slot="start">
+              <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+            </ion-thumbnail>
+            <ion-label>
+              <h2><ion-skeleton-text [animated]="true"></ion-skeleton-text></h2>
+            </ion-label>
+          </ion-item>
+        </ng-container>
+
+        <ng-template #showDocs>
+          <ng-container *ngIf="selectedPoint">
+            <div class="list-header ion-padding-horizontal">
+              <h3>{{fuelPoints.origin}} to {{fuelPoints.destination}}</h3>
+              <p>Stop State Refill: {{selectedPoint.stopState}}</p>
+            </div>
+
+            <ion-item *ngFor="let doc of selectedPoint.documents">
+              <ion-thumbnail slot="start">
+                <img [src]="(doc.name.includes('.png') || doc.name.includes('.jpeg') || doc.name.includes('.jpg')) ?
+                          env.imageUrl + doc.name : 'assets/images/doc.png'" crossorigin="anonymous">
+              </ion-thumbnail>
+              <ion-label>
+                <h2>{{doc.name}}</h2>
+              </ion-label>
+              <ion-icon *ngIf="!doc.isLoading; else showSpinner" name="eye-outline" size="default" slot="end" (click)="viewInvoice(doc)"></ion-icon>
+              <ion-icon color="danger" name="trash-outline" size="default" slot="end" (click)="presentAlert(doc)"></ion-icon>
+              <ng-template #showSpinner>
+                <ion-spinner name="crescent" slot="end"></ion-spinner>
+              </ng-template>
+            </ion-item>
+          </ng-container>
+        </ng-template>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<!-- <app-truck-part-filter [openLocation]="openFilter" [clearFilter]="clearFilter"
+  (filterChange)="getFilteredTruckParts($event)">
+</app-truck-part-filter> -->
