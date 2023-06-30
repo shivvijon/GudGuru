@@ -420,8 +420,18 @@ ion-modal.loc-select, ion-modal.state-list, ion-modal.city-list {
       justify-content: space-between;
       align-items: center;
 
-      .delete-icon {
+      .edit-icon, .delete-icon {
         font-size: 30pt;
+      }
+
+      .edit-icon {
+        padding-right: 8px;
+      }
+    }
+
+    .mcNo {
+      p {
+        margin: 0 0 8px 0;
       }
     }
   }
@@ -558,5 +568,14 @@ input[type=number] {
 
 .otpStyle .ng-otp-input-wrapper .otp-input:focus {
   outline: none;
+}
+
+ion-alert.emailPrompt {
+  .alert-wrapper .alert-message {
+    color: #FF1C1D;
+    padding-top: 16px;
+    padding-bottom: 0;
+    text-align: left;
+  }
 }
 

@@ -26,11 +26,11 @@ export class TruckSaleListPage implements OnInit {
     private auth: AuthService
   ) { }
 
-  ngOnInit() {}
-
-  ionViewWillEnter() {
+  ngOnInit() {
     this.getTrucks();
   }
+
+  ionViewWillEnter() {}
 
   getTrucks()
   {

@@ -42,8 +42,16 @@ export class TruckService {
     return this.http.post(`${environment.apiBaseUrl}/truck`, truckPost);
   }
 
+  updateTruck(id, truckPost): Observable<any> {
+    return this.http.put(`${environment.apiBaseUrl}/truck/${id}`, truckPost);
+  }
+
   addTruckPart(truckPost): Observable<any> {
     return this.http.post(`${environment.apiBaseUrl}/truckpart`, truckPost);
+  }
+
+  updateTruckPart(id, truckPost): Observable<any> {
+    return this.http.put(`${environment.apiBaseUrl}/truckpart/${id}`, truckPost);
   }
 
   deleteTruckPart(id): Observable<any> {

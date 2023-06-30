@@ -82,8 +82,12 @@
 
               <div class="price-tag">
                 <p>Price : <span>${{truck.price}}</span></p>
-                <ion-icon class="delete-icon" slot="icon-only" src="assets/icon/delete-icon.svg" (click)="presentAlert(truck._id)">
-                </ion-icon>
+                <div>
+                  <ion-icon class="edit-icon" slot="icon-only" src="assets/icon/edit.svg" (click)="navToUpdateTruckPart(truck)">
+                  </ion-icon>
+                  <ion-icon class="delete-icon" slot="icon-only" src="assets/icon/delete-icon.svg" (click)="presentAlert(truck._id)">
+                  </ion-icon>
+                </div>
               </div>
             </div>
         </ion-card>

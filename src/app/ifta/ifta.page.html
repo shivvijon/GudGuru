@@ -80,13 +80,17 @@
     </ion-card>
 
     <ng-template #fuelList>
+      <ion-button shape="round" class="report-btn ion-text-capitalize" (click)="isReport=true; openFilterModal();">
+        <ion-icon slot=start src="assets/icon/report.svg"></ion-icon>
+        Generate report
+      </ion-button>
       <ng-container *ngIf="filteredFuelRefills.length; else noFuels">
         <ion-card mode="md" *ngFor="let fuel of filteredFuelRefills" (click)="viewPoints(fuel)">
             <div class="card-content">
                 <div class="headingCnt">
                   <div>
-                   <ion-icon slot="icon-only" src="assets/icon/calendar.svg"></ion-icon>
-                   <span>{{getFormattedTripDate(fuel.startDate)}}</span>
+                    <ion-icon slot="icon-only" src="assets/icon/calendar.svg"></ion-icon>
+                    <span>{{getFormattedTripDate(fuel.startDate)}}</span>
                   </div>
                   <div>
                     <ion-icon slot="icon-only" src="assets/icon/truck-red.svg"></ion-icon>
@@ -96,8 +100,8 @@
                 <hr>
                 <div class="middleCnt">
                   <div class="origin">
-                   <ion-icon slot="icon-only" src="assets/icon/location-green.svg"></ion-icon>
-                   <span>{{fuel.origin}}</span>
+                    <ion-icon slot="icon-only" src="assets/icon/location-green.svg"></ion-icon>
+                    <span>{{fuel.origin}}</span>
                   </div>
                   <div class="divider"></div>
                   <div>
@@ -139,5 +143,5 @@
 </ion-content>
 
 <app-ifta-filter [openLocation]="openFilter" [clearFilter]="clearFilter" [truckNumbers]="truckNumbers"
-  (filterChange)="getFilteredFuels($event)">
+  [title]="isReport ? 'Generate report' : 'Find Fuel Refills'" (filterChange)="getFilteredFuels($event)">
 </app-ifta-filter>

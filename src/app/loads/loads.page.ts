@@ -57,9 +57,11 @@ export class LoadsPage implements OnInit {
       toState: new FormControl(null, [Validators.required]),
       toCity: new FormControl({value: null, disabled: true}, [Validators.required]),
       toAddress: new FormControl(null),
-      contact: new FormControl(null, [Validators.required]),
+      contact: new FormControl(null),
       email: new FormControl(null, [Validators.email]),
-      title: new FormControl(null, [Validators.required])
+      title: new FormControl(null, [Validators.required]),
+      mcNo: new FormControl(null, [Validators.required]),
+      price: new FormControl(null, [Validators.required])
     });
   }
 
@@ -156,7 +158,7 @@ export class LoadsPage implements OnInit {
 
   patchDatetime()
   {
-    const selDate = moment(this.selectedDatetime).format('Do MMM, YYYY - h:mm a');
+    const selDate = moment(this.selectedDatetime).format('Do MMM, YYYY');
     this.loadForm.patchValue({pickDate: selDate});
     this.openDatetime = false;
   }

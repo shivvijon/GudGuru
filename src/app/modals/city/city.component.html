@@ -11,19 +11,19 @@
 
   <ion-toolbar color="secondary">
     <ion-searchbar placeholder="Search City" mode="ios" class="loc-search"
-      (ionChange)="getfilteredCities($event)" (ionCancel)="resetCities()"></ion-searchbar>
+      (ionChange)="getPlacesPredictions($event)" (ionCancel)="resetCities()"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <cdk-virtual-scroll-viewport itemSize="40" [minBufferPx]="1000" [maxBufferPx]="1350">
+  <!-- <cdk-virtual-scroll-viewport itemSize="40" [minBufferPx]="1000" [maxBufferPx]="1350"> -->
     <ion-radio-group [value]="selectedCity" (ionChange)="setStateCity($event);">
-      <ion-item *cdkVirtualFor="let city of filteredCities" lines="none">
-        <ion-label>{{city.city}}</ion-label>
-        <ion-radio slot="end" [value]="city.city" mode="md"></ion-radio>
+      <ion-item *ngFor="let city of filteredCities" lines="none">
+        <ion-label>{{city.description}}</ion-label>
+        <ion-radio slot="end" [value]="city.description" mode="md"></ion-radio>
       </ion-item>
     </ion-radio-group>
-  </cdk-virtual-scroll-viewport>
+ <!--  </cdk-virtual-scroll-viewport> -->
 </ion-content>
 
 <ion-footer>

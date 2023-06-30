@@ -5,7 +5,7 @@
     <div class="modal-main-cont">
       <!--From State/City-->
       <ion-item class="modal-header-cont ion-no-padding" lines="none">
-        <ion-label class="modal-title">Find Fuel Refills</ion-label>
+        <ion-label class="modal-title">{{title}}</ion-label>
         <ion-icon class="close-btn hardware-tap" slot="end" src="assets/icon/close-icon.svg" (click)="closeModal(false)">
         </ion-icon>
       </ion-item>
@@ -82,7 +82,7 @@
         </div> -->
 
 
-        <ng-container *ngIf="fuelForm.valid">
+        <ng-container *ngIf="title !== 'Generate report'">
           <ion-item class="ion-no-padding" lines="none" mode="ios"
             (click)="openState=true; filterState();">
             <ion-label position="stacked">Select State</ion-label>

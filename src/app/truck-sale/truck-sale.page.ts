@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EmergencyLoadService } from '../services/api/emergency-load.service';
 import { AuthService } from '../services/api/auth.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -13,6 +13,7 @@ import { ToastService } from '../services/api/toast.service';
 import { FilePicker } from '@capawesome/capacitor-file-picker';
 import { PaymentService } from '../services/api/payment.service';
 import { Buffer } from 'buffer';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-truck-sale',
@@ -28,6 +29,9 @@ export class TruckSalePage implements OnInit {
   level: any;
   alertMessage: any;
   selectedPhotos: any[] = [];
+  truckId: string;
+  truckData: any;
+  headTitle = 'Truck Sale';
 
   constructor(
     private router: Router,
@@ -36,7 +40,9 @@ export class TruckSalePage implements OnInit {
     public api: TruckService,
     private auth: AuthService,
     private toast: ToastService,
-    private paymentService: PaymentService
+    private paymentService: PaymentService,
+    private route: ActivatedRoute,
+    private location: Location
   )
   {
     this.truckForm = new FormGroup({
@@ -50,10 +56,38 @@ export class TruckSalePage implements OnInit {
       contactno: new FormControl(null, [Validators.required]),
       comment: new FormControl(null, [Validators.required])
     });
+
+    route.params.subscribe(param => {
+      if(router.getCurrentNavigation().extras.state) {
+        this.truckId = router.getCurrentNavigation().extras.state.truckId;
+        this.truckData = router.getCurrentNavigation().extras.state.truckData;
+        this.headTitle = 'Edit Truck Sale';
+        this.patchForm();
+      }
+    });
   }
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  ionViewWillEnter(){
     this.getLevel();
+  }
+
+  patchForm()
+  {
+    this.truckForm.get('city').enable({onlySelf: true});
+    this.truckForm.patchValue({
+      miles: this.truckData.miles,
+      make: this.truckData.make,
+      model: this.truckData.model,
+      price: this.truckData.price,
+      year: this.truckData.year,
+      state: this.truckData.state,
+      city: this.truckData.city,
+      contactno: this.truckData.contactno,
+      comment: this.truckData.comment
+    });
+    this.selectedDatetime = this.truckData.year;
   }
 
   async openStateModal()
@@ -164,22 +198,44 @@ export class TruckSalePage implements OnInit {
         postForm.append('file[]', photo.blob, photo.fileName);
       });
 
-      this.api.addTruck(postForm).subscribe(resp => {
-        console.log(resp);
-        this.loading = false;
-        if(resp.success)
-        {
-          this.toast.presentToast('Truck Added', 'success');
-          this.router.navigate(['/tabs/listing']);
-        }
-      },
-      (err) => {
-        this.loading = false;
-        console.error(err);
-        if(err.status !== 502 && err.error) {
-          this.toast.presentToast('Unable to add truck', 'danger');
-        }
-      });
+      if(this.truckId)
+      {
+        this.api.updateTruck(this.truckId, postForm).subscribe(resp => {
+          console.log(resp);
+          this.loading = false;
+          if(resp.success)
+          {
+            this.toast.presentToast('Truck updated', 'success');
+            this.location.back();
+          }
+        },
+        (err) => {
+          this.loading = false;
+          console.error(err);
+          if(err.status !== 502 && err.error) {
+            this.toast.presentToast('Unable to update truck', 'danger');
+          }
+        });
+      }
+      else
+      {
+        this.api.addTruck(postForm).subscribe(resp => {
+          console.log(resp);
+          this.loading = false;
+          if(resp.success)
+          {
+            this.toast.presentToast('Truck Added', 'success');
+            this.router.navigate(['/tabs/listing']);
+          }
+        },
+        (err) => {
+          this.loading = false;
+          console.error(err);
+          if(err.status !== 502 && err.error) {
+            this.toast.presentToast('Unable to add truck', 'danger');
+          }
+        });
+      }
     }
     else {
       this.auth.showPlanUpgrade();

@@ -27,7 +27,7 @@
   <form [formGroup]="truckForm" (ngSubmit)="addTruck()" (keyup.enter)="addTruck(true)">
     <div class="header-cont">
       <div class="header-cont-area ion-padding">
-        <h2 class="ion-padding-vertical">Truck Sale</h2>
+        <h2 class="ion-padding-vertical">{{headTitle}}</h2>
       </div>
     </div>
 
@@ -98,7 +98,9 @@
 
         <ion-item class="ion-no-padding">
           <ion-label position="floating" class="min-scale">Price</ion-label>
-          <ion-input type="text" inputmode="numeric" maxlength="10" formControlName="price"></ion-input>
+          <ion-input type="text" inputmode="numeric" maxlength="10" formControlName="price">
+            <p class="price-dollar">&#65284;</p>
+          </ion-input>
         </ion-item>
         <div class="validation-error" *ngIf="(truckForm.get('price').touched || truckForm.get('price').dirty) &&
           truckForm.get('price').hasError('required')">
@@ -156,7 +158,7 @@
 
         <div class="ion-text-center form-btn">
           <ion-button type="submit" class="ion-text-capitalize" expand="block"
-            [disabled]="truckForm.invalid || !selectedPhotos.length || loading">
+            [disabled]="truckForm.invalid || (!selectedPhotos.length && !truckId) || loading">
             <ion-spinner *ngIf="loading" color="secondary"></ion-spinner>
             <span *ngIf="!loading">Continue</span>
           </ion-button>

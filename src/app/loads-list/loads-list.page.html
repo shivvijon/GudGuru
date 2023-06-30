@@ -113,14 +113,17 @@
               <p class="load-weight"><span>Type : </span>{{load.type}}</p>
               <div *ngIf="!api.isTrial; else bookNow">
                 <ion-button shape="round" *ngIf="level !== '2'" fill="outline" (click)="plan()" color="danger">Upgrade Plan</ion-button>
-                <ion-button shape="round" *ngIf="level === '2'" fill="outline" color="success" (click)="callLoad(load.contactno)">Book Now</ion-button>
+                <ion-button shape="round" *ngIf="level === '2'" fill="outline" color="success"
+                  (click)="load.contactno.length ? callLoad(load.contactno) : ''">Book Now</ion-button>
               </div>
               <ng-template #bookNow>
-                <ion-button shape="round" fill="outline" color="success" (click)="callLoad(load.contactno)">Book Now</ion-button>
+                <ion-button shape="round" fill="outline" color="success" (click)="load.contactno.length ? callLoad(load.contactno) : ''">Book Now</ion-button>
               </ng-template>
             </div>
-            <div *ngIf="level === '2'" class="ion-margin-vertical">
-              <a [href]="'mailto:' + load.email">{{load.email}}</a>
+            <div *ngIf="level === '2'" class="mcNo ion-margin-vertical">
+              <p class="load-weight"><span>MC No : </span>{{load.mcNo}}</p>
+              <p class="load-weight"><span>Price : </span>&#65284;{{load.price}}</p>
+              <a *ngIf="load.email.length" [href]="'mailto:' + load.email">{{load.email}}</a>
             </div>
           </div>
         </ion-card>

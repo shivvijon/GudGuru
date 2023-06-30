@@ -110,10 +110,16 @@
             </div>
 
             <p class="ion-no-margin load-weight"><span>Weight : </span>{{load.weight}} {{load.weight_type}}</p>
+            <p class="load-weight"><span>Type : </span>{{load.type}}</p>
             <div class="load-type">
-              <p class="load-weight"><span>Type : </span>{{load.type}}</p>
-              <ion-icon class="delete-icon" slot="icon-only" src="assets/icon/delete-icon.svg" (click)="presentAlert(load._id)">
-              </ion-icon>
+              <p class="ion-no-margin load-weight"><span>MC No : </span>{{load.mcNo}}</p>
+              <p class="ion-no-margin load-weight"><span>Price : </span>&#65284;{{load.price}}</p>
+              <div>
+                <!-- <ion-icon class="edit-icon" slot="icon-only" src="assets/icon/edit.svg" (click)="presentAlert(load._id)">
+                </ion-icon> -->
+                <ion-icon class="delete-icon" slot="icon-only" src="assets/icon/delete-icon.svg" (click)="presentAlert(load._id)">
+                </ion-icon>
+              </div>
             </div>
           </div>
         </ion-card>

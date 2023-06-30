@@ -15,6 +15,10 @@ const routes: Routes = [
   {
     path: 'add-ifta',
     loadChildren: () => import('./add-ifta/add-ifta.module').then( m => m.AddIftaPageModule)
+  },
+  {
+    path: 'report',
+    loadChildren: () => import('./report/report.module').then( m => m.ReportPageModule)
   }
 ];
 

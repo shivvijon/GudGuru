@@ -113,6 +113,26 @@
               Load Type is required
             </div>
 
+            <ion-item class="ion-no-padding">
+              <ion-label position="floating" class="min-scale">MC No</ion-label>
+              <ion-input type="text" inputmode="numeric" formControlName="mcNo"></ion-input>
+            </ion-item>
+            <div class="validation-error" *ngIf="(loadForm.get('mcNo').touched || loadForm.get('mcNo').dirty) &&
+              loadForm.get('mcNo').hasError('required')">
+              MC No is required
+            </div>
+
+            <ion-item class="ion-no-padding">
+              <ion-label position="floating" class="min-scale">Price</ion-label>
+              <ion-input type="text" inputmode="numeric" formControlName="price">
+                <p class="price-dollar">&#65284;</p>
+              </ion-input>
+            </ion-item>
+            <div class="validation-error" *ngIf="(loadForm.get('price').touched || loadForm.get('price').dirty) &&
+              loadForm.get('price').hasError('required')">
+              Price is required
+            </div>
+
             <h2>From</h2>
 
             <ion-item class="ion-no-padding">

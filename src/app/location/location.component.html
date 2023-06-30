@@ -109,27 +109,26 @@
 
       <ion-toolbar color="secondary">
         <ion-searchbar placeholder="Search City" mode="ios" class="loc-search"
-          (ionChange)="getfilteredCities($event)" (ionCancel)="resetCities()"></ion-searchbar>
+          (ionChange)="getPlacesPredictions($event)" (ionCancel)="resetCities()"></ion-searchbar>
+
+        <ion-chip *ngFor="let city of selectedCities">
+          <ion-label>{{city}}</ion-label>
+          <ion-icon name="close" (click)="removeCity(city)"></ion-icon>
+        </ion-chip>
       </ion-toolbar>
+
     </ion-header>
 
     <ion-content>
-      <cdk-virtual-scroll-viewport itemSize="40" [minBufferPx]="1000" [maxBufferPx]="1350">
-        <ion-item *cdkVirtualFor="let city of filteredCities" lines="none">
-          <ion-label>{{city.city}}</ion-label>
-          <ion-checkbox slot="end" [value]="city.city"
+      <!-- <cdk-virtual-scroll-viewport itemSize="40" [minBufferPx]="1000" [maxBufferPx]="1350"> -->
+        <ion-item *ngFor="let city of filteredCities" lines="none" (click)="setCities(city.description)">
+          <ion-label>{{city.description}}</ion-label>
+          <!-- <ion-checkbox slot="end" [value]="city.city"
             [checked]="selectedCities.includes(city.city) ? true : false"
             mode="md"(ionChange)="setStateCity($event, 'city')">
-          </ion-checkbox>
-          <!-- <ng-template #showCities>
-            <ion-checkbox slot="end" [value]="city.city"
-              [disabled]="selectedCities.includes('All') ? true : false"
-              [checked]="selectedCities.includes(city.city) ? true : false"
-              mode="md"(ionChange)="setStateCity($event, 'city')">
-            </ion-checkbox>
-          </ng-template> -->
+          </ion-checkbox> -->
         </ion-item>
-      </cdk-virtual-scroll-viewport>
+      <!-- </cdk-virtual-scroll-viewport> -->
     </ion-content>
 
     <ion-footer>

@@ -39,11 +39,15 @@
     <ion-icon slot="icon-only" src="assets/icon/avatar.svg"></ion-icon>
   </div>
 
-  <ng-container *ngIf="api.user; else profileLoading">
+  <ng-container *ngIf="!isLoading; else profileLoading">
     <ion-text class="ion-text-center ion-text-capitalize" color="tertiary"><h2>{{api.user.name}}</h2></ion-text>
     <div class="profile-data">
       <p><ion-icon slot="icon-only" src="assets/icon/tele-icon.svg"></ion-icon> {{api.user.phone}}</p>
-      <p><ion-icon slot="icon-only" src="assets/icon/email-icon.svg"></ion-icon> {{api.user.email}}</p>
+      <p (click)="presentAlert()">
+        <ion-icon slot="icon-only" src="assets/icon/email-icon.svg"></ion-icon>
+        {{api.user.email}}
+        <ion-icon slot="icon-only" class="email-edit" src="assets/images/edit.svg"></ion-icon>
+      </p>
     </div>
   </ng-container>
   <ng-template #profileLoading>

@@ -204,4 +204,21 @@ hr {
   }
 }
 
+ion-button.report-btn {
+  height: 48px;
+  --background: #FD191A;
+}
 
+.tableHead ion-col{
+  padding: 10px 0px;
+  font-weight: 600;
+}
+
+.headerCnt{
+  background: #EBF2FF;
+  padding: 0;
+}
+
+ion-col{
+  border: 1px solid #BED8FF;
+}

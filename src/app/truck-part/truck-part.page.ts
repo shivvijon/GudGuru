@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { EmergencyLoadService } from '../services/api/emergency-load.service';
 import { TruckService } from '../services/api/truck.service';
@@ -13,6 +13,7 @@ import { Keyboard } from '@capacitor/keyboard';
 import { AuthService } from '../services/api/auth.service';
 import { PaymentService } from '../services/api/payment.service';
 import { Buffer } from 'buffer';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-truck-part',
@@ -29,6 +30,9 @@ export class TruckPartPage implements OnInit {
   alertMessage: any;
   isEmLoading: boolean;
   selectedPhotos: any[] = [];
+  partId: string;
+  truckData: any;
+  headTitle = 'Truck Part Sale';
 
   constructor(
     private router: Router,
@@ -37,7 +41,9 @@ export class TruckPartPage implements OnInit {
     public api: TruckService,
     private auth: AuthService,
     private toast: ToastService,
-    private paymentService: PaymentService
+    private paymentService: PaymentService,
+    private route: ActivatedRoute,
+    private location: Location
   )
   {
     this.truckPartForm = new FormGroup({
@@ -50,9 +56,37 @@ export class TruckPartPage implements OnInit {
       contactno: new FormControl(null, [Validators.required]),
       comment: new FormControl(null, [Validators.required])
     });
+
+    route.params.subscribe(param => {
+      if(router.getCurrentNavigation().extras.state) {
+        this.partId = router.getCurrentNavigation().extras.state.partId;
+        this.truckData = router.getCurrentNavigation().extras.state.truckData;
+        this.headTitle = 'Edit Truck Part Sale';
+        this.patchForm();
+      }
+    });
   }
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  ionViewWillEnter(){
+    this.getLevel();
+  }
+
+  patchForm()
+  {
+    this.truckPartForm.get('city').enable({onlySelf: true});
+    this.truckPartForm.patchValue({
+      make: this.truckData.make,
+      part: this.truckData.part,
+      price: this.truckData.price,
+      year: this.truckData.year,
+      state: this.truckData.state,
+      city: this.truckData.city,
+      contactno: this.truckData.contactno,
+      comment: this.truckData.comment
+    });
+    this.selectedDatetime = this.truckData.year;
   }
 
   async openStateModal()
@@ -164,22 +198,44 @@ export class TruckPartPage implements OnInit {
         postForm.append('file[]', photo.blob, photo.fileName);
       });
 
-      this.api.addTruckPart(postForm).subscribe(resp => {
-        console.log(resp);
-        this.loading = false;
-        if(resp.success)
-        {
-          this.toast.presentToast('Truck Part Added', 'success');
-          this.router.navigate(['/tabs/listing']);
-        }
-      },
-      (err) => {
-        this.loading = false;
-        console.error(err);
-        if(err.status !== 502 && err.error) {
-          this.toast.presentToast('Unable to add truck part', 'danger');
-        }
-      });
+      if(this.partId)
+      {
+        this.api.updateTruckPart(this.partId, postForm).subscribe(resp => {
+          console.log(resp);
+          this.loading = false;
+          if(resp.success)
+          {
+            this.toast.presentToast('Truck Part updated', 'success');
+            this.location.back();
+          }
+        },
+        (err) => {
+          this.loading = false;
+          console.error(err);
+          if(err.status !== 502 && err.error) {
+            this.toast.presentToast('Unable to update truck part', 'danger');
+          }
+        });
+      }
+      else
+      {
+        this.api.addTruckPart(postForm).subscribe(resp => {
+          console.log(resp);
+          this.loading = false;
+          if(resp.success)
+          {
+            this.toast.presentToast('Truck Part Added', 'success');
+            this.router.navigate(['/tabs/listing']);
+          }
+        },
+        (err) => {
+          this.loading = false;
+          console.error(err);
+          if(err.status !== 502 && err.error) {
+            this.toast.presentToast('Unable to add truck part', 'danger');
+          }
+        });
+      }
     }
     else {
       this.auth.showPlanUpgrade();

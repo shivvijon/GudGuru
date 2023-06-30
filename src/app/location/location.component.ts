@@ -3,6 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { EventEmitter } from '@angular/core';
 import { disableSideMenu } from '../decorators/side-menu.decorator';
 import { city, statename } from './citylist';
+declare const google;
 
 @disableSideMenu()
 @Component({
@@ -33,9 +34,12 @@ export class LocationComponent implements OnInit, OnChanges {
   selectedState: string;
   selectedCities: string[] = [];
   locMode: string;
+  googleAutocomplete: any;
 
   constructor(private modalController: ModalController)
-  {}
+  {
+    this.googleAutocomplete = new google.maps.places.AutocompleteService();
+  }
 
   ngOnInit() {
     this.filteredStates = Array.from(this.states);
@@ -67,9 +71,10 @@ export class LocationComponent implements OnInit, OnChanges {
     if(this.selectedState)
     {
       this.openCity = true;
-      this.cities = city.filter(c => c.state === this.selectedState);
+      this.filteredCities = [];
+      /* this.cities = city.filter(c => c.state === this.selectedState);
       this.cities.unshift({city: 'All', state: 'All'});
-      this.filteredCities = this.cities.filter((c, index, self) => index === self.findIndex((t) => t.city === c.city));
+      this.filteredCities = this.cities.filter((c, index, self) => index === self.findIndex((t) => t.city === c.city)); */
       this.locMode = loc;
     }
   }
@@ -156,6 +161,59 @@ export class LocationComponent implements OnInit, OnChanges {
 
   resetCities() {
     this.filteredCities = Array.from(this.cities);
+  }
+
+  getPlacesPredictions(event: any)
+  {
+    const searchTerm = event.target.value;
+
+    if (searchTerm === '') {
+      return;
+    }
+
+    const config = {
+      input: searchTerm,
+      componentRestrictions: {
+        country: ['us']
+      }
+    };
+
+    this.googleAutocomplete.getPlacePredictions(config, (data) => {
+      if (data)
+      {
+        this.filteredCities = data;
+        this.filteredCities.unshift({description: 'All'});
+      }
+      else {
+        this.filteredCities = [];
+      }
+    });
+  }
+
+  setCities(googleCity: string)
+  {
+    const refactoredCity = googleCity?.split(',')[0];
+    if(refactoredCity === 'All') {
+      this.selectedCities = [];
+    }
+    else
+    {
+      const i = this.selectedCities.findIndex(c => c === 'All');
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      i !== -1 ? this.selectedCities.splice(i, 1) : null;
+    }
+
+    const index = this.selectedCities.findIndex(c => c === refactoredCity);
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    index === -1 ? this.selectedCities.push(refactoredCity) : null;
+  }
+
+  removeCity(c: string)
+  {
+    const index = this.selectedCities.indexOf(c);
+    if(index !== -1) {
+      this.selectedCities.splice(index, 1);
+    }
   }
 
   closeModal(isDataSelected)

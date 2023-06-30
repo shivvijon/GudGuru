@@ -4,7 +4,7 @@ import { NativeGeocoder, NativeGeocoderOptions } from '@ionic-native/native-geoc
 import { MapsAPILoader } from '@agm/core';
 import { AlertController, LoadingController } from '@ionic/angular';
 import { Diagnostic } from '@awesome-cordova-plugins/diagnostic/ngx';
-import { GeolocationService } from 'geolocation-service';
+import { GeolocationService } from 'background-geolocation';
 import { AuthService } from './auth.service';
 
 @Injectable({

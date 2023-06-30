@@ -5,6 +5,7 @@ import { EmergencyLoadService } from '../services/api/emergency-load.service';
 import { AuthService } from '../services/api/auth.service';
 import { FuelService } from '../services/api/fuel.service';
 import * as moment from 'moment';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-ifta',
@@ -22,13 +23,15 @@ export class IftaPage implements OnInit {
   filterResp = false;
   totalMiles = 0;
   totalGallons = 0;
+  isReport = false;
   env = environment;
 
   constructor(
     private router: Router,
     public emergency: EmergencyLoadService,
     public api: FuelService,
-    private auth: AuthService
+    private auth: AuthService,
+    private modalCtrl: ModalController
   ) { }
 
   ngOnInit() {}
@@ -86,6 +89,7 @@ export class IftaPage implements OnInit {
     console.log(filterData);
     this.openFilter = false;
     this.clearFilter = false;
+    const reportFilter = filterData;
 
     for(const key in filter) {
       if(filter[key]) {
@@ -179,12 +183,55 @@ export class IftaPage implements OnInit {
         this.totalGallons += fuel.totalGallons;
       });
 
+      this.totalMiles = parseFloat(this.totalMiles.toFixed(2));
+      this.totalGallons = parseFloat(this.totalGallons.toFixed(2));
       this.filterResp = true;
     }
     else
     {
       this.filteredFuelRefills = Array.from(this.fuelRefills);
       this.filterResp = false;
+    }
+
+    // Show Report Type list
+    if(this.isReport && filterData)
+    {
+      this.filterResp = false;
+
+      let reducedFuels: any[] = [];
+      this.filteredFuelRefills.forEach(fuel => {
+        reducedFuels = reducedFuels.concat(fuel.fuelPoints);
+      });
+
+      const fuelsReport: any[] = [];
+      reducedFuels.forEach(fuel => {
+        const index = fuelsReport.findIndex(r => (r.stopState === fuel.stopState));
+        if(index === -1) {
+          fuelsReport.push(JSON.parse(JSON.stringify(fuel)));
+        }
+        else
+        {
+          fuelsReport[index].miles += fuel.miles;
+          fuelsReport[index].gallons += fuel.gallons;
+          fuelsReport[index].miles = parseFloat(fuelsReport[index].miles.toFixed(2));
+          fuelsReport[index].gallons = parseFloat(fuelsReport[index].gallons.toFixed(2));
+        }
+      });
+
+      /* console.log('Reduced Fuels--->', fuelsReport); */
+
+      const navExtras: NavigationExtras = {
+        state: {
+          reportFilter,
+          filteredFuelRefills: fuelsReport,
+          totalMiles: this.totalMiles,
+          totalGallons: this.totalGallons}
+      };
+
+      (await this.modalCtrl.getTop()).onDidDismiss().then(() => {
+        this.router.navigate(['tabs/home/ifta/report'], navExtras);
+        this.isReport = false;
+      });
     }
 
     console.log(this.filteredFuelRefills);

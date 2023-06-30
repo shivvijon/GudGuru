@@ -83,6 +83,12 @@
         font-size: 14pt;
       }
     }
+
+    p.price-dollar {
+      order: 1;
+      color: var(--ion-color-primary);
+      font-weight: 550;
+    }
   }
 }
 

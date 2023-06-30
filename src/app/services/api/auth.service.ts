@@ -34,6 +34,10 @@ export class AuthService {
     return this.http.get(`${environment.apiBaseUrl}/auth/me`);
   }
 
+  updateProfile(postData): Observable<any> {
+    return this.http.put(`${environment.apiBaseUrl}/auth/update-details`, postData);
+  }
+
   getTrialStatus(): Observable<any> {
     return this.http.get(`${environment.apiBaseUrl}/auth/getTrialStatus`);
   }

@@ -5,6 +5,7 @@ import { city, statename } from '../location/citylist';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { RangeCustomEvent } from '@ionic/angular';
+declare const google;
 
 @disableSideMenu()
 @Component({
@@ -50,9 +51,11 @@ export class TruckFilterComponent implements OnInit, OnChanges {
     min: 0,
     max: 0
   };
+  googleAutocomplete: any;
 
   constructor()
   {
+    this.googleAutocomplete = new google.maps.places.AutocompleteService();
     this.truckForm = new FormGroup({
       minMiles: new FormControl(null),
       maxMiles: new FormControl(null),
@@ -126,9 +129,10 @@ export class TruckFilterComponent implements OnInit, OnChanges {
     if(this.selectedState)
     {
       this.openCity = true;
-      this.cities = city.filter(c => c.state === this.selectedState);
+      this.filteredCities = [];
+      /* this.cities = city.filter(c => c.state === this.selectedState);
       this.cities.unshift({city: 'All', state: 'All'});
-      this.filteredCities = this.cities.filter((c, index, self) => index === self.findIndex((t) => t.city === c.city));
+      this.filteredCities = this.cities.filter((c, index, self) => index === self.findIndex((t) => t.city === c.city)); */
     }
   }
 
@@ -197,6 +201,59 @@ export class TruckFilterComponent implements OnInit, OnChanges {
 
   clearCity() {
     this.selectedCities = Array.from(this.finalCities);
+  }
+
+  getPlacesPredictions(event: any)
+  {
+    const searchTerm = event.target.value;
+
+    if (searchTerm === '') {
+      return;
+    }
+
+    const config = {
+      input: searchTerm,
+      componentRestrictions: {
+        country: ['us']
+      }
+    };
+
+    this.googleAutocomplete.getPlacePredictions(config, (data) => {
+      if (data)
+      {
+        this.filteredCities = data;
+        this.filteredCities.unshift({description: 'All'});
+      }
+      else {
+        this.filteredCities = [];
+      }
+    });
+  }
+
+  setCities(googleCity: string)
+  {
+    const refactoredCity = googleCity?.split(',')[0];
+    if(refactoredCity === 'All') {
+      this.selectedCities = [];
+    }
+    else
+    {
+      const i = this.selectedCities.findIndex(c => c === 'All');
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      i !== -1 ? this.selectedCities.splice(i, 1) : null;
+    }
+
+    const index = this.selectedCities.findIndex(c => c === refactoredCity);
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    index === -1 ? this.selectedCities.push(refactoredCity) : null;
+  }
+
+  removeCity(c: string)
+  {
+    const index = this.selectedCities.indexOf(c);
+    if(index !== -1) {
+      this.selectedCities.splice(index, 1);
+    }
   }
 
   setPrice(event: Event)

@@ -12,6 +12,7 @@ export class IftaFilterComponent implements OnInit, OnChanges {
 
   @Input() openLocation = false;
   @Input() clearFilter = false;
+  @Input() title = 'Find Fuel Refills';
   @Input() truckNumbers = [];
   @Output() filterChange = new EventEmitter<any>();
 

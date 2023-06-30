@@ -26,11 +26,11 @@ export class TruckPartListPage implements OnInit {
     private auth: AuthService
   ) { }
 
-  ngOnInit() {}
-
-  ionViewWillEnter() {
+  ngOnInit() {
     this.getTruckParts();
   }
+
+  ionViewWillEnter() {}
 
   getTruckParts()
   {
@@ -118,7 +118,7 @@ export class TruckPartListPage implements OnInit {
             else if(key === 'state' && addedFilter[key].includes(truck[key])) {
               continue;
             }
-            else if(truck[key].toUpperCase() === addedFilter[key].toUpperCase()) {
+            else if(truck[key] === addedFilter[key]) {
               continue;
             }
             else {

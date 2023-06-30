@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/api/auth.service';
 import { EmergencyLoadService } from 'src/app/services/api/emergency-load.service';
@@ -28,11 +28,11 @@ export class TruckSalePage implements OnInit {
     private router: Router
   ) { }
 
-  ngOnInit() {
-    this.getTrucks();
-  }
+  ngOnInit() {}
 
-  ionViewWillEnter() {
+  ionViewWillEnter()
+  {
+    this.getTrucks();
     this.getTrialStatus();
   }
 
@@ -110,6 +110,16 @@ export class TruckSalePage implements OnInit {
     else {
       this.router.navigate(['tabs/listing/notification']);
     }
+  }
+
+  navToUpdateTruck(truckData: any)
+  {
+    const navExtras: NavigationExtras = {
+      // eslint-disable-next-line no-underscore-dangle
+      state: {truckId: truckData._id, truckData}
+    };
+
+    this.router.navigate(['tabs/listing/truck-sale'], navExtras);
   }
 
 }
