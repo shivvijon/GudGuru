@@ -31,6 +31,7 @@
     "@awesome-cordova-plugins/stripe": "^6.2.0",
     "@capacitor/android": "^4.3.0",
     "@capacitor/app": "4.0.1",
+    "@capacitor/browser": "^5.0.6",
     "@capacitor/camera": "^4.1.4",
     "@capacitor/core": "4.3.0",
     "@capacitor/filesystem": "^4.1.4",
@@ -66,6 +67,7 @@
     "moment": "^2.29.4",
     "ng-otp-input": "^1.8.5",
     "rxjs": "~6.6.0",
+    "socket.io-client": "^4.7.2",
     "swiper": "^8.4.7",
     "tslib": "^2.2.0",
     "zone.js": "~0.11.4"
