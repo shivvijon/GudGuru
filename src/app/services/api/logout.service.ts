@@ -15,9 +15,26 @@ export class LogoutService {
     private storage: StorageService
   ) { }
 
-  logout()
+  async logout()
   {
+    // Retrieve Login Data
+    const rememberMe = this.storage.get('rememberMe');
+    const email = this.storage.get('email');
+    const password = this.storage.get('password');
+
     this.storage.clear();
+
+    // Save Login Data
+    if(rememberMe) {
+      await this.storage.set('rememberMe', rememberMe);
+    }
+    if(email) {
+      await this.storage.set('email', email);
+    }
+    if(password) {
+      await this.storage.set('password', password);
+    }
+
     this.push.removeAllListeners();
     this.router.navigate(['login'], {replaceUrl: true});
     GeolocationService.stopTracking();

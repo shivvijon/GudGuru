@@ -7,6 +7,8 @@ import { LoadService } from '../services/api/load.service';
 import { PushService } from '../services/push-notification/push.service';
 import {  PaymentService } from '../services/api/payment.service';
 import { ErrorService } from '../services/api/error.service';
+import { SocketService } from '../services/socket/socket.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -20,6 +22,7 @@ export class HomePage implements OnInit {
   loadLocation: any;
   level: any;
   isLoading: boolean;
+  socketSubs: Subscription;
 
   constructor(
     private modalController: ModalController,
@@ -29,6 +32,7 @@ export class HomePage implements OnInit {
     public api: AuthService,
     private alert: ErrorService,
     public paymentService: PaymentService,
+    private socket: SocketService
     )
   {
     emergency.registerLocationStateChange();
@@ -38,7 +42,14 @@ export class HomePage implements OnInit {
 
   ngOnInit() {}
 
-  ionViewWillEnter() {
+  ionViewWillEnter()
+  {
+    this.getProfile();
+    this.listenSocket();
+  }
+
+  getProfile()
+  {
     this.isLoading = true;
     this.api.getProfile().subscribe((resp) => {
       if(resp.success) {
@@ -109,6 +120,17 @@ export class HomePage implements OnInit {
     else {
       this.router.navigate(['tabs/home/notification']);
     }
+  }
+
+  listenSocket()
+  {
+    this.socketSubs = this.socket.on('onStripePayment').subscribe(resp => {
+      this.getProfile();
+    });
+  }
+
+  ionViewWillLeave() {
+    this.socketSubs.unsubscribe();
   }
 
 }

@@ -1,9 +1,11 @@
-import { AfterContentChecked, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterContentChecked, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/api/auth.service';
 import { EmergencyLoadService } from 'src/app/services/api/emergency-load.service';
 import { TruckService } from 'src/app/services/api/truck.service';
+import { SocketService } from 'src/app/services/socket/socket.service';
 import { environment } from 'src/environments/environment';
 import { SwiperOptions } from 'swiper';
 import { SwiperComponent } from 'swiper/angular';
@@ -13,7 +15,7 @@ import { SwiperComponent } from 'swiper/angular';
   templateUrl: './truck-part-details.page.html',
   styleUrls: ['./truck-part-details.page.scss'],
 })
-export class TruckPartDetailsPage implements OnInit, AfterContentChecked {
+export class TruckPartDetailsPage implements OnInit, OnDestroy, AfterContentChecked {
 
   @ViewChild('swiperCont') swiper: SwiperComponent;
 
@@ -33,6 +35,7 @@ export class TruckPartDetailsPage implements OnInit, AfterContentChecked {
     }
   };
   env = environment;
+  socketSubs: Subscription;
 
   constructor(
     private router: Router,
@@ -40,6 +43,7 @@ export class TruckPartDetailsPage implements OnInit, AfterContentChecked {
     public emergency: EmergencyLoadService,
     public api: TruckService,
     private auth: AuthService,
+    private socket: SocketService
   )
   {
     route.queryParams.subscribe(params => {
@@ -52,6 +56,7 @@ export class TruckPartDetailsPage implements OnInit, AfterContentChecked {
   }
 
   ngOnInit() {
+    this.listenSocket();
   }
 
   ngAfterContentChecked(): void {
@@ -106,6 +111,17 @@ export class TruckPartDetailsPage implements OnInit, AfterContentChecked {
           false : true;
       }
     });
+  }
+
+  listenSocket()
+  {
+    this.socketSubs = this.socket.on('onStripePayment').subscribe(resp => {
+      this.getTrialStatus();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.socketSubs.unsubscribe();
   }
 
 }

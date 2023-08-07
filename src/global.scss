@@ -172,6 +172,34 @@ ion-menu::part(backdrop), ion-modal::part(backdrop) {
     order: 2;
   }
 
+  .footer-area {
+    .login-text {
+      font-size: 14pt;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+
+    .divider {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin: 40px 0;
+    }
+
+    .divider::before, .divider::after {
+      content: "";
+      border: 1px solid;
+      flex: 1 1 auto;
+    }
+
+    .signup-text {
+      b {
+        text-decoration: underline;
+      }
+    }
+  }
+
   ion-button {
     height: var(--min-height);
     --background: var(--ion-color-light);

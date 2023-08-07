@@ -30,17 +30,6 @@ export class LoadService {
     return this.http.delete(`${environment.apiBaseUrl}/loads/${id}`);
   }
 
-  sendOtpMail(data: any): Observable<any>
-  {
-    return this.http.post(environment.apiBaseUrl + '/auth/sendEmail', data);
-  }
-
-  verifyOtpMail(data: any): Observable<any>
-  {
-    return this.http.post(environment.apiBaseUrl + '/auth/verifyEmail', data);
-  }
-
-
   getProfile(): Observable<any> {
     return this.http.get(`${environment.apiBaseUrl}/auth/me`);
   }

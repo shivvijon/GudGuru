@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import { AuthService } from '../services/api/auth.service';
 import { EmergencyLoadService } from '../services/api/emergency-load.service';
+import { SocketService } from '../services/socket/socket.service';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-tabs',
@@ -13,9 +15,12 @@ export class TabsPage implements OnInit {
   constructor(
     public emergency: EmergencyLoadService,
     public api: AuthService,
-    private loadingController: LoadingController) { }
+    private loadingController: LoadingController,
+    private storage: StorageService,
+    private socket: SocketService) { }
 
   ngOnInit() {
+    this.initSocket();
   }
 
   getTrialStatus()
@@ -46,6 +51,15 @@ export class TabsPage implements OnInit {
     });
 
     await loader.present();
+  }
+
+  initSocket()
+  {
+    this.storage.get('userToken').then((userToken) => {
+      if(userToken) {
+        this.socket.join(userToken.userId);
+      }
+    });
   }
 
 }

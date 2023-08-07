@@ -115,7 +115,7 @@
 
             <ion-item class="ion-no-padding">
               <ion-label position="floating" class="min-scale">MC No</ion-label>
-              <ion-input type="text" inputmode="numeric" formControlName="mcNo"></ion-input>
+              <ion-input type="text" formControlName="mcNo"></ion-input>
             </ion-item>
             <div class="validation-error" *ngIf="(loadForm.get('mcNo').touched || loadForm.get('mcNo').dirty) &&
               loadForm.get('mcNo').hasError('required')">
@@ -124,7 +124,7 @@
 
             <ion-item class="ion-no-padding">
               <ion-label position="floating" class="min-scale">Price</ion-label>
-              <ion-input type="text" inputmode="numeric" formControlName="price">
+              <ion-input type="text" inputmode="decimal" formControlName="price">
                 <p class="price-dollar">&#65284;</p>
               </ion-input>
             </ion-item>

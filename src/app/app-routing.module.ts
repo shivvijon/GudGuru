@@ -3,16 +3,24 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+    path: 'login',
+    loadChildren: () => import('./auth/login/login.module').then( m => m.LoginPageModule)
   },
   {
-    path: 'login',
-    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+    path: 'login-opt',
+    loadChildren: () => import('./auth/login-opt/login-opt.module').then( m => m.LoginOptPageModule)
+  },
+  {
+    path: 'login-mobile',
+    loadChildren: () => import('./auth/login-mobile/login-mobile.module').then( m => m.LoginMobilePageModule)
+  },
+  {
+    path: 'login-email',
+    loadChildren: () => import('./auth/login-email/login-email.module').then( m => m.LoginEmailPageModule)
   },
   {
     path: 'register',
-    loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
+    loadChildren: () => import('./auth/register/register.module').then( m => m.RegisterPageModule)
   },
   {
     path: 'tabs',
@@ -24,7 +32,7 @@ const routes: Routes = [
   },
   {
     path: 'policy',
-    loadChildren: () => import('./priv-policy/priv-policy.module').then( m => m.PrivPolicyPageModule)
+    loadChildren: () => import('./auth/priv-policy/priv-policy.module').then( m => m.PrivPolicyPageModule)
   },
   {
     path: 'plan',
@@ -39,9 +47,9 @@ const routes: Routes = [
     loadChildren: () => import('./thanks/thanks.module').then(m => m.ThanksPageModule)
   },
   {
-    path: 'ifta',
-    loadChildren: () => import('./ifta/ifta.module').then( m => m.IftaPageModule)
-  }
+    path: 'password-reset',
+    loadChildren: () => import('./auth/password-reset/password-reset.module').then( m => m.PasswordResetPageModule)
+  },
 ];
 
 @NgModule({

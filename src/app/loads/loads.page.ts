@@ -12,6 +12,8 @@ import { Keyboard } from '@capacitor/keyboard';
 import { EmergencyLoadService } from '../services/api/emergency-load.service';
 import {  PaymentService } from '../services/api/payment.service';
 import { AuthService } from '../services/api/auth.service';
+import { Subscription } from 'rxjs';
+import { SocketService } from '../services/socket/socket.service';
 
 @disableSideMenu()
 @Component({
@@ -32,6 +34,7 @@ export class LoadsPage implements OnInit {
   minDate: string;
   maxDate: string;
   isEmLoading: boolean;
+  socketSubs: Subscription;
 
 
   constructor(
@@ -42,7 +45,8 @@ export class LoadsPage implements OnInit {
     public emergency: EmergencyLoadService,
     public paymentService: PaymentService,
     private platform: Platform,
-    private userService: AuthService
+    private userService: AuthService,
+    private socket: SocketService
     )
   {
     this.loadForm = new FormGroup({
@@ -74,6 +78,7 @@ export class LoadsPage implements OnInit {
 
   ionViewWillEnter(){
     this.getLevel();
+    this.listenSocket();
   }
 
   disableMonthPicker()
@@ -250,6 +255,17 @@ export class LoadsPage implements OnInit {
         else{ this.alertMessage='Updgrade Your Plan';}
       }
     });
+  }
+
+  listenSocket()
+  {
+    this.socketSubs = this.socket.on('onStripePayment').subscribe(resp => {
+      this.getLevel();
+    });
+  }
+
+  ionViewWillLeave() {
+    this.socketSubs.unsubscribe();
   }
 
 }

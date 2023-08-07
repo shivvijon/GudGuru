@@ -10,6 +10,7 @@ import { LogoutService } from './services/api/logout.service';
 import { AuthService } from './services/api/auth.service';
 import { NetworkService } from './services/network/network.service';
 
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',

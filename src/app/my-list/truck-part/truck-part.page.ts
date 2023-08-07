@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/api/auth.service';
 import { EmergencyLoadService } from 'src/app/services/api/emergency-load.service';
 import { ToastService } from 'src/app/services/api/toast.service';
 import { TruckService } from 'src/app/services/api/truck.service';
+import { SocketService } from 'src/app/services/socket/socket.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -17,6 +19,7 @@ export class TruckPartPage implements OnInit {
   truckParts: any[] = [];
   isLoading: any;
   env = environment;
+  socketSubs: Subscription;
 
   constructor(
     private api: TruckService,
@@ -24,7 +27,8 @@ export class TruckPartPage implements OnInit {
     private toast: ToastService,
     public emergency: EmergencyLoadService,
     public userService: AuthService,
-    private router: Router
+    private router: Router,
+    private socket: SocketService
   ) { }
 
   ngOnInit() {}
@@ -33,6 +37,7 @@ export class TruckPartPage implements OnInit {
   {
     this.getTruckParts();
     this.getTrialStatus();
+    this.listenSocket();
   }
 
   getTruckParts()
@@ -119,6 +124,17 @@ export class TruckPartPage implements OnInit {
     };
 
     this.router.navigate(['tabs/listing/truck-part'], navExtras);
+  }
+
+  listenSocket()
+  {
+    this.socketSubs = this.socket.on('onStripePayment').subscribe(resp => {
+      this.getTrialStatus();
+    });
+  }
+
+  ionViewWillLeave() {
+    this.socketSubs.unsubscribe();
   }
 
 }

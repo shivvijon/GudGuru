@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { AlertController } from '@ionic/angular';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
+import { Browser } from '@capacitor/browser';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,11 @@ export class AuthService {
 
   register(postData): Observable<any> {
     return this.http.post(`${environment.apiBaseUrl}/auth/register`, postData);
+  }
+
+  registerEmail(postData): Observable<any> {
+    delete postData.cnfmPass;
+    return this.http.post(`${environment.apiBaseUrl}/auth/registerEmail`, postData);
   }
 
   getProfile(): Observable<any> {
@@ -70,10 +76,24 @@ export class AuthService {
     return this.http.post(environment.apiBaseUrl + '/auth/verifyOtp', data);
   }
 
-
-  addProfile(data): Observable<any>
+  sendOtpMail(data: any): Observable<any>
   {
-    return this.http.post(environment.apiBaseUrl + '/auth/register', data);
+    return this.http.post(environment.apiBaseUrl + '/auth/sendEmail', data);
+  }
+
+  verifyOtpMail(data: any): Observable<any>
+  {
+    return this.http.post(environment.apiBaseUrl + '/auth/verifyEmail', data);
+  }
+
+  addProfile(data, loginMode: string): Observable<any>
+  {
+    return this.http.post(environment.apiBaseUrl + '/auth/register?loginMode=' + loginMode, data);
+  }
+
+  updatePassword(postData): Observable<any>
+  {
+    return this.http.put(environment.apiBaseUrl + '/auth/update-password', postData);
   }
 
   async showPlanUpgrade()
@@ -94,8 +114,10 @@ export class AuthService {
     await alert.present();
   }
 
-  async redirectToBrowser() {
-    const browser = this.iab.create('https://gudguru.com/login-page', '_blank', {hideurlbar: 'yes'});
+  async redirectToBrowser()
+  {
+    //const browser = this.iab.create('https://gudguru.com/login-page', '_blank', {hideurlbar: 'yes'});
+    Browser.open({url: 'https://gudguru.com/login-page'});
   }
 
 }

@@ -14,6 +14,8 @@ import { FilePicker } from '@capawesome/capacitor-file-picker';
 import { PaymentService } from '../services/api/payment.service';
 import { Buffer } from 'buffer';
 import { Location } from '@angular/common';
+import { Subscription } from 'rxjs';
+import { SocketService } from '../services/socket/socket.service';
 
 @Component({
   selector: 'app-truck-sale',
@@ -32,6 +34,7 @@ export class TruckSalePage implements OnInit {
   truckId: string;
   truckData: any;
   headTitle = 'Truck Sale';
+  socketSubs: Subscription;
 
   constructor(
     private router: Router,
@@ -42,7 +45,8 @@ export class TruckSalePage implements OnInit {
     private toast: ToastService,
     private paymentService: PaymentService,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private socket: SocketService
   )
   {
     this.truckForm = new FormGroup({
@@ -71,6 +75,7 @@ export class TruckSalePage implements OnInit {
 
   ionViewWillEnter(){
     this.getLevel();
+    this.listenSocket();
   }
 
   patchForm()
@@ -278,6 +283,17 @@ export class TruckSalePage implements OnInit {
         this.auth.daysLeft = resp.daysLeft;
       }
     });
+  }
+
+  listenSocket()
+  {
+    this.socketSubs = this.socket.on('onStripePayment').subscribe(resp => {
+      this.getLevel();
+    });
+  }
+
+  ionViewWillLeave() {
+    this.socketSubs.unsubscribe();
   }
 
 }

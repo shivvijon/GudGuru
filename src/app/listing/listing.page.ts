@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { AuthService } from '../services/api/auth.service';
 import { EmergencyLoadService } from '../services/api/emergency-load.service';
 import { ErrorService } from '../services/api/error.service';
+import { Subscription } from 'rxjs';
+import { SocketService } from '../services/socket/socket.service';
 
 @Component({
   selector: 'app-listing',
@@ -12,16 +14,19 @@ import { ErrorService } from '../services/api/error.service';
 export class ListingPage implements OnInit {
 
   isLoading: boolean;
+  socketSubs: Subscription;
 
   constructor(
     public emergency: EmergencyLoadService,
     public api: AuthService,
     private alert: ErrorService,
-    private router: Router
+    private router: Router,
+    private socket: SocketService
   ) { }
 
   ionViewWillEnter() {
     this.getTrialStatus();
+    this.listenSocket();
   }
 
   ngOnInit() {
@@ -65,5 +70,16 @@ export class ListingPage implements OnInit {
     else {
       this.router.navigate(['tabs/listing/notification']);
     }
+  }
+
+  listenSocket()
+  {
+    this.socketSubs = this.socket.on('onStripePayment').subscribe(resp => {
+      this.getTrialStatus();
+    });
+  }
+
+  ionViewWillLeave() {
+    this.socketSubs.unsubscribe();
   }
 }

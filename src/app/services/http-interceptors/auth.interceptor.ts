@@ -16,7 +16,10 @@ export class AuthInterceptor implements HttpInterceptor {
     'v1/auth/login',
     'v1/auth/register',
     'v1/auth/sendOtp',
-    'v1/auth/verifyOtp'
+    'v1/auth/verifyOtp',
+    'v1/auth/update-password',
+    'v1/auth/sendEmail',
+    'v1/auth/verifyEmail'
   ];
 
   constructor(private storage: StorageService) {}
@@ -41,7 +44,7 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   private allowToken(request: HttpRequest<any>): boolean {
-    return !(new RegExp(this.routes.join('|')).test(request.url));
+    return !new RegExp(this.routes.join('|')).test(request.url);
   }
 
 }

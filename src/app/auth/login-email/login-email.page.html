@@ -1,0 +1,57 @@
+<ion-content color="primary">
+  <div class="login-container ion-margin">
+    <h2 class="title ion-padding-vertical">Sign Up</h2>
+    <form [formGroup]="logForm" (ngSubmit)="login()" (keyup.enter)="login(true)">
+      <ion-item lines="none">
+        <ion-label class="ion-padding-bottom" position="stacked" color="light">Email</ion-label>
+        <ion-input type="email" placeholder="johndoe@gmail.com" formControlName="email">
+          <ion-icon slot="start" src="assets/icon/email.svg"></ion-icon>
+        </ion-input>
+      </ion-item>
+      <div class="validation-error" *ngIf="(logForm.get('email').touched || logForm.get('email').dirty) &&
+        logForm.get('email').hasError('required')">
+          Please enter email
+      </div>
+      <div class="validation-error" *ngIf="(logForm.get('email').touched || logForm.get('email').dirty) &&
+        logForm.get('email').hasError('email')">
+          Please enter valid email
+      </div>
+
+      <ion-item lines="none">
+        <ion-label class="ion-padding-bottom" position="stacked" color="light">Password</ion-label>
+        <ion-input type="password" placeholder="**********" formControlName="password">
+          <ion-icon slot="start" src="assets/icon/password-lock.svg"></ion-icon>
+        </ion-input>
+      </ion-item>
+      <div class="validation-error" *ngIf="(logForm.get('password').touched || logForm.get('password').dirty) &&
+        logForm.get('password').hasError('required')">
+          Please enter password
+      </div>
+      <div class="validation-error" *ngIf="(logForm.get('password').touched || logForm.get('password').dirty) &&
+        logForm.get('password').hasError('minlength')">
+          Password should be minimum 8 characters
+      </div>
+
+      <ion-item lines="none">
+        <ion-label class="ion-padding-bottom" position="stacked" color="light">Confirm password</ion-label>
+        <ion-input type="password" placeholder="**********" formControlName="cnfmPass">
+          <ion-icon slot="start" src="assets/icon/password-lock.svg"></ion-icon>
+        </ion-input>
+      </ion-item>
+      <div class="validation-error" *ngIf="(logForm.get('cnfmPass').touched || logForm.get('cnfmPass').dirty) &&
+        logForm.errors?.['passwordMismatch']">
+          Passwords do not match
+      </div>
+
+      <ion-button type="submit" class="ion-padding-vertical" expand="block" [disabled]="logForm.invalid || loading">
+      <span *ngIf="!loading">Sign up</span>
+      <ion-spinner *ngIf="loading" color="primary"></ion-spinner>
+      </ion-button>
+    </form>
+
+    <div class="footer-area ion-text-center">
+      <p class="signup-text ion-padding-vertical">Already have an account? <b routerLink="/login">Sign in</b></p>
+    </div>
+
+  </div>
+</ion-content>

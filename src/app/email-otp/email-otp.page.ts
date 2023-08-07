@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ErrorService } from '../services/api/error.service';
 import { LoadService } from '../services/api/load.service';
 import { PaymentService } from '../services/api/payment.service';
+import { AuthService } from '../services/api/auth.service';
 
 @Component({
   selector: 'app-email-otp',
@@ -28,6 +29,7 @@ export class EmailOtpPage implements OnInit {
   });
   constructor( private alert: ErrorService,
     private router: Router,
+    private auth: AuthService,
     private load: LoadService,
     private paymentService: PaymentService) {
       this.sendOtp = new FormGroup({
@@ -60,7 +62,7 @@ export class EmailOtpPage implements OnInit {
      console.log('Please provide all the required values!');
     } else {
      this.loading=true;
-     this.load.sendOtpMail(this.sendOtp.value).subscribe((response) => {
+     this.auth.sendOtpMail(this.sendOtp.value).subscribe((response) => {
 
        console.log(response);
        this.section1 = !this.section1;
@@ -97,7 +99,7 @@ export class EmailOtpPage implements OnInit {
         otp: this.otpForm.controls.otp.value
        };
 
-       this.load.verifyOtpMail(postData).subscribe((response) => {
+       this.auth.verifyOtpMail(postData).subscribe((response) => {
          console.log(response.isActive);
          if(response.success===true)
          {

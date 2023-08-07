@@ -1,0 +1,80 @@
+:host {
+  .login-container {
+    .title {
+      margin-top: 70px;
+      font-weight: 600;
+    }
+
+    .forgot-pass {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      ion-checkbox {
+        --border-color:#FFFFFF;
+        --border-color-checked: #FFFFFF;
+        margin-inline: 0 10px;
+      }
+
+      ion-label, p {
+        font-size: 10pt;
+        color: var(--ion-color-light);
+      }
+
+      p {
+        text-decoration: underline;
+      }
+    }
+
+    h3 {
+      font-weight: 600;
+    }
+
+    h3, p span {
+      text-decoration: underline;
+    }
+
+    .or-divider {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .or-divider:before, .or-divider:after {
+      content: "";
+      flex: 1;
+      border-bottom: 1px solid white;
+    }
+
+    .or-divider:not(:empty)::before {
+      margin-right: 16px;
+    }
+
+    .or-divider:not(:empty)::after {
+      margin-left: 16px;
+    }
+  }
+
+  .app-footer {
+    border-top: 1px solid #FFFFFF;
+    padding: 20px 16px;
+    background: var(--ion-color-primary);
+
+    a {
+      color: #FFFFFF;
+      text-decoration: underline;
+    }
+  }
+
+  .backButn{
+    background-color: transparent;
+    color: white;
+    font-size: 24px;
+  }
+.flagIcon{
+  padding: 0 8px;
+    height: 35px;
+    width: 40px;
+}
+
+}

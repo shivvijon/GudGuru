@@ -4,15 +4,18 @@
 
 export const environment = {
   production: false,
-  apiBaseUrl: 'https://54.177.82.189/api/v1',
-  /* apiBaseUrl: 'http://192.168.1.17:5000/api/v1', */
-  imageUrl: 'https://54.177.82.189/api/v1/uploads/',
+  /* apiBaseUrl: 'https://api.gudguru.com/api/v1', */
+  apiBaseUrl: 'http://192.168.1.17:5000/api/v1',
+  /* socketUrl: 'https://api.gudguru.com', */
+  socketUrl: 'http://192.168.1.17:5000',
+  imageUrl: 'https://api.gudguru.com/api/v1/uploads/',
   /* imageUrl: 'http://192.168.1.17:5000/api/v1/uploads/', */
   googleAPIKey: 'AIzaSyC8YK4C4My-RK-1VniQ6a2hOQzPeA88CNU',
   stripeKey: 'pk_test_51M4z8kGpPauB6Gta2TjUCkxjAcLGWQD6WD9RFCFTkI2ePUExjVIsJy6qx0gZH6PS3gXOINRCOgfad0uZProbBlQe00JaudHlVu',
   policyUrl: 'https://gudguru.com/policy',
   termsUrl: 'https://gudguru.com/term',
-  platinumId: 'platinum_plan_monthly_999'
+  platinumId: 'platinum_plan_monthly_999',
+  countryCode: '+91'
 };
 
 /*

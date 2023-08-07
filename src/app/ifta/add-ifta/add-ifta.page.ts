@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmergencyLoadService } from '../../services/api/emergency-load.service';
 import { AuthService } from '../../services/api/auth.service';
@@ -14,13 +14,15 @@ import { FuelService } from 'src/app/services/api/fuel.service';
 import { FilePicker } from '@capawesome/capacitor-file-picker';
 import { Location } from '@angular/common';
 import { Buffer } from 'buffer';
+import { SocketService } from 'src/app/services/socket/socket.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-add-ifta',
   templateUrl: './add-ifta.page.html',
   styleUrls: ['./add-ifta.page.scss'],
 })
-export class AddIftaPage implements OnInit {
+export class AddIftaPage implements OnInit, OnDestroy {
 
   fuelForm: FormGroup;
   openDatetime = false;
@@ -37,6 +39,7 @@ export class AddIftaPage implements OnInit {
   fuelPoint: any;
   headTitle = 'Create Trip';
   mode: string;
+  socketSubs: Subscription;
 
   constructor(
     private router: Router,
@@ -49,7 +52,8 @@ export class AddIftaPage implements OnInit {
     private toast: ToastService,
     private paymentService: PaymentService,
     private actionSheetCtrl: ActionSheetController,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private socket: SocketService
   )
   {
     this.fuelForm = new FormGroup({
@@ -80,6 +84,7 @@ export class AddIftaPage implements OnInit {
 
   ngOnInit() {
     this.getLevel();
+    this.listenSocket();
   }
 
   patchForm()
@@ -382,6 +387,17 @@ export class AddIftaPage implements OnInit {
         this.auth.daysLeft = resp.daysLeft;
       }
     });
+  }
+
+  listenSocket()
+  {
+    this.socketSubs = this.socket.on('onStripePayment').subscribe(resp => {
+      this.getLevel();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.socketSubs.unsubscribe();
   }
 
 }

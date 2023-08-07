@@ -14,6 +14,8 @@ import { AuthService } from '../services/api/auth.service';
 import { PaymentService } from '../services/api/payment.service';
 import { Buffer } from 'buffer';
 import { Location } from '@angular/common';
+import { Subscription } from 'rxjs';
+import { SocketService } from '../services/socket/socket.service';
 
 @Component({
   selector: 'app-truck-part',
@@ -33,6 +35,7 @@ export class TruckPartPage implements OnInit {
   partId: string;
   truckData: any;
   headTitle = 'Truck Part Sale';
+  socketSubs: Subscription;
 
   constructor(
     private router: Router,
@@ -43,7 +46,8 @@ export class TruckPartPage implements OnInit {
     private toast: ToastService,
     private paymentService: PaymentService,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private socket: SocketService
   )
   {
     this.truckPartForm = new FormGroup({
@@ -71,6 +75,7 @@ export class TruckPartPage implements OnInit {
 
   ionViewWillEnter(){
     this.getLevel();
+    this.listenSocket();
   }
 
   patchForm()
@@ -278,6 +283,17 @@ export class TruckPartPage implements OnInit {
         this.auth.daysLeft = resp.daysLeft;
       }
     });
+  }
+
+  listenSocket()
+  {
+    this.socketSubs = this.socket.on('onStripePayment').subscribe(resp => {
+      this.getLevel();
+    });
+  }
+
+  ionViewWillLeave() {
+    this.socketSubs.unsubscribe();
   }
 
 }

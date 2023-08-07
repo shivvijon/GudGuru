@@ -1,0 +1,43 @@
+<ion-content color="primary">
+  <div class="login-container ion-margin">
+    <h2 class="title ion-padding-vertical">Sign In</h2>
+    <form [formGroup]="logForm" (ngSubmit)="login()" (keyup.enter)="login(true)">
+      <ion-item lines="none">
+        <ion-label class="ion-padding-bottom" position="stacked" color="light">Email</ion-label>
+        <ion-input type="email" placeholder="johndoe@gmail.com" formControlName="email">
+          <ion-icon slot="start" src="assets/icon/email.svg"></ion-icon>
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="password-cont" lines="none">
+        <ion-label class="ion-padding-bottom" position="stacked" color="light">Password</ion-label>
+        <ion-input [type]="showPass ? 'text' : 'password'" placeholder="**********" formControlName="password">
+          <ion-icon slot="start" src="assets/icon/password-lock.svg"></ion-icon>
+          <ion-icon *ngIf="showPass" slot="start" name="eye" (click)="showPass=false;"></ion-icon>
+          <ion-icon *ngIf="!showPass" slot="start" name="eye-off" (click)="showPass=true;"></ion-icon>
+        </ion-input>
+      </ion-item>
+
+      <div class="forgot-pass ion-padding-vertical">
+        <ion-item lines="none">
+          <ion-checkbox slot="start" [checked]="rememberMe" (ionChange)="setRememberMe($event)">Remember me</ion-checkbox>
+          <ion-label>Remember me</ion-label>
+        </ion-item>
+        <p class="ion-no-margin" routerLink="/password-reset">Forgot password?</p>
+      </div>
+
+
+      <ion-button type="submit" class="ion-padding-vertical" expand="block" [disabled]="logForm.invalid || loading">
+      <span *ngIf="!loading"> Sign in </span>
+      <ion-spinner *ngIf="loading" color="primary"></ion-spinner>
+      </ion-button>
+    </form>
+
+    <div class="footer-area ion-text-center">
+      <p class="login-text" routerLink="/login-mobile">Login with phone number</p>
+      <p class="divider">or</p>
+      <p class="signup-text">Don't have an account? <b routerLink="/login-opt">Sign up</b></p>
+    </div>
+
+  </div>
+</ion-content>

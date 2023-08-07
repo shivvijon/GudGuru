@@ -1,23 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadService } from '../services/api/load.service';
 import { mergeMap, switchMap } from 'rxjs/operators';
 import { EmergencyLoadService } from '../services/api/emergency-load.service';
 import {  PaymentService } from '../services/api/payment.service';
 import { AuthService } from '../services/api/auth.service';
+import { SocketService } from '../services/socket/socket.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-loads-list',
   templateUrl: './loads-list.page.html',
   styleUrls: ['./loads-list.page.scss'],
 })
-export class LoadsListPage implements OnInit {
+export class LoadsListPage implements OnInit, OnDestroy {
 
   location: any;
   loads: any[] = [];
   isLoading = true;
   level: any;
   isEmLoading: boolean;
+  socketSubs: Subscription;
 
   constructor(
     private router: Router,
@@ -25,7 +28,8 @@ export class LoadsListPage implements OnInit {
     private apiService: LoadService,
     public emergency: EmergencyLoadService,
     public paymentService: PaymentService,
-    public api: AuthService
+    public api: AuthService,
+    private socket: SocketService
   )
   {
     route.queryParams.subscribe(param => {
@@ -38,6 +42,7 @@ export class LoadsListPage implements OnInit {
 
   ngOnInit() {
     this.getLevel();
+    this.listenSocket();
   }
 
   getLoad()
@@ -125,6 +130,17 @@ export class LoadsListPage implements OnInit {
         this.api.daysLeft = resp.daysLeft;
       }
     });
+  }
+
+  listenSocket()
+  {
+    this.socketSubs = this.socket.on('onStripePayment').subscribe(resp => {
+      this.getLevel();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.socketSubs.unsubscribe();
   }
 
 }

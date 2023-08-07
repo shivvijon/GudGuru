@@ -1,9 +1,11 @@
-import { AfterContentChecked, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterContentChecked, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/api/auth.service';
 import { EmergencyLoadService } from 'src/app/services/api/emergency-load.service';
 import { TruckService } from 'src/app/services/api/truck.service';
+import { SocketService } from 'src/app/services/socket/socket.service';
 import { environment } from 'src/environments/environment';
 import Swiper, { Autoplay, Pagination, SwiperOptions } from 'swiper';
 import { SwiperComponent } from 'swiper/angular';
@@ -14,7 +16,7 @@ Swiper.use([Autoplay, Pagination]);
   templateUrl: './truck-sale-details.page.html',
   styleUrls: ['./truck-sale-details.page.scss'],
 })
-export class TruckSaleDetailsPage implements OnInit, AfterContentChecked {
+export class TruckSaleDetailsPage implements OnInit, OnDestroy, AfterContentChecked {
 
   @ViewChild('swiperCont') swiper: SwiperComponent;
 
@@ -34,6 +36,7 @@ export class TruckSaleDetailsPage implements OnInit, AfterContentChecked {
     }
   };
   env = environment;
+  socketSubs: Subscription;
 
   constructor(
     private router: Router,
@@ -41,7 +44,8 @@ export class TruckSaleDetailsPage implements OnInit, AfterContentChecked {
     public emergency: EmergencyLoadService,
     public api: TruckService,
     private auth: AuthService,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private socket: SocketService
   )
   {
     route.queryParams.subscribe(params => {
@@ -54,6 +58,7 @@ export class TruckSaleDetailsPage implements OnInit, AfterContentChecked {
   }
 
   ngOnInit() {
+    this.listenSocket();
   }
 
   ngAfterContentChecked(): void {
@@ -109,6 +114,17 @@ export class TruckSaleDetailsPage implements OnInit, AfterContentChecked {
           false : true;
       }
     });
+  }
+
+  listenSocket()
+  {
+    this.socketSubs = this.socket.on('onStripePayment').subscribe(resp => {
+      this.getTrialStatus();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.socketSubs.unsubscribe();
   }
 
 }
