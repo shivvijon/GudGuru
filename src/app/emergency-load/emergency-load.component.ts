@@ -49,6 +49,7 @@ export class EmergencyLoadComponent implements OnInit {
       title: new FormControl(null, [Validators.required]),
       notificationDistance: new FormControl(null),
       mcNo: new FormControl(null, [Validators.required]),
+      referenceId: new FormControl(null),
       price: new FormControl(null, [Validators.required])
     });
   }

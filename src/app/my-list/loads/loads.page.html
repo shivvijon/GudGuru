@@ -113,6 +113,7 @@
             <p class="load-weight"><span>Type : </span>{{load.type}}</p>
             <div class="load-type">
               <p class="ion-no-margin load-weight"><span>MC No : </span>{{load.mcNo}}</p>
+              <p class="ion-no-margin load-weight" *ngIf="load.referenceId"><span>Reference Id : </span>{{load.referenceId}}</p>
               <p class="ion-no-margin load-weight"><span>Price : </span>&#65284;{{load.price}}</p>
               <div>
                 <!-- <ion-icon class="edit-icon" slot="icon-only" src="assets/icon/edit.svg" (click)="presentAlert(load._id)">

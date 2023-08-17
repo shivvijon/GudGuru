@@ -80,6 +80,11 @@
         <div class="form-container">
           <div class="form-fields">
             <ion-item class="ion-no-padding">
+              <ion-label position="floating" class="min-scale">Reference ID</ion-label>
+              <ion-input type="text" formControlName="referenceId"></ion-input>
+            </ion-item>
+
+            <ion-item class="ion-no-padding">
               <ion-label position="floating" class="min-scale">Weight</ion-label>
               <ion-input type="text" inputmode="numeric" maxlength="10" formControlName="weight"></ion-input>
             </ion-item>
@@ -105,6 +110,7 @@
               <ion-select formControlName="type">
                 <ion-select-option value="refeer">Reefer</ion-select-option>
                 <ion-select-option value="dry van">Dry Van</ion-select-option>
+                <ion-select-option value="both (R or D)">Both (R or D)</ion-select-option>
                 <ion-select-option value="other">Other</ion-select-option>
               </ion-select>
             </ion-item>

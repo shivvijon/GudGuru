@@ -65,6 +65,7 @@ export class LoadsPage implements OnInit {
       email: new FormControl(null, [Validators.email]),
       title: new FormControl(null, [Validators.required]),
       mcNo: new FormControl(null, [Validators.required]),
+      referenceId: new FormControl(null),
       price: new FormControl(null, [Validators.required])
     });
   }
