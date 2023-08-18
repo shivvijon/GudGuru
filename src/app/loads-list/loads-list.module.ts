@@ -7,14 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { LoadsListPageRoutingModule } from './loads-list-routing.module';
 
 import { LoadsListPage } from './loads-list.page';
+import { LocationComponent } from '../location/location.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    LoadsListPageRoutingModule
+    LoadsListPageRoutingModule,
+
   ],
-  declarations: [LoadsListPage]
+  declarations: [LoadsListPage, LocationComponent]
 })
 export class LoadsListPageModule {}

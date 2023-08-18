@@ -45,22 +45,30 @@
         </ion-button>
       </ng-template>
     </div>
-    <div class="header-cont-area location-cont ion-padding-horizontal">
-      <div class="source">
-        <ion-skeleton-text *ngIf="isLoading; else showFromState" [animated]="true" style="width: 100px;"></ion-skeleton-text>
-        <ng-template #showFromState>
-          <ion-icon slot="icon-only" src="assets/icon/location-marker.svg"></ion-icon>
-          <p>{{location.fromState}}</p>
-        </ng-template>
-      </div>
-      <ion-icon slot="icon-only" src="assets/icon/chevron-right.svg"></ion-icon>
-      <div class="destination">
-        <ion-skeleton-text *ngIf="isLoading; else showToState" [animated]="true" style="width: 100px;"></ion-skeleton-text>
-        <ng-template #showToState>
-          <ion-icon slot="icon-only" src="assets/icon/location-marker.svg"></ion-icon>
-          <p>{{location.toState}}</p>
-        </ng-template>
-      </div>
+    <div class="header-cont-area location-cont ion-padding-horizontal" (click)="location ? openLocationModal() : ''">
+      <ng-container *ngIf="location; else showFilter">
+        <div class="source">
+          <ion-skeleton-text *ngIf="isLoading; else showFromState" [animated]="true" style="width: 100px;"></ion-skeleton-text>
+          <ng-template #showFromState>
+            <ion-icon slot="icon-only" src="assets/icon/location-marker.svg"></ion-icon>
+            <p>{{location?.fromState}}</p>
+          </ng-template>
+        </div>
+        <ion-icon slot="icon-only" src="assets/icon/chevron-right.svg"></ion-icon>
+        <div class="destination">
+          <ion-skeleton-text *ngIf="isLoading; else showToState" [animated]="true" style="width: 100px;"></ion-skeleton-text>
+          <ng-template #showToState>
+            <ion-icon slot="icon-only" src="assets/icon/location-marker.svg"></ion-icon>
+            <p>{{location?.toState}}</p>
+          </ng-template>
+        </div>
+      </ng-container>
+      <ng-template #showFilter>
+        <ion-button fill="clear" class="load-filter" (click)="openLocationModal()">
+          <ion-icon slot="start" src="assets/icon/filter-icon-white.svg"></ion-icon>
+          FILTER
+        </ion-button>
+      </ng-template>
     </div>
   </div>
   <div class="header-logo">
@@ -137,3 +145,7 @@
     </ng-template>
   </div>
 </ion-content>
+
+<app-location [openLocation]="openLocation" [clearLocation]="clearLocation"
+  (locationFetch)="getLoadLocation($event)">
+</app-location>

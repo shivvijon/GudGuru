@@ -17,6 +17,6 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     HomePageRoutingModule,
     ScrollingModule
   ],
-  declarations: [HomePage, LocationComponent]
+  declarations: [HomePage, /* LocationComponent */]
 })
 export class HomePageModule {}
