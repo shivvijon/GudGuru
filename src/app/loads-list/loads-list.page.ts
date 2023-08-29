@@ -7,7 +7,7 @@ import {  PaymentService } from '../services/api/payment.service';
 import { AuthService } from '../services/api/auth.service';
 import { SocketService } from '../services/socket/socket.service';
 import { Subscription } from 'rxjs';
-import { ModalController } from '@ionic/angular';
+import { InfiniteScrollCustomEvent, ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-loads-list',
@@ -18,6 +18,7 @@ export class LoadsListPage implements OnInit, OnDestroy {
 
   location: any;
   loads: any[] = [];
+  originalLoads: any[] = [];
   isLoading = false;
   level: any;
   isEmLoading: boolean;
@@ -58,44 +59,45 @@ export class LoadsListPage implements OnInit, OnDestroy {
       console.log(response);
       if(response.success && this.location)
       {
-        if(this.location.fromCity.includes('All') && this.location.toState === 'All' && this.location.toCity.includes('All')) {
-          this.loads = response.data.filter(loadData =>
-            (loadData.isblock === false &&
-            loadData.from.state === this.location.fromState));
+        const location = JSON.parse(JSON.stringify(this.location));
+        for(const key in location)
+        {
+          if((key === 'fromState' || key === 'toState') && location[key] === 'All') {
+            delete location[key];
+          }
+          else if((key === 'fromCity' || key === 'toCity') && location[key].includes('All')) {
+            delete location[key];
+          }
         }
-        else if(this.location.fromCity.includes('All') && this.location.toCity.includes('All')) {
-          this.loads = response.data.filter(loadData =>
-            (loadData.isblock === false &&
-            loadData.from.state === this.location.fromState &&
-            loadData.to.state === this.location.toState));
-        }
-        else if(!this.location.toCity.includes('All') && this.location.fromCity.includes('All')) {
-          this.loads = response.data.filter(loadData =>
-            (loadData.isblock === false &&
-            loadData.from.state === this.location.fromState &&
-            loadData.to.state === this.location.toState &&
-            this.location.toCity.includes(loadData.to.city)));
-        }
-        else if(this.location.toCity.includes('All') && !this.location.fromCity.includes('All')) {
-          this.loads = response.data.filter(loadData =>
-            (loadData.isblock === false &&
-            loadData.from.state === this.location.fromState &&
-            loadData.to.state === this.location.toState &&
-            this.location.fromCity.includes(loadData.from.city)));
-        }
-        else {
-          this.loads = response.data.filter(loadData =>
-            (loadData.isblock === false &&
-            loadData.from.state === this.location.fromState &&
-            this.location.fromCity.includes(loadData.from.city) &&
-            loadData.to.state === this.location.toState &&
-            this.location.toCity.includes(loadData.to.city)));
-        }
+
+        this.originalLoads = response.data.filter(loadData => {
+          for(const key in location)
+          {
+            if(key === 'fromState' && loadData.from.state === location.fromState) {
+              continue;
+            }
+            else if(key === 'toState' && loadData.to.state === location.toState) {
+              continue;
+            }
+            else if(key === 'fromCity' && location.fromCity.includes(loadData.from.city)) {
+              continue;
+            }
+            else if(key === 'toCity' && location.toCity.includes(loadData.to.city)) {
+              continue;
+            }
+            else {
+              return false;
+            }
+          }
+
+          return true;
+        });
       }
       else {
-        this.loads = response.data;
+        this.originalLoads = response.data;
       }
 
+      this.loads = this.originalLoads.slice(0, 20);
       this.isLoading = false;
     },
     (err) => {
@@ -168,6 +170,27 @@ export class LoadsListPage implements OnInit, OnDestroy {
     this.socketSubs = this.socket.on('onStripePayment').subscribe(resp => {
       this.getLevel();
     });
+  }
+
+  fetchNextLoads()
+  {
+    if((this.loads.length + 20) < this.originalLoads.length) {
+      this.loads = this.loads.concat(this.originalLoads.slice(this.loads.length, this.loads.length + 20));
+    }
+    else {
+      this.loads = this.loads.concat(this.originalLoads.slice(this.loads.length));
+    }
+  }
+
+  onIonInfinite(ev)
+  {
+    this.fetchNextLoads();
+    setTimeout(() => {
+      (ev as InfiniteScrollCustomEvent).target.complete();
+      if(this.loads.length === this.originalLoads.length) {
+        ev.target.disabled = true;
+      }
+    }, 500);
   }
 
   ngOnDestroy(): void {

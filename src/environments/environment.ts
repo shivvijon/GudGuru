@@ -4,10 +4,10 @@
 
 export const environment = {
   production: false,
-  apiBaseUrl: 'https://api.gudguru.com/api/v1',
-  /* apiBaseUrl: 'http://192.168.1.17:5000/api/v1', */
-  socketUrl: 'https://api.gudguru.com',
-  /* socketUrl: 'http://192.168.1.17:5000', */
+  /* apiBaseUrl: 'https://api.gudguru.com/api/v1', */
+  apiBaseUrl: 'http://localhost:5000/api/v1',
+  /* socketUrl: 'https://api.gudguru.com', */
+  socketUrl: 'http://localhost:5000',
   imageUrl: 'https://api.gudguru.com/api/v1/uploads/',
   /* imageUrl: 'http://192.168.1.17:5000/api/v1/uploads/', */
   googleAPIKey: 'AIzaSyC8YK4C4My-RK-1VniQ6a2hOQzPeA88CNU',

@@ -102,11 +102,18 @@
       <ng-container *ngIf="loads.length; else noLoads">
         <ion-card *ngFor="let load of loads" mode="md">
           <ion-item class="ion-no-padding">
-            <ion-label>{{load.title}}</ion-label>
+            <ion-label class="ion-text-wrap">{{load.title}}</ion-label>
             <ion-icon *ngIf="load.emergency" slot="end" src="assets/icon/emergency-icon.svg"></ion-icon>
           </ion-item>
 
           <div class="card-content">
+            <div class="loc-content">
+              <ion-icon slot="icon-only" src="assets/icon/truck-green.svg"></ion-icon>
+              <p>
+                <span>{{load.from.city}}, {{load.from.state}}</span>
+              </p>
+            </div>
+
             <div class="loc-content">
               <ion-icon slot="icon-only" src="assets/icon/location-red.svg"></ion-icon>
               <p>
@@ -135,8 +142,12 @@
               <p class="load-weight"><span>Price : </span>&#65284;{{load.price}}</p>
               <a *ngIf="load.email?.length" [href]="'mailto:' + load.email">{{load.email}}</a>
             </div>
+            <p class="load-weight ion-no-margin" *ngIf="load.remarks"><span>Remarks : </span>{{load.remarks}}</p>
           </div>
         </ion-card>
+        <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+          <ion-infinite-scroll-content></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
       </ng-container>
 
       <ng-template #noLoads>

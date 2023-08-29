@@ -214,6 +214,11 @@
           Title is required
         </div>
 
+        <ion-item class="ion-no-padding">
+          <ion-label position="floating" class="min-scale">Remarks</ion-label>
+          <ion-textarea formControlName="remarks"></ion-textarea>
+        </ion-item>
+
         <div class="ion-text-center form-btn">
           <ion-button type="submit" class="ion-text-capitalize" expand="block" [disabled]="loadForm.invalid || loading || isEmLoading">
             <ion-spinner *ngIf="loading" color="secondary"></ion-spinner>

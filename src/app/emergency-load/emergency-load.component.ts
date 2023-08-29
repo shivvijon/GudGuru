@@ -50,6 +50,7 @@ export class EmergencyLoadComponent implements OnInit {
       notificationDistance: new FormControl(null),
       mcNo: new FormControl(null, [Validators.required]),
       referenceId: new FormControl(null),
+      remarks: new FormControl(null),
       price: new FormControl(null, [Validators.required])
     });
   }
@@ -121,7 +122,7 @@ export class EmergencyLoadComponent implements OnInit {
 
   patchDatetime()
   {
-    const selDate = moment(this.selectedDatetime).format('Do MMM, YYYY - h:mm a');
+    const selDate = moment(this.selectedDatetime).format('Do MMM, YYYY');
     this.loadForm.patchValue({pickDate: selDate});
     this.openDatetime = false;
   }
