@@ -607,3 +607,16 @@ ion-alert.emailPrompt {
   }
 }
 
+ion-alert.account-delete {
+  .alert-head.sc-ion-alert-md, .alert-message.sc-ion-alert-md {
+    padding-inline-start: unset;
+    padding-inline-end: unset;
+    -webkit-padding-start: unset;
+    -webkit-padding-end: unset;
+  }
+
+  .alert-message.sc-ion-alert-md p {
+    color: #1A47A2;
+  }
+}
+

@@ -96,6 +96,10 @@ export class AuthService {
     return this.http.put(environment.apiBaseUrl + '/auth/update-password', postData);
   }
 
+  deleteAccount(): Observable<any> {
+    return this.http.delete(environment.apiBaseUrl + '/auth/deleteAccount');
+  }
+
   async showPlanUpgrade()
   {
     const alert = await this.alertController.create({
