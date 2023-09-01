@@ -47,9 +47,9 @@
 	<key>NSContactsUsageDescription</key>
 	<string>This app requires contacts access to function properly.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This app uses location updates. Allow app to track your location?</string>
+	<string>Your location is used in order to use the emergency load option and to capture the location coordinates and send the notification in the specified distance. Whoever falls under specified distance will get notification of emergency load board.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app uses location updates. Allow app to track your location?</string>
+	<string>Your location is used in order to use the emergency load option and to capture the location coordinates and send the notification in the specified distance. Whoever falls under specified distance will get notification of emergency load board.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app requires microphone access to function properly.</string>
 	<key>NSMotionUsageDescription</key>
