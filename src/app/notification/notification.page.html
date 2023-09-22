@@ -19,7 +19,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content scrollY="false">
   <div class="header-cont">
     <div class="header-cont-area ion-padding">
       <h2 class="ion-padding-vertical">
@@ -75,14 +75,14 @@
               <ion-icon slot="icon-only" src="assets/icon/truck-green.svg"></ion-icon>
               <p>
                 <span>{{load.from.city}}, {{load.from.state}}</span>
+                <br>
+                {{load.from.pickupdate}} - {{load.from.pickupEndDate}}
               </p>
             </div>
             <div class="loc-content">
               <ion-icon slot="icon-only" src="assets/icon/location-red.svg"></ion-icon>
               <p>
                 <span>{{load.to.city}}, {{load.to.state}}</span>
-                <br>
-                {{load.from.pickupdate}}
               </p>
             </div>
 
@@ -90,16 +90,20 @@
             <div class="load-type">
               <p class="load-weight"><span>Type : </span>{{load.type}}</p>
               <div *ngIf="!api.isTrial; else bookNow">
-                <ion-button shape="round" *ngIf="level !== '2'" fill="outline" (click)="plan()" color="danger">Upgrade Plan</ion-button>
+                <ion-button shape="round" *ngIf="level !== '2'" fill="outline" (click)="plan()" color="danger">Upgrade only $9.99</ion-button>
                 <ion-button shape="round" *ngIf="level === '2'" fill="outline" color="success" (click)="callLoad(load.contactno)">Book Now</ion-button>
               </div>
               <ng-template #bookNow>
                 <ion-button shape="round" fill="outline" color="success" (click)="callLoad(load.contactno)">Book Now</ion-button>
               </ng-template>
             </div>
-            <div class="ion-margin-vertical">
-              <a [href]="'mailto:' + load.email">{{load.email}}</a>
+            <div class="mcNo ion-margin-vertical">
+              <p class="load-weight"><span>MC No : </span>{{load.mcNo}}</p>
+              <p class="load-weight" *ngIf="load.referenceId"><span>Reference Id : </span>{{load.referenceId}}</p>
+              <p class="load-weight"><span>Price : </span>&#65284;{{load.price}}</p>
+              <a *ngIf="load.email?.length" [href]="'mailto:' + load.email">{{load.email}}</a>
             </div>
+            <p class="load-weight ion-no-margin" *ngIf="level === '2' && load.remarks"><span>Comment : </span>{{load.remarks}}</p>
           </div>
         </ion-card>
       </ng-container>

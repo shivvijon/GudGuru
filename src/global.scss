@@ -391,6 +391,8 @@ ion-modal.loc-select, ion-modal.state-list, ion-modal.city-list {
 .loads-list {
   position: relative;
   margin-top: -120px;
+  overflow: scroll;
+  max-height: 45vh;
 
   ion-card {
     border-radius: 7px;

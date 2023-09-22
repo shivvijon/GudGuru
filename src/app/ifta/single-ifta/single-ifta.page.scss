@@ -2,6 +2,10 @@ ion-header {
   ion-toolbar.filter {
     --background: #305EBC;
     --color: #FFFFFF;
+
+    ion-back-button, ion-button {
+      --color: #FFFFFF;
+    }
   }
 }
 

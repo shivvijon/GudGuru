@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
+import { /* IonContent, */ LoadingController } from '@ionic/angular';
 import { AuthService } from '../services/api/auth.service';
 import { EmergencyLoadService } from '../services/api/emergency-load.service';
 import { SocketService } from '../services/socket/socket.service';
@@ -11,6 +11,8 @@ import { StorageService } from '../services/storage.service';
   styleUrls: ['./tabs.page.scss'],
 })
 export class TabsPage implements OnInit {
+
+  /* prevTab = 'home'; */
 
   constructor(
     public emergency: EmergencyLoadService,
@@ -61,5 +63,19 @@ export class TabsPage implements OnInit {
       }
     });
   }
+
+  /* handleTabClick(event: MouseEvent)
+  {
+    const { tab } = event.composedPath().find((element: any) => element.tagName === 'ION-TAB-BUTTON') as EventTarget & { tab: string };
+
+    if(this.prevTab === tab)
+    {
+      const collection = Array.from(document.getElementsByTagName(`app-${tab}`)[0]?.children);
+      const content: IonContent = collection.filter(c => c.tagName === 'ion-content'.toUpperCase())[0] as any;
+      content?.scrollToTop(500);
+    }
+
+    this.prevTab = tab;
+  } */
 
 }

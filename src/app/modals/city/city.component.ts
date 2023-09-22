@@ -73,7 +73,7 @@ export class CityComponent implements OnInit {
     const config = {
       input: searchTerm,
       componentRestrictions: {
-        country: ['us']
+        country: ['us', 'ca']
       }
     };
 

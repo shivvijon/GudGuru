@@ -126,24 +126,47 @@
           From City is required
         </div>
 
-        <ion-item class="ion-no-padding" (click)="openDatetime=true;">
-          <ion-label position="floating" class="min-scale">Pick up Date</ion-label>
+        <ion-item class="ion-no-padding" (click)="openStartDatetime=true;">
+          <ion-label position="floating" class="min-scale">Pick up Start Date</ion-label>
           <ion-input id="pickupDate" type="text" readonly="true" formControlName="pickDate">
             <ion-icon slot="end" src="assets/icon/calendar.svg"></ion-icon>
           </ion-input>
         </ion-item>
         <div class="validation-error" *ngIf="(loadForm.get('pickDate').touched || loadForm.get('pickDate').dirty) &&
           loadForm.get('pickDate').hasError('required')">
-          Pickup date time is required
+          Pickup start date is required
         </div>
-        <ion-modal class="datetimePicker" [isOpen]="openDatetime" [backdropDismiss]="false" (didPresent)="disableMonthPicker()">
+        <ion-modal class="datetimePicker" [isOpen]="openStartDatetime" [backdropDismiss]="false" (didPresent)="disableMonthPicker()">
           <ng-template>
             <div class="cal-wrapper">
-              <ion-datetime #ionDatetime presentation="date" size="cover" [min]="minDate" [max]="maxDate"
+              <ion-datetime presentation="date" size="cover" [min]="minDate" [max]="maxDate"
                 [value]="selectedDatetime" (ionChange)="setDatetime($event)"></ion-datetime>
               <div class="ion-text-right ion-padding-top">
-                <ion-button fill="clear" class="hardware-tap" (click)="openDatetime=false;">Cancel</ion-button>
-                <ion-button fill="clear" (click)="patchDatetime()" [disabled]="!selectedDatetime">Ok</ion-button>
+                <ion-button fill="clear" class="hardware-tap" (click)="openStartDatetime=false;">Cancel</ion-button>
+                <ion-button fill="clear" (click)="patchDatetime('start')" [disabled]="!selectedDatetime">Ok</ion-button>
+              </div>
+            </div>
+          </ng-template>
+        </ion-modal>
+
+        <ion-item class="ion-no-padding" (click)="loadForm.get('pickDate').value ? openEndDatetime=true : null;">
+          <ion-label position="floating" class="min-scale">Pick up End Date</ion-label>
+          <ion-input id="pickupDate" type="text" readonly="true" formControlName="pickEndDate">
+            <ion-icon slot="end" src="assets/icon/calendar.svg"></ion-icon>
+          </ion-input>
+        </ion-item>
+        <div class="validation-error" *ngIf="(loadForm.get('pickEndDate').touched || loadForm.get('pickEndDate').dirty) &&
+          loadForm.get('pickEndDate').hasError('required')">
+          Pickup end date is required
+        </div>
+        <ion-modal class="datetimePicker" [isOpen]="openEndDatetime" [backdropDismiss]="false" (didPresent)="disableMonthPicker()">
+          <ng-template>
+            <div class="cal-wrapper">
+              <ion-datetime presentation="date" size="cover" [min]="minEndDate" [max]="maxEndDate"
+                [value]="selectedDatetime" (ionChange)="setDatetime($event)"></ion-datetime>
+              <div class="ion-text-right ion-padding-top">
+                <ion-button fill="clear" class="hardware-tap" (click)="openEndDatetime=false;">Cancel</ion-button>
+                <ion-button fill="clear" (click)="patchDatetime('end')" [disabled]="!selectedDatetime">Ok</ion-button>
               </div>
             </div>
           </ng-template>
@@ -215,7 +238,7 @@
         </div>
 
         <ion-item class="ion-no-padding">
-          <ion-label position="floating" class="min-scale">Remarks</ion-label>
+          <ion-label position="floating" class="min-scale">Comment</ion-label>
           <ion-textarea formControlName="remarks"></ion-textarea>
         </ion-item>
 

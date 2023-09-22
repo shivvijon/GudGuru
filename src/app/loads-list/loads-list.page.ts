@@ -8,6 +8,7 @@ import { AuthService } from '../services/api/auth.service';
 import { SocketService } from '../services/socket/socket.service';
 import { Subscription } from 'rxjs';
 import { InfiniteScrollCustomEvent, ModalController } from '@ionic/angular';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-loads-list',
@@ -65,11 +66,23 @@ export class LoadsListPage implements OnInit, OnDestroy {
           if((key === 'fromState' || key === 'toState') && location[key] === 'All') {
             delete location[key];
           }
-          else if((key === 'fromCity' || key === 'toCity') && location[key].includes('All')) {
+          else if((key === 'fromCity' || key === 'toCity') && (!location[key].length || location[key].includes('All'))) {
+            delete location[key];
+          }
+          else if(!location[key]) {
             delete location[key];
           }
         }
 
+        if(location.pickupDate) {
+          location.pickupDate = moment(location.pickupDate, 'Do MMM, YYYY');
+        }
+
+        if(location.pickupEndDate) {
+          location.pickupEndDate = moment(location.pickupEndDate, 'Do MMM, YYYY');
+        }
+
+        console.log(location);
         this.originalLoads = response.data.filter(loadData => {
           for(const key in location)
           {
@@ -83,6 +96,10 @@ export class LoadsListPage implements OnInit, OnDestroy {
               continue;
             }
             else if(key === 'toCity' && location.toCity.includes(loadData.to.city)) {
+              continue;
+            }
+            else if((key === 'pickupDate' && moment(loadData.from.pickupdate, 'Do MMM, YYYY').isSameOrAfter(location.pickupDate)) ||
+                key === 'pickupEndDate' && moment(loadData.from.pickupEndDate, 'Do MMM, YYYY').isSameOrBefore(location.pickupEndDate)) {
               continue;
             }
             else {

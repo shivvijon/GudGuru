@@ -23,16 +23,17 @@ import { SocketService } from '../services/socket/socket.service';
 })
 export class LoadsPage implements OnInit {
 
-  @ViewChild('ionDatetime') ionDatetimeElm: IonDatetime;
-
   loadForm: FormGroup;
-  openDatetime = false;
+  openStartDatetime = false;
+  openEndDatetime = false;
   selectedDatetime: string;
   loading = false;
   level: any;
   alertMessage: any;
   minDate: string;
   maxDate: string;
+  minEndDate: string;
+  maxEndDate: string;
   isEmLoading: boolean;
   socketSubs: Subscription;
 
@@ -57,6 +58,7 @@ export class LoadsPage implements OnInit {
       fromState: new FormControl(null, [Validators.required]),
       fromCity: new FormControl({value: null, disabled: true}, [Validators.required]),
       pickDate: new FormControl(null, [Validators.required]),
+      pickEndDate: new FormControl({value: null, disabled: true}, [Validators.required]),
       fromAddress: new FormControl(null),
       toState: new FormControl(null, [Validators.required]),
       toCity: new FormControl({value: null, disabled: true}, [Validators.required]),
@@ -71,11 +73,21 @@ export class LoadsPage implements OnInit {
     });
   }
 
-  ngOnInit() {
+  ngOnInit()
+  {
     this.minDate = this.selectedDatetime = new Date().toISOString();
 
     const maxDt = moment().add(7, 'days');
     this.maxDate = new Date(maxDt.year(), maxDt.month(), maxDt.date(), 23, 59).toISOString();
+
+    this.loadForm.controls.emergency.valueChanges.subscribe((val) => {
+      if(val) {
+        this.loadForm.controls.pickEndDate.disable({onlySelf: true});
+      }
+      else {
+        this.loadForm.controls.pickEndDate.enable({onlySelf: true});
+      }
+    });
   }
 
   ionViewWillEnter(){
@@ -87,6 +99,7 @@ export class LoadsPage implements OnInit {
   {
     const ionDateTimeElement = document.getElementsByTagName('ion-datetime');
     let element: HTMLElement;
+
     if(this.platform.is('ios')) {
       element = ionDateTimeElement[0].shadowRoot.getRootNode().childNodes[1] as HTMLElement;
     }
@@ -163,11 +176,26 @@ export class LoadsPage implements OnInit {
     console.log(this.selectedDatetime);
   }
 
-  patchDatetime()
+  patchDatetime(type: string)
   {
     const selDate = moment(this.selectedDatetime).format('Do MMM, YYYY');
-    this.loadForm.patchValue({pickDate: selDate});
-    this.openDatetime = false;
+    if(type === 'start')
+    {
+      this.loadForm.patchValue({pickDate: selDate});
+      this.openStartDatetime = false;
+
+      if(!this.loadForm.controls.emergency.value) {
+        this.loadForm.controls.pickEndDate.enable({onlySelf: true});
+      }
+      this.minEndDate = new Date(this.selectedDatetime).toISOString();
+      const maxDt = moment(this.minEndDate).add(7, 'days');
+      this.maxEndDate = new Date(maxDt.year(), maxDt.month(), maxDt.date(), 23, 59).toISOString();
+    }
+    else
+    {
+      this.loadForm.patchValue({pickEndDate: selDate});
+      this.openEndDatetime = false;
+    }
   }
 
   addLoad(isEnterKeyHit: boolean = false)
@@ -176,8 +204,8 @@ export class LoadsPage implements OnInit {
       Keyboard.hide();
     }
 
-    if(this.level === '2' && this.userService.subscriptionStatus === 'active')
-    {
+    /* if(this.level === '2' && this.userService.subscriptionStatus === 'active')
+    { */
       this.loading = true;
 
       const loadPost = this.loadForm.value;
@@ -193,7 +221,8 @@ export class LoadsPage implements OnInit {
         state: loadPost.fromState,
         city: loadPost.fromCity,
         address: loadPost.fromAddress,
-        pickupdate: loadPost.pickDate
+        pickupdate: loadPost.pickDate,
+        pickupEndDate: loadPost.emergency ? loadPost.pickDate : loadPost.pickEndDate
       };
 
       loadPost.to = {
@@ -203,7 +232,7 @@ export class LoadsPage implements OnInit {
       };
 
       ['fromState', 'fromCity','toState', 'toCity', 'fromAddress',
-      'toAddress', 'pickDate', 'contact', 'weightType'].forEach(key => delete loadPost[key]);
+      'toAddress', 'pickDate', 'pickupEndDate', 'contact', 'weightType'].forEach(key => delete loadPost[key]);
 
       this.api.addLoad(loadPost).subscribe(resp => {
         console.log(resp);
@@ -221,10 +250,10 @@ export class LoadsPage implements OnInit {
           this.toast.presentToast('Unable to add load', 'danger');
         }
       });
-    }
+    /* }
     else {
       this.userService.showPlanUpgrade();
-    }
+    } */
   }
 
   getLevel()

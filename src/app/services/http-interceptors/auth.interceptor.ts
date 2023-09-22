@@ -19,7 +19,8 @@ export class AuthInterceptor implements HttpInterceptor {
     'v1/auth/verifyOtp',
     'v1/auth/update-password',
     'v1/auth/sendEmail',
-    'v1/auth/verifyEmail'
+    'v1/auth/verifyEmail',
+    'v1/auth/appInfo'
   ];
 
   constructor(private storage: StorageService) {}

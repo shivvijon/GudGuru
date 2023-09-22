@@ -3,6 +3,8 @@ import { ModalController } from '@ionic/angular';
 import { EventEmitter } from '@angular/core';
 import { disableSideMenu } from '../decorators/side-menu.decorator';
 import { city, statename } from './citylist';
+import { FormControl, FormGroup } from '@angular/forms';
+import * as moment from 'moment';
 declare const google;
 
 @disableSideMenu()
@@ -35,10 +37,20 @@ export class LocationComponent implements OnInit, OnChanges {
   selectedCities: string[] = [];
   locMode: string;
   googleAutocomplete: any;
+  loadFilter: FormGroup;
+  openPickupDate = false;
+  openPickupEndDate = false;
+  selectedpickupDate: any;
+  selectedpickupEndDate: any;
 
   constructor(private modalController: ModalController)
   {
     this.googleAutocomplete = new google.maps.places.AutocompleteService();
+    this.selectedpickupDate = this.selectedpickupEndDate = new Date().toISOString();
+    this.loadFilter = new FormGroup({
+      pickupDate: new FormControl(null),
+      pickupEndDate: new FormControl(null)
+    });
   }
 
   ngOnInit() {
@@ -52,6 +64,7 @@ export class LocationComponent implements OnInit, OnChanges {
       this.fromSelected = false;
       this.selectedPickState = this.selectedDropState = null;
       this.selectedPickCities = []; this.selectedDropCities = [];
+      this.loadFilter.reset();
     }
   }
 
@@ -174,7 +187,7 @@ export class LocationComponent implements OnInit, OnChanges {
     const config = {
       input: searchTerm,
       componentRestrictions: {
-        country: ['us']
+        country: ['us', 'ca']
       }
     };
 
@@ -216,6 +229,34 @@ export class LocationComponent implements OnInit, OnChanges {
     }
   }
 
+  setDatetime(event, yearType)
+  {
+    if(yearType === 'min') {
+      this.selectedpickupDate = event.target.value;
+    }
+    else {
+      this.selectedpickupEndDate = event.target.value;
+    }
+
+    console.log(this.selectedpickupDate);
+  }
+
+  patchDatetime(yearType)
+  {
+    if(yearType === 'min')
+    {
+      const selDate = moment(this.selectedpickupDate).format('Do MMM, YYYY');
+      this.loadFilter.patchValue({pickupDate: selDate});
+      this.openPickupDate = false;
+    }
+    else
+    {
+      const selDate = moment(this.selectedpickupEndDate).format('Do MMM, YYYY');
+      this.loadFilter.patchValue({pickupEndDate: selDate});
+      this.openPickupEndDate = false;
+    }
+  }
+
   closeModal(isDataSelected)
   {
     if(isDataSelected) {
@@ -223,7 +264,9 @@ export class LocationComponent implements OnInit, OnChanges {
         fromState: this.selectedPickState,
         fromCity: this.selectedPickCities,
         toState: this.selectedDropState,
-        toCity: this.selectedDropCities
+        toCity: this.selectedDropCities,
+        pickupDate: this.loadFilter.get('pickupDate').value,
+        pickupEndDate: this.loadFilter.get('pickupEndDate').value
       });
     }
     else {

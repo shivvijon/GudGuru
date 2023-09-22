@@ -136,7 +136,7 @@
 
         <ion-item class="ion-no-padding">
           <ion-label position="floating" class="min-scale">Comment</ion-label>
-          <ion-input type="text" pattern="[A-Za-z ]+" formControlName="comment" maxlength="70"></ion-input>
+          <ion-input type="text" formControlName="comment" maxlength="200"></ion-input>
         </ion-item>
         <div class="validation-error" *ngIf="(truckForm.get('comment').touched || truckForm.get('comment').dirty) &&
           truckForm.get('comment').hasError('required')">

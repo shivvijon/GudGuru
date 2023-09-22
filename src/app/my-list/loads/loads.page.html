@@ -32,7 +32,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content scrollY="false">
   <div class="header-cont">
     <div class="header-cont-area ion-padding">
       <h2 class="ion-padding-vertical">
@@ -115,7 +115,7 @@
               <p class="ion-no-margin load-weight"><span>MC No : </span>{{load.mcNo}}</p>
               <p class="ion-no-margin load-weight" *ngIf="load.referenceId"><span>Reference Id : </span>{{load.referenceId}}</p>
               <p class="ion-no-margin load-weight"><span>Price : </span>&#65284;{{load.price}}</p>
-              <p class="ion-no-margin load-weight" *ngIf="load.remarks"><span>Remarks : </span>{{load.remarks}}</p>
+              <p class="ion-no-margin load-weight" *ngIf="load.remarks"><span>Comment : </span>{{load.remarks}}</p>
               <div>
                 <!-- <ion-icon class="edit-icon" slot="icon-only" src="assets/icon/edit.svg" (click)="presentAlert(load._id)">
                 </ion-icon> -->

@@ -10,7 +10,8 @@ import { LogoutService } from './services/api/logout.service';
 import { AuthService } from './services/api/auth.service';
 import { NetworkService } from './services/network/network.service';
 import { ToastService } from './services/api/toast.service';
-
+import { App } from '@capacitor/app';
+import { NativeMarket } from '@capacitor-community/native-market';
 
 @Component({
   selector: 'app-root',
@@ -71,6 +72,8 @@ export class AppComponent {
         else {
           this.router.navigate(['/login']);
         }
+
+        this.checkUpdates();
       }
     });
 
@@ -138,5 +141,48 @@ export class AppComponent {
     });
 
     await loading.present();
+  }
+
+  async checkUpdates()
+  {
+    let appInfo = {androidVer: -1, iosVer: -1};
+    this.auth.getAppInfo().subscribe(async (resp) => {
+      appInfo = resp.data;
+      console.log(resp);
+
+      const info = await App.getInfo();
+      if(this.platform.is('ios')) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        appInfo.iosVer > parseFloat(info.version) ? this.presentUpdateAlert() : null;
+      }
+      else {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        appInfo.androidVer > parseFloat(info.version) ? this.presentUpdateAlert() : null;
+      }
+    });
+  }
+
+  async presentUpdateAlert()
+  {
+    const alert = await this.alertController.create({
+      header: 'Update App',
+      message: `Please update the app to latest version in order to use latest features.`,
+      mode: 'md',
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: 'Update',
+          handler: () => { this.directToAppStore(); return false; }
+        },
+      ]
+    });
+
+    await alert.present();
+  }
+
+  directToAppStore() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    this.platform.is('ios') ? NativeMarket.openStoreListing({appId: 'id6444596230'}) :
+                              NativeMarket.openStoreListing({appId: 'com.gudguru.app'});
   }
 }

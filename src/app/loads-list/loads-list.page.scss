@@ -1,3 +1,7 @@
+ion-content::part(scroll) {
+  z-index: 0;
+}
+
 .header-cont {
   .header-cont-area {
     display: flex;

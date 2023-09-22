@@ -25,7 +25,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content scrollY="false">
   <div class="header-cont">
     <div class="header-cont-area ion-padding">
       <h2 class="ion-padding-vertical">
@@ -101,7 +101,7 @@
     <ng-template #loadsList>
       <ng-container *ngIf="loads.length; else noLoads">
         <ion-card *ngFor="let load of loads" mode="md">
-          <ion-item class="ion-no-padding">
+          <ion-item class="ion-no-padding" *ngIf="level === '2'">
             <ion-label class="ion-text-wrap">{{load.title}}</ion-label>
             <ion-icon *ngIf="load.emergency" slot="end" src="assets/icon/emergency-icon.svg"></ion-icon>
           </ion-item>
@@ -111,6 +111,8 @@
               <ion-icon slot="icon-only" src="assets/icon/truck-green.svg"></ion-icon>
               <p>
                 <span>{{load.from.city}}, {{load.from.state}}</span>
+                <br>
+                {{load.from.pickupdate}} - {{load.from.pickupEndDate}}
               </p>
             </div>
 
@@ -118,8 +120,6 @@
               <ion-icon slot="icon-only" src="assets/icon/location-red.svg"></ion-icon>
               <p>
                 <span>{{load.to.city}}, {{load.to.state}}</span>
-                <br>
-                {{load.from.pickupdate}}
               </p>
             </div>
 
@@ -127,7 +127,7 @@
             <div class="load-type">
               <p class="load-weight"><span>Type : </span>{{load.type}}</p>
               <div *ngIf="!api.isTrial; else bookNow">
-                <ion-button shape="round" *ngIf="level !== '2'" fill="outline" (click)="plan()" color="danger">Upgrade Plan</ion-button>
+                <ion-button shape="round" *ngIf="level !== '2'" fill="outline" (click)="plan()" color="danger">Upgrade only $9.99</ion-button>
                 <ion-button shape="round" *ngIf="level === '2' && load.contactno?.length" fill="outline" color="success"
                   (click)="load.contactno?.length ? callLoad(load.contactno) : ''">Book Now</ion-button>
               </div>
@@ -142,7 +142,7 @@
               <p class="load-weight"><span>Price : </span>&#65284;{{load.price}}</p>
               <a *ngIf="load.email?.length" [href]="'mailto:' + load.email">{{load.email}}</a>
             </div>
-            <p class="load-weight ion-no-margin" *ngIf="load.remarks"><span>Remarks : </span>{{load.remarks}}</p>
+            <p class="load-weight ion-no-margin" *ngIf="level === '2' && load.remarks"><span>Comment : </span>{{load.remarks}}</p>
           </div>
         </ion-card>
         <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">

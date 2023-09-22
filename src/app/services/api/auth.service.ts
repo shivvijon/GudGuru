@@ -100,6 +100,10 @@ export class AuthService {
     return this.http.delete(environment.apiBaseUrl + '/auth/deleteAccount');
   }
 
+  getAppInfo(): Observable<any> {
+    return this.http.get(environment.apiBaseUrl + '/auth/appInfo');
+  }
+
   async showPlanUpgrade()
   {
     const alert = await this.alertController.create({

@@ -214,7 +214,7 @@ export class TruckFilterComponent implements OnInit, OnChanges {
     const config = {
       input: searchTerm,
       componentRestrictions: {
-        country: ['us']
+        country: ['us', 'ca']
       }
     };
 

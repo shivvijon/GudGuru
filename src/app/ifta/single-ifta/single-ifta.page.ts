@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { EmergencyLoadService } from '../../services/api/emergency-load.service';
 import { AuthService } from '../../services/api/auth.service';
 import { FuelService } from 'src/app/services/api/fuel.service';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController, Platform } from '@ionic/angular';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { HttpEventType } from '@angular/common/http';
 import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
@@ -36,6 +36,7 @@ export class SingleIftaPage implements OnInit {
     private fileOpener: FileOpener,
     private alertCtrl: AlertController,
     private toast: ToastService,
+    private platform: Platform
   )
   {
     //this.showLoading();
@@ -154,7 +155,7 @@ export class SingleIftaPage implements OnInit {
         const savedFile = await Filesystem.writeFile({
           path: doc.name,
           data: base64,
-          directory: Directory.Documents
+          directory: this.platform.is('ios') ? Directory.Documents : Directory.Library
         });
 
         doc.isLoading = false;
