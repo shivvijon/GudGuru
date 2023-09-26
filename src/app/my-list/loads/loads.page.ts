@@ -40,9 +40,7 @@ export class LoadsPage implements OnInit {
 
   getTrialStatus()
   {
-    this.isLoading = true;
     this.userService.getTrialStatus().subscribe((resp) => {
-      this.isLoading = false;
       if(resp.success) {
         this.userService.isTrial = resp.isTrial;
         this.userService.subscriptionStatus = resp.subscriptionStatus;

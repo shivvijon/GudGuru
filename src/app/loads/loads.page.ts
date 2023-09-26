@@ -208,7 +208,7 @@ export class LoadsPage implements OnInit {
     { */
       this.loading = true;
 
-      const loadPost = this.loadForm.value;
+      const loadPost = JSON.parse(JSON.stringify(this.loadForm.value));
 
       loadPost.weight_type = loadPost.weightType;
       loadPost.contactno = loadPost.contact;

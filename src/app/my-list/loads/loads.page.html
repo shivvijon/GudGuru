@@ -32,7 +32,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content scrollY="false">
+<ion-content scrollY="false" class="header-action-no-filter">
   <div class="header-cont">
     <div class="header-cont-area ion-padding">
       <h2 class="ion-padding-vertical">
@@ -56,7 +56,9 @@
   <div class="header-logo">
     <ion-icon slot="icon-only" src="assets/icon/truck-icon.svg"></ion-icon>
   </div>
+</ion-content>
 
+<ion-content>
   <div class="loads-list ion-padding">
     <ion-card mode="md" *ngIf="isLoading; else loadsList">
       <ion-item class="ion-no-padding">

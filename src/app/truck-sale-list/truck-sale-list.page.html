@@ -25,7 +25,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content scrollY="false">
+<ion-content scrollY="false" class="header-action">
   <div class="header-cont">
     <div class="header-cont-area ion-padding">
       <h2 class="ion-padding-vertical">
@@ -38,7 +38,9 @@
     <ion-icon slot="icon-only" src="assets/icon/filter-icon.svg"></ion-icon>
     <a>Filter by Name & Year</a>
   </div>
+</ion-content>
 
+<ion-content>
   <div class="loads-list ion-padding">
     <ion-card mode="md" *ngIf="isLoading; else truckList">
       <div class="thumbnail">

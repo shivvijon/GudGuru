@@ -49,6 +49,14 @@ cdk-virtual-scroll-viewport {
   --min-height: 48px;
 }
 
+ion-content.header-action {
+  max-height: 320px;
+}
+
+ion-content.header-action-no-filter {
+  max-height: 280px;
+}
+
 ion-content::part(background) {
   background: var(--ion-color-secondary);
 }
@@ -257,6 +265,18 @@ ion-tab-button.tab-selected {
     background: var(--ion-color-primary);
     border-radius: 100%;
     z-index: -1;
+
+    /* content: "";
+    display: block;
+    width: 150%;
+    height: 200px;
+    position: relative;
+    left: -25.5%;
+    right: 0;
+    margin-top: -100px;
+    background: var(--ion-color-primary);
+    border-radius: 100%;
+    z-index: -1; */
   }
 
   .trial {
@@ -390,9 +410,6 @@ ion-modal.loc-select, ion-modal.state-list, ion-modal.city-list {
 
 .loads-list {
   position: relative;
-  margin-top: -120px;
-  overflow: scroll;
-  max-height: 45vh;
 
   ion-card {
     border-radius: 7px;

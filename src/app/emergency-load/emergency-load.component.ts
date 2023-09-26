@@ -135,7 +135,7 @@ export class EmergencyLoadComponent implements OnInit {
 
     this.loading = true;
 
-    const loadPost = this.loadForm.value;
+    const loadPost: any = JSON.parse(JSON.stringify(this.loadForm.value));
 
     loadPost.emergency = true;
     loadPost.weight_type = loadPost.weightType;
@@ -149,7 +149,8 @@ export class EmergencyLoadComponent implements OnInit {
       state: loadPost.fromState,
       city: loadPost.fromCity,
       address: loadPost.fromAddress,
-      pickupdate: loadPost.pickDate
+      pickupdate: moment(loadPost.pickDate, 'Do MMM, YYYY - h:mm a').format('Do MMM, YYYY'),
+      pickupEndDate: moment(loadPost.pickDate, 'Do MMM, YYYY - h:mm a').format('Do MMM, YYYY'),
     };
 
     loadPost.to = {

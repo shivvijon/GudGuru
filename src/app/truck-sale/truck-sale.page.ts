@@ -16,6 +16,7 @@ import { Buffer } from 'buffer';
 import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { SocketService } from '../services/socket/socket.service';
+/* import heic2any from 'heic2any'; */
 
 @Component({
   selector: 'app-truck-sale',
@@ -164,6 +165,17 @@ export class TruckSalePage implements OnInit {
     result.files.forEach(async file => {
       const buffer = Buffer.from(file.data, 'base64');
       const blob = new Blob([buffer], {type: file.mimeType});
+
+      /* if(file.mimeType === 'image/heic' || file.mimeType === 'image/heif')
+      {
+        const convertedBlob: any = await heic2any({
+          blob,
+          toType: 'image/jpeg',
+          quality: 0.5
+        });
+
+        blob = convertedBlob;
+      } */
 
       const reader = new FileReader();
       reader.readAsDataURL(blob);

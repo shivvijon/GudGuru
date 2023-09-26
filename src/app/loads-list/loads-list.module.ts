@@ -8,6 +8,7 @@ import { LoadsListPageRoutingModule } from './loads-list-routing.module';
 
 import { LoadsListPage } from './loads-list.page';
 import { LocationComponent } from '../location/location.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   imports: [
@@ -16,7 +17,7 @@ import { LocationComponent } from '../location/location.component';
     IonicModule,
     ReactiveFormsModule,
     LoadsListPageRoutingModule,
-
+    ScrollingModule
   ],
   declarations: [LoadsListPage, LocationComponent]
 })
