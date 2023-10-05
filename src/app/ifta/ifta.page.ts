@@ -5,7 +5,9 @@ import { EmergencyLoadService } from '../services/api/emergency-load.service';
 import { AuthService } from '../services/api/auth.service';
 import { FuelService } from '../services/api/fuel.service';
 import * as moment from 'moment';
-import { ModalController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
+import { ToastService } from '../services/api/toast.service';
+import { PaymentService } from '../services/api/payment.service';
 
 @Component({
   selector: 'app-ifta',
@@ -24,20 +26,37 @@ export class IftaPage implements OnInit {
   totalMiles = 0;
   totalGallons = 0;
   isReport = false;
+  level: any;
   env = environment;
 
   constructor(
     private router: Router,
     public emergency: EmergencyLoadService,
     public api: FuelService,
-    private auth: AuthService,
-    private modalCtrl: ModalController
+    public auth: AuthService,
+    private paymentService: PaymentService,
+    private toast: ToastService,
+    private modalCtrl: ModalController,
+    private alertController: AlertController
   ) { }
 
   ngOnInit() {}
 
   ionViewWillEnter() {
+    this.getLevel();
     this.getFuelRefills();
+  }
+
+  getLevel()
+  {
+    this.paymentService.getLevel().subscribe(resp => {
+      console.log(resp);
+      this.level = resp.level;
+    },
+    (err) => {
+      console.error(err);
+
+    });
   }
 
   getFuelRefills()
@@ -56,8 +75,10 @@ export class IftaPage implements OnInit {
     return moment(tripDate, 'DD/MM/YYYY').format('MMMM DD, YYYY');
   }
 
-  async openFilterModal()
+  async openFilterModal(isReport = false)
   {
+    this.isReport = isReport;
+
     this.openFilter = true;
     this.clearFilter = true;
   }
@@ -235,6 +256,50 @@ export class IftaPage implements OnInit {
     }
 
     console.log(this.filteredFuelRefills);
+  }
+
+  async presentAlert(id: string)
+  {
+    const alert = await this.alertController.create({
+      header: 'Are you sure you want to delete this fuel?',
+      cssClass: 'delete-alert',
+      mode: 'md',
+      backdropDismiss: false,
+      buttons: [
+        {
+          text: 'Delete',
+          cssClass: 'btn-delete',
+          handler: () => this.deleteFuel(id)
+        },
+        {
+          text: 'Cancel',
+          cssClass: 'btn-cancel',
+          role: 'cancel'
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  deleteFuel(id: string)
+  {
+    this.isLoading = true;
+    this.api.deleteFuel(id).subscribe(resp => {
+      console.log(resp);
+      if(resp.success)
+      {
+        this.getFuelRefills();
+        this.toast.presentToast(resp.message, 'success');
+      }
+    },
+    (err) => {
+      console.log(err);
+      this.isLoading = false;
+      if(err.status !== 502) {
+        this.toast.presentToast(err.error.message, 'danger');
+      }
+    });
   }
 
 }

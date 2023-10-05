@@ -30,9 +30,9 @@
       </ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button fill="clear" (click)="openFilterModal()">
+      <ion-button fill="clear" *ngIf="level" (click)="level === '2' ? openFilterModal() : auth.showPlanUpgrade()">
         <ion-icon slot="start" src="assets/icon/filter-icon-white.svg"></ion-icon>
-        FILTER
+        Search
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -80,13 +80,14 @@
     </ion-card>
 
     <ng-template #fuelList>
-      <ion-button shape="round" class="report-btn ion-text-capitalize" (click)="isReport=true; openFilterModal();">
+      <ion-button *ngIf="level" shape="round" class="report-btn ion-text-capitalize"
+        (click)="level === '2' ? openFilterModal(true) : auth.showPlanUpgrade()">
         <ion-icon slot=start src="assets/icon/report.svg"></ion-icon>
         Generate report
       </ion-button>
       <ng-container *ngIf="filteredFuelRefills.length; else noFuels">
-        <ion-card mode="md" *ngFor="let fuel of filteredFuelRefills" (click)="viewPoints(fuel)">
-            <div class="card-content">
+        <ion-card mode="md" *ngFor="let fuel of filteredFuelRefills; index as i">
+            <div class="card-content" (click)="viewPoints(fuel)">
                 <div class="headingCnt">
                   <div>
                     <ion-icon slot="icon-only" src="assets/icon/calendar.svg"></ion-icon>
@@ -120,12 +121,28 @@
                       {{fuel.totalGallons}} <span>gallons</span>
                     </p>
                   </div>
-                  <div>
-                    <p>
-                      Add Details
-                    </p>
-                  </div>
                 </div>
+            </div>
+            <div class="card-action">
+              <ion-button fill="clear" [id]="'open-popover' + i">
+                <ion-icon slot="icon-only" src="assets/icon/red-plus.svg"></ion-icon>
+              </ion-button>
+              <ion-popover [trigger]="'open-popover' + i" [dismissOnSelect]="true">
+                <ng-template>
+                  <ion-content class="ion-padding">
+                    <ion-list>
+                      <ion-item [button]="true" [detail]="false" (click)="viewPoints(fuel)">
+                        <ion-icon slot="start" src="assets/icon/file-pen-solid.svg"></ion-icon>
+                        <ion-label>Add Details</ion-label>
+                      </ion-item>
+                      <ion-item [button]="true" [detail]="false" (click)="presentAlert(fuel._id)">
+                        <ion-icon slot="start" src="assets/icon/trash-can-solid.svg"></ion-icon>
+                        <ion-label>Delete</ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </ion-content>
+                </ng-template>
+              </ion-popover>
             </div>
         </ion-card>
       </ng-container>

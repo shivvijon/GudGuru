@@ -33,6 +33,10 @@ export class FuelService {
     return this.http.put(`${environment.apiBaseUrl}/fuelRefill/${id}`, postData);
   }
 
+  deleteFuel(id: string): Observable<any> {
+    return this.http.delete(`${environment.apiBaseUrl}/fuelRefill/${id}`);
+  }
+
   getInvoice(doc: string): Observable<any> {
     return this.http.get(`${environment.imageUrl + doc}`, {responseType: 'blob', reportProgress: true, observe: 'events'});
   }

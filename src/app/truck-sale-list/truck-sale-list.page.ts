@@ -4,6 +4,7 @@ import { EmergencyLoadService } from '../services/api/emergency-load.service';
 import { AuthService } from '../services/api/auth.service';
 import { TruckService } from '../services/api/truck.service';
 import { environment } from 'src/environments/environment';
+import { PaymentService } from '../services/api/payment.service';
 
 @Component({
   selector: 'app-truck-sale-list',
@@ -17,20 +18,35 @@ export class TruckSaleListPage implements OnInit {
   isLoading: any;
   openFilter = false;
   clearFilter = false;
+  level: any;
   env = environment;
 
   constructor(
     private router: Router,
     public emergency: EmergencyLoadService,
+    public paymentService: PaymentService,
     public api: TruckService,
-    private auth: AuthService
+    public auth: AuthService
   ) { }
 
   ngOnInit() {
+    this.getLevel();
     this.getTrucks();
   }
 
   ionViewWillEnter() {}
+
+  getLevel()
+  {
+    this.paymentService.getLevel().subscribe(resp => {
+      console.log(resp);
+      this.level = resp.level;
+    },
+    (err) => {
+      console.error(err);
+
+    });
+  }
 
   getTrucks()
   {

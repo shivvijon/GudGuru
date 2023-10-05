@@ -64,9 +64,9 @@
         </div>
       </ng-container>
       <ng-template #showFilter>
-        <ion-button fill="clear" class="load-filter" (click)="openLocationModal()">
+        <ion-button *ngIf="level" fill="clear" class="load-filter" (click)="level === '2' ? openLocationModal() : api.showPlanUpgrade()">
           <ion-icon slot="start" src="assets/icon/filter-icon-white.svg"></ion-icon>
-          FILTER
+          Search
         </ion-button>
       </ng-template>
     </div>

@@ -48,8 +48,8 @@ export class LoadsListPage implements OnInit, OnDestroy {
 
   ngOnInit()
   {
-    this.getLoad();
     this.getLevel();
+    this.getLoad();
     this.listenSocket();
   }
 
@@ -201,13 +201,28 @@ export class LoadsListPage implements OnInit, OnDestroy {
 
   onIonInfinite(ev)
   {
-    this.fetchNextLoads();
-    setTimeout(() => {
-      (ev as InfiniteScrollCustomEvent).target.complete();
-      if(this.loads.length === this.originalLoads.length) {
-        ev.target.disabled = true;
-      }
-    }, 500);
+    if(this.level === '2')
+    {
+      this.fetchNextLoads();
+
+      setTimeout(() => {
+        (ev as InfiniteScrollCustomEvent).target.complete();
+        if(this.loads.length === this.originalLoads.length) {
+          ev.target.disabled = true;
+        }
+      }, 500);
+    }
+    else
+    {
+      this.api.showPlanUpgrade();
+
+      setTimeout(() => {
+        (ev as InfiniteScrollCustomEvent).target.complete();
+        if(this.loads.length <= 20) {
+          ev.target.disabled = true;
+        }
+      }, 500);
+    }
   }
 
   ngOnDestroy(): void {

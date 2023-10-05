@@ -34,9 +34,9 @@
       </h2>
     </div>
   </div>
-  <div class="header-logo" (click)="openFilterModal()">
+  <div class="header-logo" *ngIf="level" (click)="level === '2' ? openFilterModal() : auth.showPlanUpgrade()">
     <ion-icon slot="icon-only" src="assets/icon/filter-icon.svg"></ion-icon>
-    <a>Filter by Name & Year</a>
+    <a>Search</a>
   </div>
 </ion-content>
 

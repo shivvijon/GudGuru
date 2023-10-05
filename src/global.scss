@@ -61,6 +61,15 @@ ion-content::part(background) {
   background: var(--ion-color-secondary);
 }
 
+ion-popover {
+  --background: rgba(40, 173, 218, 0.6);
+  --backdrop-opacity: 0.6;
+}
+
+ion-popover::part(backdrop) {
+  background: var(--ion-color-secondary);
+}
+
 .emload-skel {
   width: 200px;
   height: 38px;

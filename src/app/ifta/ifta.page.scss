@@ -137,6 +137,12 @@ ion-header {
       }
     }
   }
+
+  .card-action {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
 }
 
 .headingCnt{
