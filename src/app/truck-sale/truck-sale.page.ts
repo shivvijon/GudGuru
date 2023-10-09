@@ -171,6 +171,8 @@ export class TruckSalePage implements OnInit {
         this.selectedPhotos.push({src: reader.result, blob, fileType: 'img', fileName: file.name});
       };
     });
+
+    console.log(result);
   }
 
   removePhoto(index: number) {

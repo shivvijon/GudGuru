@@ -5,6 +5,7 @@ import { AuthService } from '../services/api/auth.service';
 import { TruckService } from '../services/api/truck.service';
 import { environment } from 'src/environments/environment';
 import { PaymentService } from '../services/api/payment.service';
+import { InfiniteScrollCustomEvent } from '@ionic/angular';
 
 @Component({
   selector: 'app-truck-sale-list',
@@ -55,7 +56,7 @@ export class TruckSaleListPage implements OnInit {
       this.isLoading = false;
       console.log(response);
       this.trucks = response.data;
-      this.filteredTrucks = Array.from(this.trucks);
+      this.filteredTrucks = Array.from(this.trucks.slice(0,20));
     });
   }
 
@@ -171,6 +172,42 @@ export class TruckSaleListPage implements OnInit {
     }
     else {
       this.filteredTrucks = Array.from(this.trucks);
+    }
+  }
+
+  fetchNextTrucks()
+  {
+    if((this.filteredTrucks.length + 20) < this.trucks.length) {
+      this.filteredTrucks = this.filteredTrucks.concat(this.trucks.slice(this.filteredTrucks.length, this.filteredTrucks.length + 20));
+    }
+    else {
+      this.filteredTrucks = this.filteredTrucks.concat(this.trucks.slice(this.filteredTrucks.length));
+    }
+  }
+
+  onIonInfinite(ev)
+  {
+    if(this.level === '2')
+    {
+      this.fetchNextTrucks();
+
+      setTimeout(() => {
+        (ev as InfiniteScrollCustomEvent).target.complete();
+        if(this.filteredTrucks.length === this.trucks.length) {
+          ev.target.disabled = true;
+        }
+      }, 500);
+    }
+    else
+    {
+      this.auth.showPlanUpgrade();
+
+      setTimeout(() => {
+        (ev as InfiniteScrollCustomEvent).target.complete();
+        if(this.filteredTrucks.length <= 20) {
+          ev.target.disabled = true;
+        }
+      }, 500);
     }
   }
 

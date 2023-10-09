@@ -82,6 +82,10 @@
               </div>
             </div>
         </ion-card>
+
+        <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+          <ion-infinite-scroll-content></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
       </ng-container>
 
       <ng-template #noTrucks>

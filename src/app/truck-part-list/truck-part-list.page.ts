@@ -5,6 +5,7 @@ import { EmergencyLoadService } from '../services/api/emergency-load.service';
 import { TruckService } from '../services/api/truck.service';
 import { AuthService } from '../services/api/auth.service';
 import { PaymentService } from '../services/api/payment.service';
+import { InfiniteScrollCustomEvent } from '@ionic/angular';
 
 @Component({
   selector: 'app-truck-part-list',
@@ -54,7 +55,7 @@ export class TruckPartListPage implements OnInit {
       this.isLoading = false;
       console.log(response);
       this.truckParts = response.data;
-      this.filteredParts = Array.from(this.truckParts);
+      this.filteredParts = Array.from(this.truckParts.slice(0,20));
     });
   }
 
@@ -147,6 +148,42 @@ export class TruckPartListPage implements OnInit {
     }
     else {
       this.filteredParts = Array.from(this.truckParts);
+    }
+  }
+
+  fetchNextTruckParts()
+  {
+    if((this.filteredParts.length + 20) < this.truckParts.length) {
+      this.filteredParts = this.filteredParts.concat(this.truckParts.slice(this.filteredParts.length, this.filteredParts.length + 20));
+    }
+    else {
+      this.filteredParts = this.filteredParts.concat(this.truckParts.slice(this.filteredParts.length));
+    }
+  }
+
+  onIonInfinite(ev)
+  {
+    if(this.level === '2')
+    {
+      this.fetchNextTruckParts();
+
+      setTimeout(() => {
+        (ev as InfiniteScrollCustomEvent).target.complete();
+        if(this.filteredParts.length === this.truckParts.length) {
+          ev.target.disabled = true;
+        }
+      }, 500);
+    }
+    else
+    {
+      this.auth.showPlanUpgrade();
+
+      setTimeout(() => {
+        (ev as InfiniteScrollCustomEvent).target.complete();
+        if(this.filteredParts.length <= 20) {
+          ev.target.disabled = true;
+        }
+      }, 500);
     }
   }
 
