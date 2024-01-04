@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button mode="md"></ion-back-button>
+      <ion-menu-button auto-hide="false">
+        <ion-icon src="assets/icon/menu-icon.svg"></ion-icon>
+      </ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>
+      <ion-icon src="assets/icon/location-icon.svg"></ion-icon>
+      <ng-container *ngIf="emergency.currentLocation; else noLoc">
+        {{emergency.currentLocation}}
+        <!-- <ion-icon src="assets/icon/chevron-down-light.svg"></ion-icon> -->
+      </ng-container>
+      <ng-template #noLoc>
+        No Location...
+      </ng-template>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button routerLink="../../notification">
+        <ion-icon slot="icon-only" src="assets/icon/bell-icon.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div #map id="map" style="height: 50%;">
+  </div>
+
+  <div class="places">
+    <div>
+      <ion-icon slot="icon-only" src="assets/icon/truck-green.svg"></ion-icon>
+      <ion-label color="primary">{{load?.from?.city}}</ion-label>
+    </div>
+
+    <ion-icon class="divider" slot="icon-only" src="assets/icon/chevron-right-blue.svg"></ion-icon>
+
+    <div>
+      <ion-icon slot="icon-only" src="assets/icon/location-red.svg"></ion-icon>
+      <ion-label color="primary">{{load?.to?.city}}</ion-label>
+    </div>
+  </div>
+
+  <div class="ion-padding">
+    <ion-text color="primary"><h2 class="ion-no-margin">Transportation Title</h2></ion-text>
+
+    <div class="ion-margin-vertical trip-details">
+      <div class="trip-cont">
+        <ion-label color="primary">TRIP</ion-label>
+        <p>{{totalDistance}} ({{time}})</p>
+      </div>
+
+      <div class="trip-cont">
+        <ion-label color="primary">RATE</ion-label>
+          <p>${{load?.price}}</p>
+      </div>
+
+      <div class="trip-cont">
+        <ion-label color="primary">PER MILE</ion-label>
+          <p>${{perDistance}}</p>
+      </div>
+    </div>
+
+    <ion-button shape="round" *ngIf="load.contactno?.length" expand="block" fill="outline" color="success"
+      (click)="callLoad(load.contactno.length)">
+      Book Now
+    </ion-button>
+  </div>
+</ion-content>

@@ -109,7 +109,8 @@ export class TruckPartPage implements OnInit {
   {
     if(!this.userService.isTrial && this.userService.user?.role === '0' &&
     (this.userService.subscriptionStatus === 'inactive' || this.userService.subscriptionStatus === 'past_due')) {
-      this.userService.showPlanUpgrade();
+      // this.userService.showPlanUpgrade();
+      this.router.navigate(['tabs/listing/notification']);
     }
     else {
       this.router.navigate(['tabs/listing/notification']);

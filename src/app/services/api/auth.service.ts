@@ -114,8 +114,7 @@ export class AuthService {
       mode: 'ios',
       buttons: [{
         text: 'Ok',
-        role: 'cancel',
-        handler: () => { this.redirectToBrowser(); }
+        handler: () => { this.redirectToBrowser(); return false;}
       }]
     });
 

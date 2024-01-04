@@ -14,6 +14,10 @@ export class LoadService {
     return this.http.get(`${environment.apiBaseUrl}/loads`);
   }
 
+  filterLoads(filter): Observable<any> {
+    return this.http.post(`${environment.apiBaseUrl}/loads/filterLoads`, filter);
+  }
+
   getEmergencyLoads(): Observable<any> {
     return this.http.post(`${environment.apiBaseUrl}/loads/loadsNotification`, {});
   }

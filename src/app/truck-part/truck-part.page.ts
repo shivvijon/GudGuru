@@ -184,74 +184,75 @@ export class TruckPartPage implements OnInit {
       Keyboard.hide();
     }
 
-    if(this.level === '2' && this.auth.subscriptionStatus === 'active')
+    this.loading = true;
+
+    console.log(this.truckPartForm.value);
+
+    const postForm = new FormData();
+    postForm.append('make', this.truckPartForm.value.make);
+    postForm.append('part', this.truckPartForm.value.part);
+    postForm.append('price', this.truckPartForm.value.price);
+    postForm.append('year', this.truckPartForm.value.year);
+    postForm.append('state', this.truckPartForm.value.state);
+    postForm.append('city', this.truckPartForm.value.city);
+    postForm.append('contactno', this.truckPartForm.value.contactno);
+    postForm.append('comment', this.truckPartForm.value.comment);
+    this.selectedPhotos.forEach(photo => {
+      postForm.append('file[]', photo.blob, photo.fileName);
+    });
+
+    if(this.partId)
     {
-      this.loading = true;
-
-      console.log(this.truckPartForm.value);
-
-      const postForm = new FormData();
-      postForm.append('make', this.truckPartForm.value.make);
-      postForm.append('part', this.truckPartForm.value.part);
-      postForm.append('price', this.truckPartForm.value.price);
-      postForm.append('year', this.truckPartForm.value.year);
-      postForm.append('state', this.truckPartForm.value.state);
-      postForm.append('city', this.truckPartForm.value.city);
-      postForm.append('contactno', this.truckPartForm.value.contactno);
-      postForm.append('comment', this.truckPartForm.value.comment);
-      this.selectedPhotos.forEach(photo => {
-        postForm.append('file[]', photo.blob, photo.fileName);
+      this.api.updateTruckPart(this.partId, postForm).subscribe(resp => {
+        console.log(resp);
+        this.loading = false;
+        if(resp.success)
+        {
+          this.toast.presentToast('Truck Part updated', 'success');
+          this.location.back();
+        }
+      },
+      (err) => {
+        this.loading = false;
+        console.error(err);
+        if(err.status !== 502 && err.error) {
+          this.toast.presentToast('Unable to update truck part', 'danger');
+        }
       });
-
-      if(this.partId)
-      {
-        this.api.updateTruckPart(this.partId, postForm).subscribe(resp => {
-          console.log(resp);
-          this.loading = false;
-          if(resp.success)
-          {
-            this.toast.presentToast('Truck Part updated', 'success');
-            this.location.back();
-          }
-        },
-        (err) => {
-          this.loading = false;
-          console.error(err);
-          if(err.status !== 502 && err.error) {
-            this.toast.presentToast('Unable to update truck part', 'danger');
-          }
-        });
-      }
-      else
-      {
-        this.api.addTruckPart(postForm).subscribe(resp => {
-          console.log(resp);
-          this.loading = false;
-          if(resp.success)
-          {
-            this.toast.presentToast('Truck Part Added', 'success');
-            this.router.navigate(['/tabs/listing']);
-          }
-        },
-        (err) => {
-          this.loading = false;
-          console.error(err);
-          if(err.status !== 502 && err.error) {
-            this.toast.presentToast('Unable to add truck part', 'danger');
-          }
-        });
-      }
     }
+    else
+    {
+      this.api.addTruckPart(postForm).subscribe(resp => {
+        console.log(resp);
+        this.loading = false;
+        if(resp.success)
+        {
+          this.toast.presentToast('Truck Part Added', 'success');
+          this.router.navigate(['/tabs/listing']);
+        }
+      },
+      (err) => {
+        this.loading = false;
+        console.error(err);
+        if(err.status !== 502 && err.error) {
+          this.toast.presentToast('Unable to add truck part', 'danger');
+        }
+      });
+    }
+
+    /* if(this.level === '2' && (this.auth.subscriptionStatus === 'active' || this.auth.subscriptionStatus === 'trialing'))
+    {}
     else {
       this.auth.showPlanUpgrade();
-    }
+    } */
   }
 
   navToNotifications()
   {
     if(!this.auth.isTrial && this.auth.user?.role === '0' &&
     (this.auth.subscriptionStatus === 'inactive' || this.auth.subscriptionStatus === 'past_due')) {
-      this.auth.showPlanUpgrade();
+      // this.auth.showPlanUpgrade();
+      this.router.navigate(['tabs/home/notification']);
     }
     else {
       this.router.navigate(['tabs/home/notification']);

@@ -30,7 +30,11 @@
       </ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button fill="clear" *ngIf="level" (click)="level === '2' ? openFilterModal() : auth.showPlanUpgrade()">
+      <!-- <ion-button fill="clear" *ngIf="level" (click)="level === '2' ? openFilterModal() : auth.showPlanUpgrade()">
+        <ion-icon slot="start" src="assets/icon/filter-icon-white.svg"></ion-icon>
+        Search
+      </ion-button> -->
+      <ion-button fill="clear" *ngIf="level" (click)="level === '2' ? openFilterModal() : openFilterModal()">
         <ion-icon slot="start" src="assets/icon/filter-icon-white.svg"></ion-icon>
         Search
       </ion-button>
@@ -80,8 +84,13 @@
     </ion-card>
 
     <ng-template #fuelList>
-      <ion-button *ngIf="level" shape="round" class="report-btn ion-text-capitalize"
+      <!-- <ion-button *ngIf="level" shape="round" class="report-btn ion-text-capitalize"
         (click)="level === '2' ? openFilterModal(true) : auth.showPlanUpgrade()">
+        <ion-icon slot=start src="assets/icon/report.svg"></ion-icon>
+        Generate report
+      </ion-button> -->
+      <ion-button *ngIf="level" shape="round" class="report-btn ion-text-capitalize"
+        (click)="level === '2' ? openFilterModal(true) : openFilterModal(true)">
         <ion-icon slot=start src="assets/icon/report.svg"></ion-icon>
         Generate report
       </ion-button>

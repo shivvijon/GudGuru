@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { LoadService } from '../services/api/load.service';
-import { mergeMap, switchMap } from 'rxjs/operators';
 import { EmergencyLoadService } from '../services/api/emergency-load.service';
 import {  PaymentService } from '../services/api/payment.service';
 import { AuthService } from '../services/api/auth.service';
@@ -58,7 +57,11 @@ export class LoadsListPage implements OnInit, OnDestroy {
     this.isLoading = true;
     this.apiService.getLoads().subscribe((response: any) => {
       console.log(response);
-      if(response.success && this.location)
+      this.originalLoads = response.data;
+      this.loads = this.originalLoads.slice(0, 20);
+      this.isLoading = false;
+
+      /* if(response.success && this.location)
       {
         const location = JSON.parse(JSON.stringify(this.location));
         for(const key in location)
@@ -114,6 +117,43 @@ export class LoadsListPage implements OnInit, OnDestroy {
         this.originalLoads = response.data;
       }
 
+      this.loads = this.originalLoads.slice(0, 20);
+      this.isLoading = false; */
+    },
+    (err) => {
+      this.isLoading = false;
+      console.error(err);
+    });
+  }
+
+  getFilteredLoads()
+  {
+    this.isLoading = true;
+    const location = JSON.parse(JSON.stringify(this.location));
+    for(const key in location)
+    {
+      if((key === 'fromState' || key === 'toState') && location[key] === 'All') {
+        delete location[key];
+      }
+      else if((key === 'fromCity' || key === 'toCity') && (!location[key].length || location[key].includes('All'))) {
+        delete location[key];
+      }
+      else if(!location[key]) {
+        delete location[key];
+      }
+    }
+
+    console.log(location);
+
+    if(location.fromDeadMiles && location.fromCity?.length === 1) {
+      location.fromCity = location.fromCity[0];
+    }
+    if(location.toDeadMiles && location.toCity?.length === 1) {
+      location.toCity = location.toCity[0];
+    }
+
+    this.apiService.filterLoads(location).subscribe((response: any) => {
+      this.originalLoads = response.data;
       this.loads = this.originalLoads.slice(0, 20);
       this.isLoading = false;
     },
@@ -177,7 +217,7 @@ export class LoadsListPage implements OnInit, OnDestroy {
 
     this.modalController.dismiss().then(() => {
       if(this.location) {
-        this.getLoad();
+        this.getFilteredLoads();
       }
     });
   }
@@ -214,7 +254,7 @@ export class LoadsListPage implements OnInit, OnDestroy {
     }
     else
     {
-      this.api.showPlanUpgrade();
+      //this.api.showPlanUpgrade();
 
       setTimeout(() => {
         (ev as InfiniteScrollCustomEvent).target.complete();
@@ -223,6 +263,16 @@ export class LoadsListPage implements OnInit, OnDestroy {
         }
       }, 500);
     }
+  }
+
+  navToMap(load: any)
+  {
+    const navExtras: NavigationExtras = {
+      state: load,
+      relativeTo: this.route
+    };
+
+    this.router.navigate(['view-load'], navExtras);
   }
 
   ngOnDestroy(): void {

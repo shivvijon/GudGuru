@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: LoadsListPage
+  },
+  {
+    path: 'view-load',
+    loadChildren: () => import('./view-load/view-load.module').then( m => m.ViewLoadPageModule)
   }
 ];
 

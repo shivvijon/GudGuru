@@ -43,10 +43,17 @@
         <ion-skeleton-text class="emload-skel" [animated]="true"></ion-skeleton-text>
       </ng-container>
       <ng-template #emLoad>
-        <ion-button class="emergency-btn" shape="round" [disabled]="!userService.user || isLoading"
+        <!-- <ion-button class="emergency-btn" shape="round" [disabled]="!userService.user || isLoading"
           (click)="(!userService.isTrial && userService.user?.role === '0' &&
           (userService.subscriptionStatus === 'inactive' || userService.subscriptionStatus === 'past_due')) ?
           userService.showPlanUpgrade() : emergency.checkPermission()">
+          Emergency Load
+          <ion-icon slot="end" src="assets/icon/emergency-icon.svg"></ion-icon>
+        </ion-button> -->
+        <ion-button class="emergency-btn" shape="round" [disabled]="!userService.user || isLoading"
+          (click)="(!userService.isTrial && userService.user?.role === '0' &&
+          (userService.subscriptionStatus === 'inactive' || userService.subscriptionStatus === 'past_due')) ?
+          emergency.checkPermission() : emergency.checkPermission()">
           Emergency Load
           <ion-icon slot="end" src="assets/icon/emergency-icon.svg"></ion-icon>
         </ion-button>

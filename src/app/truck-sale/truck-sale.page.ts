@@ -185,73 +185,74 @@ export class TruckSalePage implements OnInit {
       Keyboard.hide();
     }
 
-    if(this.level === '2' && this.auth.subscriptionStatus === 'active')
+    this.loading = true;
+
+    const postForm = new FormData();
+    postForm.append('miles', this.truckForm.value.miles);
+    postForm.append('make', this.truckForm.value.make);
+    postForm.append('model', this.truckForm.value.model);
+    postForm.append('price', this.truckForm.value.price);
+    postForm.append('year', this.truckForm.value.year);
+    postForm.append('state', this.truckForm.value.state);
+    postForm.append('city', this.truckForm.value.city);
+    postForm.append('contactno', this.truckForm.value.contactno);
+    postForm.append('comment', this.truckForm.value.comment);
+    this.selectedPhotos.forEach(photo => {
+      postForm.append('file[]', photo.blob, photo.fileName);
+    });
+
+    if(this.truckId)
     {
-      this.loading = true;
-
-      const postForm = new FormData();
-      postForm.append('miles', this.truckForm.value.miles);
-      postForm.append('make', this.truckForm.value.make);
-      postForm.append('model', this.truckForm.value.model);
-      postForm.append('price', this.truckForm.value.price);
-      postForm.append('year', this.truckForm.value.year);
-      postForm.append('state', this.truckForm.value.state);
-      postForm.append('city', this.truckForm.value.city);
-      postForm.append('contactno', this.truckForm.value.contactno);
-      postForm.append('comment', this.truckForm.value.comment);
-      this.selectedPhotos.forEach(photo => {
-        postForm.append('file[]', photo.blob, photo.fileName);
+      this.api.updateTruck(this.truckId, postForm).subscribe(resp => {
+        console.log(resp);
+        this.loading = false;
+        if(resp.success)
+        {
+          this.toast.presentToast('Truck updated', 'success');
+          this.location.back();
+        }
+      },
+      (err) => {
+        this.loading = false;
+        console.error(err);
+        if(err.status !== 502 && err.error) {
+          this.toast.presentToast('Unable to update truck', 'danger');
+        }
       });
-
-      if(this.truckId)
-      {
-        this.api.updateTruck(this.truckId, postForm).subscribe(resp => {
-          console.log(resp);
-          this.loading = false;
-          if(resp.success)
-          {
-            this.toast.presentToast('Truck updated', 'success');
-            this.location.back();
-          }
-        },
-        (err) => {
-          this.loading = false;
-          console.error(err);
-          if(err.status !== 502 && err.error) {
-            this.toast.presentToast('Unable to update truck', 'danger');
-          }
-        });
-      }
-      else
-      {
-        this.api.addTruck(postForm).subscribe(resp => {
-          console.log(resp);
-          this.loading = false;
-          if(resp.success)
-          {
-            this.toast.presentToast('Truck Added', 'success');
-            this.router.navigate(['/tabs/listing']);
-          }
-        },
-        (err) => {
-          this.loading = false;
-          console.error(err);
-          if(err.status !== 502 && err.error) {
-            this.toast.presentToast('Unable to add truck', 'danger');
-          }
-        });
-      }
     }
+    else
+    {
+      this.api.addTruck(postForm).subscribe(resp => {
+        console.log(resp);
+        this.loading = false;
+        if(resp.success)
+        {
+          this.toast.presentToast('Truck Added', 'success');
+          this.router.navigate(['/tabs/listing']);
+        }
+      },
+      (err) => {
+        this.loading = false;
+        console.error(err);
+        if(err.status !== 502 && err.error) {
+          this.toast.presentToast('Unable to add truck', 'danger');
+        }
+      });
+    }
+
+    /* if(this.level === '2' && (this.auth.subscriptionStatus === 'active' || this.auth.subscriptionStatus === 'trialing'))
+    {}
     else {
       this.auth.showPlanUpgrade();
-    }
+    } */
   }
 
   navToNotifications()
   {
     if(!this.auth.isTrial && this.auth.user?.role === '0' &&
     (this.auth.subscriptionStatus === 'inactive' || this.auth.subscriptionStatus === 'past_due')) {
-      this.auth.showPlanUpgrade();
+      // this.auth.showPlanUpgrade();
+      this.router.navigate(['tabs/home/notification']);
     }
     else {
       this.router.navigate(['tabs/home/notification']);

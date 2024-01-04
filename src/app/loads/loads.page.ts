@@ -279,11 +279,16 @@ export class LoadsPage implements OnInit {
         this.userService.isTrial = resp.isTrial;
         this.userService.subscriptionStatus = resp.subscriptionStatus;
         this.userService.daysLeft = resp.daysLeft;
-        if(this.level === '2' && this.userService.subscriptionStatus === 'active') {
+        if(this.level === '2' && (this.userService.subscriptionStatus === 'active' || this.userService.subscriptionStatus === 'trialing')) {
           this.loadForm.get('emergency').enable({onlySelf: true});
           this.alertMessage='';
         }
-        else{ this.alertMessage='Updgrade Your Plan';}
+        else
+        {
+          // this.alertMessage='Updgrade Your Plan';
+          this.loadForm.get('emergency').enable({onlySelf: true});
+          this.alertMessage='';
+        }
       }
     });
   }

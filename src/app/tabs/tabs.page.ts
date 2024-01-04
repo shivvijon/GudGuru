@@ -38,7 +38,8 @@ export class TabsPage implements OnInit {
           // eslint-disable-next-line @typescript-eslint/no-unused-expressions
           (!this.api.isTrial && this.api.user?.role === '0' &&
           (this.api.subscriptionStatus === 'inactive' || this.api.subscriptionStatus === 'past_due')) ?
-          this.api.showPlanUpgrade() : this.emergency.checkPermission();
+          // this.api.showPlanUpgrade() : this.emergency.checkPermission();
+          this.emergency.checkPermission() : this.emergency.checkPermission();
         });
       }
     });

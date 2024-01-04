@@ -34,7 +34,11 @@
       </h2>
     </div>
   </div>
-  <div class="header-logo" *ngIf="level" (click)="level === '2' ? openFilterModal() : auth.showPlanUpgrade()">
+  <!-- <div class="header-logo" *ngIf="level" (click)="level === '2' ? openFilterModal() : auth.showPlanUpgrade()">
+    <ion-icon slot="icon-only" src="assets/icon/filter-icon.svg"></ion-icon>
+    <a>Search</a>
+  </div> -->
+  <div class="header-logo" *ngIf="level" (click)="level === '2' ? openFilterModal() : openFilterModal()">
     <ion-icon slot="icon-only" src="assets/icon/filter-icon.svg"></ion-icon>
     <a>Search</a>
   </div>

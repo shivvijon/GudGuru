@@ -2,6 +2,7 @@
 <ion-modal class="loc-select" [isOpen]="openLocation" [initialBreakpoint]="modalInitialBr" [breakpoints]="[0.50, 1]"
  [backdropDismiss]="false" [handle]="false">
   <ng-template>
+  <form [formGroup]="loadFilter">
     <div class="modal-main-cont" [ngClass]="fromSelected ? 'from-loc-selected' : ''">
       <!--From State/City-->
       <ion-item class="modal-header-cont ion-no-padding" lines="none">
@@ -17,12 +18,19 @@
           <ion-icon slot="end" src="assets/icon/chevron-down.svg"></ion-icon>
         </ion-input>
       </ion-item>
-      <ion-item class="ion-no-padding" lines="none" mode="ios" (click)="filterCity('pickCity')">
-        <ion-label position="stacked">Select City</ion-label>
-        <ion-input placeholder="Select City" readonly="true" [value]="selectedPickCities">
-          <ion-icon slot="end" src="assets/icon/chevron-down.svg"></ion-icon>
-        </ion-input>
-      </ion-item>
+
+      <div class="dead-location">
+        <ion-item class="ion-no-padding" lines="none" mode="ios" (click)="filterCity('pickCity')">
+          <ion-label position="stacked">Select City</ion-label>
+          <ion-input placeholder="Select City" readonly="true" [value]="selectedPickCities">
+            <ion-icon slot="end" src="assets/icon/chevron-down.svg"></ion-icon>
+          </ion-input>
+        </ion-item>
+        <ion-item class="ion-no-padding" lines="none" mode="ios">
+          <ion-label position="stacked">DH-O</ion-label>
+          <ion-input type="number" formControlName="fromDeadMiles"></ion-input>
+        </ion-item>
+      </div>
 
       <!--To State/City-->
       <ng-container *ngIf="fromSelected">
@@ -38,58 +46,65 @@
             <ion-icon slot="end" src="assets/icon/chevron-down.svg"></ion-icon>
           </ion-input>
         </ion-item>
-        <ion-item class="ion-no-padding" lines="none" mode="ios" (click)="filterCity('dropCity')">
-          <ion-label position="stacked">Select City</ion-label>
-          <ion-input placeholder="Select City" readonly="true" [value]="selectedDropCities">
-            <ion-icon slot="end" src="assets/icon/chevron-down.svg"></ion-icon>
-          </ion-input>
-        </ion-item>
+
+        <div class="dead-location">
+          <ion-item class="ion-no-padding" lines="none" mode="ios" (click)="filterCity('dropCity')">
+            <ion-label position="stacked">Select City</ion-label>
+            <ion-input placeholder="Select City" readonly="true" [value]="selectedDropCities">
+              <ion-icon slot="end" src="assets/icon/chevron-down.svg"></ion-icon>
+            </ion-input>
+          </ion-item>
+          <ion-item class="ion-no-padding" lines="none" mode="ios">
+            <ion-label position="stacked">DH-D</ion-label>
+            <ion-input type="number" formControlName="toDeadMiles"></ion-input>
+          </ion-item>
+        </div>
       </ng-container>
 
-      <form [formGroup]="loadFilter">
-        <ion-item class="ion-no-padding" lines="none" mode="ios" (click)="openPickupDate=true;">
-          <ion-label position="stacked">Pickup Start Date</ion-label>
-            <ion-input type="text" readonly="true" formControlName="pickupDate">
-              <ion-icon slot="end" src="assets/icon/calendar.svg"></ion-icon>
-            </ion-input>
-        </ion-item>
-        <ion-modal class="datetimePicker" [isOpen]="openPickupDate" [backdropDismiss]="false">
-          <ng-template>
-            <div class="cal-wrapper">
-              <ion-datetime #ionDatetime presentation="date" size="cover" [value]="selectedpickupDate"
-                (ionChange)="setDatetime($event, 'min')" mode="ios"></ion-datetime>
-              <div class="ion-text-right ion-padding-top">
-                <ion-button fill="clear" class="hardware-tap" (click)="openPickupDate=false;">Cancel</ion-button>
-                <ion-button fill="clear" (click)="patchDatetime('min')" [disabled]="!selectedpickupDate">Ok</ion-button>
-              </div>
-            </div>
-          </ng-template>
-        </ion-modal>
 
-        <ion-item class="ion-no-padding" lines="none" mode="ios" (click)="openPickupEndDate=true;">
-          <ion-label position="stacked">Pickup End Date</ion-label>
-            <ion-input type="text" readonly="true" formControlName="pickupEndDate">
-              <ion-icon slot="end" src="assets/icon/calendar.svg"></ion-icon>
-            </ion-input>
-        </ion-item>
-        <ion-modal class="datetimePicker" [isOpen]="openPickupEndDate" [backdropDismiss]="false">
-          <ng-template>
-            <div class="cal-wrapper">
-              <ion-datetime #ionDatetime presentation="date" size="cover" [value]="selectedpickupEndDate"
-                (ionChange)="setDatetime($event, 'max')" mode="ios"></ion-datetime>
-              <div class="ion-text-right ion-padding-top">
-                <ion-button fill="clear" class="hardware-tap" (click)="openPickupEndDate=false;">Cancel</ion-button>
-                <ion-button fill="clear" (click)="patchDatetime('max')" [disabled]="!selectedpickupEndDate">Ok</ion-button>
-              </div>
+      <ion-item class="ion-no-padding" lines="none" mode="ios" (click)="openPickupDate=true;">
+        <ion-label position="stacked">Pickup Start Date</ion-label>
+          <ion-input type="text" readonly="true" formControlName="pickupDate">
+            <ion-icon slot="end" src="assets/icon/calendar.svg"></ion-icon>
+          </ion-input>
+      </ion-item>
+      <ion-modal class="datetimePicker" [isOpen]="openPickupDate" [backdropDismiss]="false">
+        <ng-template>
+          <div class="cal-wrapper">
+            <ion-datetime #ionDatetime presentation="date" size="cover" [value]="selectedpickupDate"
+              (ionChange)="setDatetime($event, 'min')" mode="ios"></ion-datetime>
+            <div class="ion-text-right ion-padding-top">
+              <ion-button fill="clear" class="hardware-tap" (click)="openPickupDate=false;">Cancel</ion-button>
+              <ion-button fill="clear" (click)="patchDatetime('min')" [disabled]="!selectedpickupDate">Ok</ion-button>
             </div>
-          </ng-template>
-        </ion-modal>
+          </div>
+        </ng-template>
+      </ion-modal>
 
-        <ion-button class="ion-margin-vertical" expand="block" (click)="closeModal(true);">
-          Submit
-        </ion-button>
-      </form>
+      <ion-item class="ion-no-padding" lines="none" mode="ios" (click)="openPickupEndDate=true;">
+        <ion-label position="stacked">Pickup End Date</ion-label>
+          <ion-input type="text" readonly="true" formControlName="pickupEndDate">
+            <ion-icon slot="end" src="assets/icon/calendar.svg"></ion-icon>
+          </ion-input>
+      </ion-item>
+      <ion-modal class="datetimePicker" [isOpen]="openPickupEndDate" [backdropDismiss]="false">
+        <ng-template>
+          <div class="cal-wrapper">
+            <ion-datetime #ionDatetime presentation="date" size="cover" [value]="selectedpickupEndDate"
+              (ionChange)="setDatetime($event, 'max')" mode="ios"></ion-datetime>
+            <div class="ion-text-right ion-padding-top">
+              <ion-button fill="clear" class="hardware-tap" (click)="openPickupEndDate=false;">Cancel</ion-button>
+              <ion-button fill="clear" (click)="patchDatetime('max')" [disabled]="!selectedpickupEndDate">Ok</ion-button>
+            </div>
+          </div>
+        </ng-template>
+      </ion-modal>
+
+      <ion-button class="ion-margin-vertical" expand="block" (click)="closeModal(true);">
+        Submit
+      </ion-button>
     </div>
+  </form>
   </ng-template>
 </ion-modal>
 

@@ -1,0 +1,41 @@
+.places {
+  display: flex;
+  justify-content: space-between;
+  padding: 24px;
+  background: #FFFFFF;
+  align-items: center;
+
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    ion-icon {
+      margin-right: 8px;
+    }
+  }
+
+  ion-icon.divider {
+    font-size: 22pt;
+  }
+}
+
+.trip-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+
+  .trip-cont {
+    padding: 12px 10px;
+    background: #FFFFFF;
+    border-radius: 5px;
+    text-align: center;
+    min-height: 117px;
+    width: 100%;
+
+    p {
+      font-weight: 500;
+    }
+  }
+}

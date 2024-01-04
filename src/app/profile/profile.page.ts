@@ -46,7 +46,8 @@ export class ProfilePage implements OnInit {
   {
     if(!this.api.isTrial && this.api.user?.role === '0' &&
     (this.api.subscriptionStatus === 'inactive' || this.api.subscriptionStatus === 'past_due')) {
-      this.api.showPlanUpgrade();
+      // this.api.showPlanUpgrade();
+      this.router.navigate(['tabs/profile/notification']);
     }
     else {
       this.router.navigate(['tabs/profile/notification']);

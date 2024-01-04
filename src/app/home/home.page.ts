@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { AuthService } from '../services/api/auth.service';
 import { EmergencyLoadService } from '../services/api/emergency-load.service';
 import { LoadService } from '../services/api/load.service';
@@ -31,6 +31,7 @@ export class HomePage implements OnInit {
     public push: PushService,
     public api: AuthService,
     private alert: ErrorService,
+    private alertCtrl: AlertController,
     public paymentService: PaymentService,
     private socket: SocketService
     )
@@ -68,6 +69,14 @@ export class HomePage implements OnInit {
         this.api.isTrial = resp.isTrial;
         this.api.subscriptionStatus = resp.subscriptionStatus;
         this.api.daysLeft = resp.daysLeft;
+
+        if(this.api.subscriptionStatus === 'inactive') {
+          /* this.api.showPlanUpgrade(); */
+          this.alertCtrl?.dismiss();
+        }
+        else {
+          this.alertCtrl?.dismiss();
+        }
       }
     });
   }
@@ -105,7 +114,8 @@ export class HomePage implements OnInit {
   {
     if(!this.api.isTrial && this.api.user?.role === '0' &&
     (this.api.subscriptionStatus === 'inactive' || this.api.subscriptionStatus === 'past_due')) {
-      this.api.showPlanUpgrade();
+      // this.api.showPlanUpgrade();
+      this.router.navigate(['tabs/home/notification']);
     }
     else {
       this.router.navigate(['tabs/home/notification']);
@@ -122,5 +132,4 @@ export class HomePage implements OnInit {
   ionViewWillLeave() {
     this.socketSubs.unsubscribe();
   }
-
 }

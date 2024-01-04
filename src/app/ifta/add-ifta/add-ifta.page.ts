@@ -283,79 +283,80 @@ export class AddIftaPage implements OnInit, OnDestroy {
       Keyboard.hide();
     }
 
-    if(this.level === '2' && this.auth.subscriptionStatus === 'active')
-    {
-      this.loading = true;
+    this.loading = true;
 
-      const postForm = new FormData();
-      if(this.addCurrentTrip && this.mode === 'add') {
-        // eslint-disable-next-line no-underscore-dangle
-        postForm.append('_id', this.addCurrentTrip._id);
-      }
-      else if(this.addCurrentTrip && this.mode === 'update') {
-        // eslint-disable-next-line no-underscore-dangle
-        postForm.append('fuelPoints[_id]', this.fuelPoint._id);
-      }
-      postForm.append('origin', this.fuelForm.value.origin);
-      postForm.append('destination', this.fuelForm.value.destination);
-      postForm.append('startDate', moment(this.fuelForm.value.startDate, 'MM/DD/YYYY').format('DD/MM/YYYY'));
-      postForm.append('fuelPoints[truckNumber]', this.fuelForm.value.truckNumber);
-      postForm.append('fuelPoints[refillDate]', moment(this.fuelForm.value.refillDate, 'MM/DD/YYYY').format('DD/MM/YYYY'));
-      postForm.append('fuelPoints[stopState]', this.fuelForm.value.stopState);
-      postForm.append('fuelPoints[miles]', this.fuelForm.value.miles);
-      postForm.append('fuelPoints[gallons]', this.fuelForm.value.gallons);
-      this.selectedPhotos.forEach(photo => {
-        postForm.append('file[]', photo.blob, photo.fileName);
+    const postForm = new FormData();
+    if(this.addCurrentTrip && this.mode === 'add') {
+      // eslint-disable-next-line no-underscore-dangle
+      postForm.append('_id', this.addCurrentTrip._id);
+    }
+    else if(this.addCurrentTrip && this.mode === 'update') {
+      // eslint-disable-next-line no-underscore-dangle
+      postForm.append('fuelPoints[_id]', this.fuelPoint._id);
+    }
+    postForm.append('origin', this.fuelForm.value.origin);
+    postForm.append('destination', this.fuelForm.value.destination);
+    postForm.append('startDate', moment(this.fuelForm.value.startDate, 'MM/DD/YYYY').format('DD/MM/YYYY'));
+    postForm.append('fuelPoints[truckNumber]', this.fuelForm.value.truckNumber);
+    postForm.append('fuelPoints[refillDate]', moment(this.fuelForm.value.refillDate, 'MM/DD/YYYY').format('DD/MM/YYYY'));
+    postForm.append('fuelPoints[stopState]', this.fuelForm.value.stopState);
+    postForm.append('fuelPoints[miles]', this.fuelForm.value.miles);
+    postForm.append('fuelPoints[gallons]', this.fuelForm.value.gallons);
+    this.selectedPhotos.forEach(photo => {
+      postForm.append('file[]', photo.blob, photo.fileName);
+    });
+
+    if(this.addCurrentTrip && this.mode === 'update') {
+      // eslint-disable-next-line no-underscore-dangle
+      this.api.updateFuel(this.addCurrentTrip._id, postForm).subscribe(resp => {
+        console.log(resp);
+        this.loading = false;
+        if(resp.success)
+        {
+          this.toast.presentToast('Fuel updated', 'success');
+          this.location.back();
+        }
+      },
+      (err) => {
+        this.loading = false;
+        console.error(err);
+        if(err.status !== 502 && err.error) {
+          this.toast.presentToast('Unable to update fuel', 'danger');
+        }
       });
-
-      if(this.addCurrentTrip && this.mode === 'update') {
-        // eslint-disable-next-line no-underscore-dangle
-        this.api.updateFuel(this.addCurrentTrip._id, postForm).subscribe(resp => {
-          console.log(resp);
-          this.loading = false;
-          if(resp.success)
-          {
-            this.toast.presentToast('Fuel updated', 'success');
-            this.location.back();
-          }
-        },
-        (err) => {
-          this.loading = false;
-          console.error(err);
-          if(err.status !== 502 && err.error) {
-            this.toast.presentToast('Unable to update fuel', 'danger');
-          }
-        });
-      }
-      else {
-        this.api.addfuel(postForm).subscribe(resp => {
-          console.log(resp);
-          this.loading = false;
-          if(resp.success)
-          {
-            this.toast.presentToast('Fuel Added', 'success');
-            this.location.back();
-          }
-        },
-        (err) => {
-          this.loading = false;
-          console.error(err);
-          if(err.status !== 502 && err.error) {
-            this.toast.presentToast('Unable to add fuel', 'danger');
-          }
-        });
-      }
     }
     else {
-      this.auth.showPlanUpgrade();
+      this.api.addfuel(postForm).subscribe(resp => {
+        console.log(resp);
+        this.loading = false;
+        if(resp.success)
+        {
+          this.toast.presentToast('Fuel Added', 'success');
+          this.location.back();
+        }
+      },
+      (err) => {
+        this.loading = false;
+        console.error(err);
+        if(err.status !== 502 && err.error) {
+          this.toast.presentToast('Unable to add fuel', 'danger');
+        }
+      });
     }
+
+    /* if(this.level === '2' && (this.auth.subscriptionStatus === 'active' || this.auth.subscriptionStatus === 'trialing'))
+    {}
+    else {
+      this.auth.showPlanUpgrade();
+    } */
   }
 
   navToNotifications()
   {
     if(!this.auth.isTrial && this.auth.user?.role === '0' &&
     (this.auth.subscriptionStatus === 'inactive' || this.auth.subscriptionStatus === 'past_due')) {
-      this.auth.showPlanUpgrade();
+      // this.auth.showPlanUpgrade();
+      this.router.navigate(['tabs/home/notification']);
     }
     else {
       this.router.navigate(['tabs/home/notification']);

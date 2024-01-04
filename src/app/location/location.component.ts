@@ -49,7 +49,9 @@ export class LocationComponent implements OnInit, OnChanges {
     this.selectedpickupDate = this.selectedpickupEndDate = new Date().toISOString();
     this.loadFilter = new FormGroup({
       pickupDate: new FormControl(null),
-      pickupEndDate: new FormControl(null)
+      pickupEndDate: new FormControl(null),
+      fromDeadMiles: new FormControl({value: null, disabled: true}),
+      toDeadMiles: new FormControl({value: null, disabled: true})
     });
   }
 
@@ -136,8 +138,15 @@ export class LocationComponent implements OnInit, OnChanges {
 
       this.resetStates();
     }
-    else if(this.locMode === 'pickCity') {
+    else if(this.locMode === 'pickCity')
+    {
       this.selectedPickCities = Array.from(this.selectedCities);
+      if(this.selectedPickCities.length === 1) {
+        this.loadFilter.controls.fromDeadMiles.enable({onlySelf: true});
+      }
+      else {
+        this.loadFilter.controls.fromDeadMiles.disable({onlySelf: true});
+      }
     }
     else if(this.locMode === 'dropState')
     {
@@ -145,8 +154,15 @@ export class LocationComponent implements OnInit, OnChanges {
       this.selectedDropCities = ['All'];
       this.resetStates();
     }
-    else {
+    else
+    {
       this.selectedDropCities = Array.from(this.selectedCities);
+      if(this.selectedDropState !== 'All' && this.selectedDropCities.length === 1) {
+        this.loadFilter.controls.toDeadMiles.enable({onlySelf: true});
+      }
+      else {
+        this.loadFilter.controls.toDeadMiles.disable({onlySelf: true});
+      }
     }
 
     if(this.selectedPickState && this.selectedPickCities.length) {
@@ -266,7 +282,9 @@ export class LocationComponent implements OnInit, OnChanges {
         toState: this.selectedDropState,
         toCity: this.selectedDropCities,
         pickupDate: this.loadFilter.get('pickupDate').value,
-        pickupEndDate: this.loadFilter.get('pickupEndDate').value
+        pickupEndDate: this.loadFilter.get('pickupEndDate').value,
+        fromDeadMiles: this.loadFilter.get('fromDeadMiles').value,
+        toDeadMiles: this.loadFilter.get('toDeadMiles').value
       });
     }
     else {

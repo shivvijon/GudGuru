@@ -36,10 +36,17 @@
         <ion-skeleton-text class="emload-skel" [animated]="true"></ion-skeleton-text>
       </ng-container>
       <ng-template #emLoad>
-        <ion-button class="emergency-btn" shape="round" [disabled]="!api.user || isEmLoading"
+        <!-- <ion-button class="emergency-btn" shape="round" [disabled]="!api.user || isEmLoading"
         (click)="(!api.isTrial && api.user?.role === '0' &&
         (api.subscriptionStatus === 'inactive' || api.subscriptionStatus === 'past_due')) ?
         api.showPlanUpgrade() : emergency.checkPermission()">
+          Emergency Load
+          <ion-icon slot="end" src="assets/icon/emergency-icon.svg"></ion-icon>
+        </ion-button> -->
+        <ion-button class="emergency-btn" shape="round" [disabled]="!api.user || isEmLoading"
+        (click)="(!api.isTrial && api.user?.role === '0' &&
+        (api.subscriptionStatus === 'inactive' || api.subscriptionStatus === 'past_due')) ?
+        emergency.checkPermission() : emergency.checkPermission()">
           Emergency Load
           <ion-icon slot="end" src="assets/icon/emergency-icon.svg"></ion-icon>
         </ion-button>
@@ -64,7 +71,11 @@
         </div>
       </ng-container>
       <ng-template #showFilter>
-        <ion-button *ngIf="level" fill="clear" class="load-filter" (click)="level === '2' ? openLocationModal() : api.showPlanUpgrade()">
+        <!-- <ion-button *ngIf="level" fill="clear" class="load-filter" (click)="level === '2' ? openLocationModal() : api.showPlanUpgrade()">
+          <ion-icon slot="start" src="assets/icon/filter-icon-white.svg"></ion-icon>
+          Search
+        </ion-button> -->
+        <ion-button *ngIf="level" fill="clear" class="load-filter" (click)="level === '2' ? openLocationModal() : openLocationModal()">
           <ion-icon slot="start" src="assets/icon/filter-icon-white.svg"></ion-icon>
           Search
         </ion-button>
@@ -130,12 +141,12 @@
               <p class="load-weight"><span>Type : </span>{{load.type}}</p>
               <div *ngIf="!api.isTrial; else bookNow">
                 <ion-button shape="round" *ngIf="level !== '2'" fill="outline" (click)="plan()" color="danger">Upgrade only $9.99</ion-button>
-                <ion-button shape="round" *ngIf="level === '2' && load.contactno?.length" fill="outline" color="success"
-                  (click)="load.contactno?.length ? callLoad(load.contactno) : ''">Book Now</ion-button>
+                <ion-button shape="round" *ngIf="level === '2'" fill="outline" color="success" (click)="navToMap(load)">
+                  View
+                </ion-button>
               </div>
               <ng-template #bookNow>
-                <ion-button *ngIf="load.contactno?.length" shape="round" fill="outline" color="success"
-                  (click)="load.contactno?.length ? callLoad(load.contactno) : ''">Book Now</ion-button>
+                <ion-button shape="round" fill="outline" color="success" (click)="navToMap(load)">View</ion-button>
               </ng-template>
             </div>
             <div *ngIf="level === '2'" class="mcNo ion-margin-vertical">

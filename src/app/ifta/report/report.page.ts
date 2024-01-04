@@ -56,7 +56,8 @@ export class ReportPage implements OnInit {
   {
     if(!this.auth.isTrial && this.auth.user?.role === '0' &&
     (this.auth.subscriptionStatus === 'inactive' || this.auth.subscriptionStatus === 'past_due')) {
-      this.auth.showPlanUpgrade();
+      // this.auth.showPlanUpgrade();
+      this.router.navigate(['tabs/listing/notification']);
     }
     else {
       this.router.navigate(['tabs/listing/notification']);

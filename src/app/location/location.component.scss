@@ -51,6 +51,17 @@ ion-item {
   ion-item:nth-child(3) {
     padding-bottom: 16px;
   }
+
+  .dead-location {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+
+    ion-item:first-child {
+      width: 100%;
+    }
+  }
 }
 
 .modal-main-cont.from-loc-selected {
